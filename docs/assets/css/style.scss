@@ -1,0 +1,37 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+header 
+{
+  background:#0066D7;
+  color:#00FF00
+}
+
+header ul
+{
+  background:#2a2e67;
+}
+
+ul a
+{
+    color:#0066d7;
+}
+
+a
+{
+  color:#0066d7;
+}
+
+p
+{
+    color:#61778B;
+    font-weight: bold;
+}
+
+.wrapper
+{
+  width: 900px;
+  background:#FAFAFA;
+}
