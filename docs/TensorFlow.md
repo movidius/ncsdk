@@ -46,7 +46,6 @@ mvNCCompile output/inception-v1.meta -in=input -on=InceptionV1/Logits/Prediction
 * Inception V1
 * Inception V3
 * Inception V4
-* Inception ResNet V1 (FaceNet)
 * Inception ResNet V2
 * MobileNet
 

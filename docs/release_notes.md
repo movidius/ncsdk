@@ -36,9 +36,8 @@ Support for the following networks has been tested.
 1. inception-v1
 2. inception-v3
 3. inception-v4
-4. Inception ResNet v1 (FaceNet) 
-5. Inception ResNet v2
-6. Mobilenet_V1_1.0_224 (preview -- see erratum #3.)
+4. Inception ResNet v2
+5. Mobilenet_V1_1.0_224 (preview -- see erratum #3.)
 
 ## Firmware Features:
 1. Convolutions
