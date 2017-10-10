@@ -1,8 +1,8 @@
 # NC SDK Documentation Table of Contents
 
-- [Introduction](#Introduction)
+- [Introduction](readme.md#Introduction)
   - [NCS Architecture](ncs1arch.md)
-- [Frameworks](#Frameworks)
+- [Frameworks](readme.md#Frameworks)
   - [Caffe Support](Caffe.md)
   - [TensorFlow Support](TensorFlow.md)
   - [Configure Networks for NCS](configure_network.md)
