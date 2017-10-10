@@ -1,3 +1,4 @@
+
 <a name="Introduction"></a>
 # Introduction 
 The Movidius™ Neural Compute SDK and Movidius™ Neural Compute Stick (NCS) enables rapid prototyping, validation and deployment of Deep Neural Networks (DNNs.)

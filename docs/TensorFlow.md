@@ -43,7 +43,6 @@ mvNCCompile output/inception-v1.meta -in=input -on=InceptionV1/Logits/Prediction
 # Neural Compute TensorFlow™ Layer Support
 
 # TensorFlow™ Networks Supported
-* AlexNet
 * Inception V1
 * Inception V3
 * Inception V4
