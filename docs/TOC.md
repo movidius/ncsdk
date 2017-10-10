@@ -19,5 +19,6 @@
   - [C API](c_api/readme.md)
 - [Neural Compute User Forum](readme.md#UserForum)
 - [Examples](readme.md#Examples)
+- <a href="{{ "index.html#Examples" | absolute_url }}">Examples </a>
 
   
