@@ -15,6 +15,8 @@ Also included in the SDK are examples.  After cloning and running 'make install'
 make examples
 ```
 
+For additional examples please see the Neural Compute App Zoo here: [http://www.github.com/movidius/ncappzoo](http://www.github.com/movidius/ncappzoo).  The ncappzoo is a valuable resource for NCS users that includes community developed applications and neural networks for the NCS.
+
 # Documentation
 The complete Neural Compute SDK documentation can be viewed at [https://movidius.github.io/ncsdk/](https://movidius.github.io/ncsdk/)
 
