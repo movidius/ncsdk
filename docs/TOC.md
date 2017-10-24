@@ -25,3 +25,5 @@
 - <a href="{{ "index.html#UserForum" | absolute_url }}">Neural Compute User Forum </a>
 
 - <a href="{{ "index.html#Examples" | absolute_url }}">Examples </a>
+
+- <a href="{{ "index.html#AppZoo" | absolute_url }}">Neural Compute App Zoo </a>

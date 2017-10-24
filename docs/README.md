@@ -87,5 +87,11 @@ git clone http://github.com/Movidius/ncsdk # Already done during installation
 
 ```
 
+<a name="AppZoo"></a>
+# Neural Compute App Zoo
+The Neural Compute App Zoo is a github repository at [http://github.com/Movidius/ncappzoo](http://github.com/Movidius/ncappzoo) which is designed for developers to contribute networks and applications written for the Neural Compute Stick to the NCS community.
+
+See [The Neural Compute App Zoo README](https://github.com/Movidius/ncappzoo/blob/master/README.md) for more information.
+
 
 [Release Notes](release_notes.md)
