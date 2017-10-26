@@ -62,6 +62,7 @@ Support for the following networks has been tested.
 16. Power
 17. Crop
 18. ELU
+19. Batch Normalization
 
 ## Bug Fixes:
 1. USB protocol bug fixes, for expanded compatibility with hubs and hosts. In particular, fix for devices with maxpacket of 64.
