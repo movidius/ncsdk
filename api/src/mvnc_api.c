@@ -137,21 +137,13 @@ static int is_device_opened(const char *name)
 	return -1;
 }
 
-mvncStatus mvncOpenDevice(const char *name, void **deviceHandle)
+static mvncStatus load_fw_file(const char *name)
 {
 	int rc;
 	FILE *fp;
 	char *tx_buf;
 	unsigned file_size;
 	char mv_cmd_file[MAX_PATH_LENGTH], *p;
-	char name2[MVNC_MAX_NAME_SIZE] = "";
-
-	if (!name || !deviceHandle)
-		return MVNC_INVALID_PARAMETERS;
-
-	pthread_mutex_lock(&mm);
-	if (!initialized)
-		initialize();
 
 	// Search the mvnc executable in the same directory of this library, under mvnc
 	Dl_info info;
@@ -202,13 +194,73 @@ mvncStatus mvncOpenDevice(const char *name, void **deviceHandle)
 	}
 
 	PRINT_DEBUG(stderr, "Boot successful, device address %s\n", name);
+	return MVNC_OK;
+}
+
+static void allocate_device(const char* name, void **deviceHandle, void* f)
+{
+	struct Device *d = calloc(1, sizeof(*d));
+	d->dev_addr = strdup(name);
+	d->usb_link = f;
+	d->next = devices;
+	d->temp_lim_upper = 95;
+	d->temp_lim_lower = 85;
+	d->backoff_time_normal = 0;
+	d->backoff_time_high = 100;
+	d->backoff_time_critical = 10000;
+	d->temperature_debug = 0;
+	pthread_mutex_init(&d->mm, 0);
+	devices = d;
+	*deviceHandle = d;
+
+	PRINT_DEBUG(stderr, "done\n");
+	PRINT_INFO(stderr, "Booted %s -> %s\n",
+		   d->dev_addr,
+		   d->dev_file ? d->dev_file : "VSC");
+}
+
+mvncStatus mvncOpenDevice(const char *name, void **deviceHandle)
+{
+	int rc;
+	char name2[MVNC_MAX_NAME_SIZE] = "";
+	char* device_name;
+	char* saved_name = NULL;
+	char* temp = NULL; //save to be able to free memory
+	int second_name_available = 0;
+
+	if (!name || !deviceHandle)
+		return MVNC_INVALID_PARAMETERS;
+
+	temp = saved_name = strdup(name);
+
+	device_name = strtok_r(saved_name, ":", &saved_name);
+	if (device_name == NULL) {
+		free(temp);
+		return MVNC_INVALID_PARAMETERS;
+	}
+
+	pthread_mutex_lock(&mm);
+	if (!initialized)
+		initialize();
+
+
+	rc = load_fw_file(device_name);
+	if (rc != MVNC_OK) {
+		free(temp);
+		return rc;
+	}
+	if (strlen(saved_name) > 0) {
+		device_name = strtok_r(NULL, ":", &saved_name);
+		second_name_available = 1;
+	}
 
 	// Now we should have a new /dev/ttyACM, try to open it
 	double waittm = time_in_seconds() + STATUS_WAIT_TIMEOUT;
 	while (time_in_seconds() < waittm) {
-		void *f = usblink_open(name);
+		void *f = usblink_open(device_name);
 
-		if (f == NULL) {	//we might fail in case name changed after boot
+		//we might fail in case name changed after boot and we don't have it
+		if (f == NULL && !second_name_available) {
 			int count = 0;
 			while (1) {
 				name2[0] = '\0';
@@ -232,25 +284,8 @@ mvncStatus mvncOpenDevice(const char *name, void **deviceHandle)
 			myriadStatus_t status;
 
 			if (!usblink_getmyriadstatus(f, &status) && status == MYRIAD_WAITING) {
-				struct Device *d = calloc(1, sizeof(*d));
-				d->dev_addr = strlen(name2) > 0 ? strdup(name2)
-								: strdup(name);
-				d->usb_link = f;
-				d->next = devices;
-				d->temp_lim_upper = 95;
-				d->temp_lim_lower = 85;
-				d->backoff_time_normal = 0;
-				d->backoff_time_high = 100;
-				d->backoff_time_critical = 10000;
-				d->temperature_debug = 0;
-				pthread_mutex_init(&d->mm, 0);
-				devices = d;
-				*deviceHandle = d;
-
-				PRINT_DEBUG(stderr, "done\n");
-				PRINT_INFO(stderr, "Booted %s -> %s\n",
-					   d->dev_addr,
-					   d->dev_file ? d->dev_file : "VSC");
+				allocate_device(strlen(name2) > 0 ? name2 : device_name, deviceHandle, f);
+				free(temp);
 				pthread_mutex_unlock(&mm);
 				return MVNC_OK;
 			} else {
@@ -262,7 +297,7 @@ mvncStatus mvncOpenDevice(const char *name, void **deviceHandle)
 		// Error opening it, continue searching
 		usleep(10000);
 	}
-
+	free(temp);
 	pthread_mutex_unlock(&mm);
 	return MVNC_ERROR;
 }
