@@ -1,22 +1,26 @@
-# Movidius™ Neural Compute Software Development Kit
-This SDK is provided for users of the [Movidius™ Neural Compute Stick (NCS)](https://developer.movidius.com/).  It provides software tools, an API, and examples which enable developers to create software that takes advantage of the hardware the accelerated neural network capability provided by the NCS.
+# Intel® Movidius™ Neural Compute SDK
+This Intel® Movidius™ Neural Compute software developer kit (NCSDK) is provided for users of the [Intel® Movidius™ Neural Compute Stick](https://developer.movidius.com/) (Intel® Movidius™ NCS). It includes software tools, an API, and examples, so developers can create software that takes advantage of the accelerated neural network capability provided by the Intel Movidius NCS hardware.
 
  
 # Installation
-The provided Makefile helps with installation.  Clone this repository and then run the following command to install the SDK.
+The provided Makefile helps with installation. Clone this repository and then run the following command to install the NCSDK:
 
 ```
 make install
 ```
 
 # Examples
-Also included in the SDK are examples.  After cloning and running 'make install' run the following command to install examples.
+The Neural Compute SDK also includes examples. After cloning and running 'make install,' run the following command to install the examples:
 ```
 make examples
 ```
 
-For additional examples please see the Neural Compute App Zoo here: [http://www.github.com/movidius/ncappzoo](http://www.github.com/movidius/ncappzoo).  The ncappzoo is a valuable resource for NCS users that includes community developed applications and neural networks for the NCS.
+## NCAPPZOO Examples
+For additional examples, please see the Neural Compute App Zoo available at [http://www.github.com/movidius/ncappzoo](http://www.github.com/movidius/ncappzoo). The ncappzoo is a valuable resource for NCS users and includes community developed applications and neural networks for the NCS.
 
 # Documentation
-The complete Neural Compute SDK documentation can be viewed at [https://movidius.github.io/ncsdk/](https://movidius.github.io/ncsdk/)
+The complete Intel Movidius Neural Compute SDK documentation can be viewed at [https://movidius.github.io/ncsdk/](https://movidius.github.io/ncsdk/)
+
+# Getting Started Video
+For installation and general instructions to get started with the NCSDK, take a look at this [video](https://www.youtube.com/watch?v=fESFVNcQVVA)
 

@@ -11,10 +11,10 @@ then
 	cd /tmp
 else
 	cd /tmp
-	wget --no-cache http://ncs-forum-uploads.s3.amazonaws.com/ncsdk/ncsdk_01_09/ncsdk_redirector.txt 
+	wget --no-cache http://ncs-forum-uploads.s3.amazonaws.com/ncsdk/ncsdk_01_10/ncsdk_redirector.txt
 fi
 
-download_filename=NCSDK-1.09.tar.gz
+download_filename=NCSDK-1.10.tar.gz
 
 # redirector is the url from redirector text file
 redirector=$(<ncsdk_redirector.txt)
