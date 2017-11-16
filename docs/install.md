@@ -19,10 +19,13 @@ The Intel Movidius NCS connects to the development computer over a USB 2.0 High 
 ![](images/ncs_plugged.jpg)
 
 ## Installation of SDK and Examples
-To install the SDK along with the examples in this repository, use the following command on your development computer. This is the typical installation. If you haven't already installed the SDK on your development computer, you should use this command to install:
+To install the SDK along with the examples in this repository, use the following command on your development computer. This is the typical installation. If your development machine already has caffe installed see the note below.  If you haven't already installed the SDK on your development computer, you should use this command to install:
 ```
 git clone http://github.com/Movidius/ncsdk && cd ncsdk && make install && make examples
 ```
+<strong>Note:</strong> if you are installing on a machine that already has caffe installed and it's directory is already in the PYTHONPATH environment variable you will need to manually remove the existing directory from the PYTHONPATH environment variable prior to installing the ncsdk.  Also, you will need to manually adjust the PYTHONPATH to match your development needs such that it points to the caffe version installed with the NCSDK when using the NCSDK, and it points to other caffe versions when using those.
+
+<strong>Note:</strong> The installation will only set the PYTHONPATH environment variable for the current user.  It will do so by modifying the .bashrc file for that user.  To use the sdk as other users on the machine you will need to manually set the PYTHONPATH for those other users.
 
 ## Installation of Examples without SDK
 To install only the examples and not the SDK on your development computer, use the following command to clone the repository and then make appropriate examples for your development computer. If you already have the SDK installed and only need the examples on your machine, you should use this command to install the examples:

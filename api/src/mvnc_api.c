@@ -249,7 +249,7 @@ mvncStatus mvncOpenDevice(const char *name, void **deviceHandle)
 		free(temp);
 		return rc;
 	}
-	if (strlen(saved_name) > 0) {
+	if (saved_name && strlen(saved_name) > 0) {
 		device_name = strtok_r(NULL, ":", &saved_name);
 		second_name_available = 1;
 	}

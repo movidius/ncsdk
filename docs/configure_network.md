@@ -121,7 +121,7 @@ labels_offset=0
 ```
 Code snippet:
 ```
-#load the label files
+#Load the label files
 labels_offset=0 # no background class offset
 labels_file='./synset_words.txt'
 labels=numpy.loadtxt(labels_file,str,delimiter='\t')
@@ -134,7 +134,7 @@ iterations = graph.GetGraphOption(mvnc.GraphOption.ITERATIONS)
 img = cv2.imread('./dog.jpg') # using OpenCV for reading the image, it will be in BGR
 img=cv2.resize(img,(224,224)) # resize to 224x224
 img-=[104,117,124] # subtract mean
-#run, get the result and print results per the synset_words.txt
+#Run, get the result and print results per the synset_words.txt
 graph.LoadTensor(img.astype(numpy.float16), 'user object')
 output, userobj = graph.GetResult()
 order = output.argsort()[::-1][:6]
@@ -155,7 +155,7 @@ labels_offset=1
 ```
 Code snippet:
 ```
-#load the label files
+#Load the label files
 labels_offset=1 # background class offset of 1
 labels_file='./synset_words.txt'
 labels=numpy.loadtxt(labels_file,str,delimiter='\t')
@@ -165,13 +165,13 @@ with open('./inceptionv3.blob', mode='rb') as f:
 graph = device.AllocateGraph(blob)
 graph.SetGraphOption(mvnc.GraphOption.ITERATIONS, 1)
 iterations = graph.GetGraphOption(mvnc.GraphOption.ITERATIONS)
-#import the image and do the proper scaling
+#Import the image and do the proper scaling
 img = cv2.imread('./dog.jpg').astype(numpy.float32) # using OpenCV for reading the image, it will be in BGR
 img=cv2.resize(img,(299,299)) # resize to 299x299
 img=cv2.cvtColor(img,cv2.COLOR_BGR2RGB) # need to convert to RBG
 img-=[128,128,128] # subtract mean 
 img /=128. # scale the image
-#run, get the result and print results per the synset_words.txt
+#Run, get the result and print results per the synset_words.txt
 graph.LoadTensor(img.astype(numpy.float16), 'user object')
 output, userobj = graph.GetResult()
 order = output.argsort()[::-1][:6]

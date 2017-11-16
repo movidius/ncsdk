@@ -93,5 +93,12 @@ The Neural Compute App Zoo is a GitHub repository at [http://github.com/Movidius
 
 See [The Neural Compute App Zoo README](https://github.com/Movidius/ncappzoo/blob/master/README.md) for more information.
 
+<a name="TroubleShooting"></a>
+# Troubleshooting and Tech Support
+Be sure to check the [NCS Troubleshooting Guide](https://ncsforum.movidius.com/discussion/370/intel-ncs-troubleshooting-help-and-guidelines#latest) if you run into any issues with the NCS or NCSDK.
 
-[Release Notes](release_notes.md)
+Also for general tech support issues the [NCS User Forum](https://developer.movidius.com/forums) is recommended and contains community discussions on many issues and resolutions.
+
+<a name="ReleaseNotes"></a>
+# Release Notes
+See the latests [Release Notes](release_notes.md) for detailed information of the specific release.

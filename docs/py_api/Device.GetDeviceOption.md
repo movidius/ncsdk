@@ -5,10 +5,10 @@
 |Package   |  mvnc         |
 |Module    |  mvncapi      |
 |Version   |  1.0          |
-|See also  |Device.SetDeviceOption<br>DeviceOption|
+|See also  |[Device.SetDeviceOption()](Device.SetDeviceOption.md) <br>[DeviceOption](DeviceOption.md)|
 
 ## Overview
-This function is used to get an option for the device. The options can be found in the DeviceOption enumeration table.  
+This function is used to get an option for the device. The options can be found in the [DeviceOption](DeviceOption.md) enumeration table.  
 
 ## Syntax
 ```python
@@ -22,7 +22,7 @@ GetDeviceOption(option)
 | option        | Member of the DeviceOption enumeration that specifies which option to get.|
 
 ## Return
-The value for the specified device option.  The type of the returned value depends on the option specified.  See the DeviceOption enumeration for the type that will be returned for each option.
+The value for the specified device option. The type of the returned value depends on the option specified. See the [DeviceOption](DeviceOption.md) enumeration for the type that will be returned for each option.
 
 ## Known Issues
 

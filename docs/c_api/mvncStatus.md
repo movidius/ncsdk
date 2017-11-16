@@ -22,4 +22,4 @@ MVNC_MVCMD_NOT_FOUND | The file named MvNCAPI.mvcmd should be installed in the m
 MVNC_NO_DATA | No data to return.
 MVNC_GONE | The graph or device has been closed during the operation.
 MVNC_UNSUPPORTED_GRAPH_FILE | The graph file may have been created with an incompatible prior version of the Toolkit. Try to recompile the graph file with the version of the Toolkit that corresponds to the API version.
-MVNC_MYRIAD_ERROR | An error has been reported by Movidius™ VPU. Use MVNC_DEBUGINFO to get more information.
+MVNC_MYRIAD_ERROR | An error has been reported by Intel® Movidius™ VPU. Use MVNC_DEBUGINFO to get more information.

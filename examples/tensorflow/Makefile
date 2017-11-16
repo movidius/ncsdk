@@ -1,6 +1,6 @@
 
 ifneq ($(findstring movidius, $(PYTHONPATH)), movidius)
-	export PYTHONPATH:=/opt/movidius/caffe/python:/opt/movidius/mvnc/python:$(PYTHONPATH)
+	export PYTHONPATH:=/opt/movidius/caffe/python:$(PYTHONPATH)
 endif
 
 

@@ -5,10 +5,10 @@
 |Package   |  mvnc         |
 |Module    |  mvncapi      |
 |Version   |  1.0          |
-|See also|Device.AllocateGraph()|
+|See also|[Device.AllocateGraph()](Device.AllocateGraph.md)|
 
 ## Overview
-This function is used to deallocate a graph that was allocated for an NCS device with the Device.AllocateGraph() method.  This should be called for every graph that is created to free resources associated with the graph. 
+This function is used to deallocate a graph that was allocated for an Intel® Movidius™ NCS device with the Device.AllocateGraph() method.  This should be called for every graph that is created to free resources associated with the graph. 
 
 ## Syntax
 
@@ -33,7 +33,7 @@ if len(deviceNames) == 0:
 	print("Error - No devices detected.")
 	quit()
 
-# open first NCS device found
+# Open first NCS device found
 device = mvnc.Device(devices[0])
 
 # Allocate the graph 

@@ -35,23 +35,23 @@ This function returns an appropriate value from the [mvncStatus](mvncStatus.md) 
 .
 .
 .
-    // open NCS device to initialize deviceHandle.
-    // read compiled graph file into graphFileBuf and put length of it in graphFileLen
+    // Open NCS device to initialize deviceHandle.
+    // Read compiled graph file into graphFileBuf and put length of it in graphFileLen
 
-    // allocate the graph
+    // Allocate the graph
     void* graphHandle;
     retCode = mvncAllocateGraph(deviceHandle, &graphHandle, graphFileBuf, graphFileLen);
     if (retCode != MVNC_OK)
-    {   // error allocating graph
+    {   // Error allocating graph
         printf("Could not allocate graph for file: %s\n", GRAPH_FILE_NAME); 
     }
     else
-    {   // successfully allocated graph.  Now graphHandle is ready to go.  
-        // use graphHandle for other API calls and call mvncDeallocateGraph
+    {   // Successfully allocated graph. Now graphHandle is ready to go.  
+        // Use graphHandle for other API calls and call mvncDeallocateGraph
         // when done with it.
         printf("Successfully allocated graph for %s\n", GRAPH_FILE_NAME);
         
-        // set the graph option for blocking calls
+        // Set the graph option for blocking calls
         int dontBlockValue = 0;
         retCode = mvncSetGraphOption(graphHandle, MVNC_DONTBLOCK, &dontBlockValue, sizeof(int));
         if (retCode == MVNC_OK)
@@ -64,8 +64,8 @@ This function returns an appropriate value from the [mvncStatus](mvncStatus.md) 
             printf("Error returned from mvncSetGraphOption: %d\n", retCode);
         }
 
-        // use graphHandle here with the option set above.
-        // then deallocate the graph and close the device
+        // Use graphHandle here with the option set above.
+        // Then deallocate the graph and close the device.
     }
 .
 .

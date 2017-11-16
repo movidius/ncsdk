@@ -5,7 +5,7 @@
 |Package   |  mvnc         |
 |Module    |  mvncapi      |
 |Version   |  1.0          |
-|See also|Device.\_\_init\_\_()<br>Device.OpenDevice()|
+|See also|[Device.\_\_init\_\_()](Device.__init__.md) <br>[Device.OpenDevice()](Device.OpenDevice.md)|
 
 ## Overview
 This function is used to cease communication and reset the device.

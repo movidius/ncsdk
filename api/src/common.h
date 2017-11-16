@@ -30,5 +30,5 @@
 // Common defines
 #define DEFAULT_VID				0x03E7
 #define DEFAULT_PID				0x2150	// Myriad2v2 ROM
-#define DEFAULT_OPEN_VID			0x040e
+#define DEFAULT_OPEN_VID			DEFAULT_VID
 #define DEFAULT_OPEN_PID			0xf63b	// Once opened in VSC mode, VID/PID change

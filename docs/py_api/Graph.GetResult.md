@@ -5,7 +5,7 @@
 |Package   |  mvnc         |
 |Module    |  mvncapi      |
 |Version   |  1.0          |
-|See also  |Graph.LoadTensor()|
+|See also  |[Graph.LoadTensor()](Graph.LoadTensor.md)|
 
 ## Overview
 This function retrieves the result of an inference that was initiated via Graph.LoadTensor() on the specified graph.  
