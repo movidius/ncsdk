@@ -5,10 +5,10 @@
 |Package   |  mvnc         |
 |Module    |  mvncapi      |
 |Version   |  1.0          |
-|See also|Graph.SetGraphOption()<br>GraphOption|
+|See also|[Graph.SetGraphOption()](Graph.SetGraphOption.md) <br>[GraphOption](GraphOption.md)|
 
 ## Overview
-This function is used to get a graph option. The available options can be found in GraphOption enumeration class. 
+This function is used to get a graph option. The available options can be found in [GraphOption](GraphOption.md) enumeration class. 
 
 ## Syntax
 ```python
@@ -22,7 +22,7 @@ value = graph.GetGraphOption(option)
 |option   |  A value from the GraphOption enumeration to specify which option's value should be returned. |
 
 ## Return
-The value for the specified GraphOption is returned.  The type of the returned value depends on the option specified.  See the GraphOption class for the value types for each option.
+The value for the specified GraphOption is returned. The type of the returned value depends on the option specified. See the [GraphOption](GraphOption.md) class for the value types for each option.
 
 ## Known Issues
 

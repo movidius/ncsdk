@@ -1,5 +1,5 @@
 
-# NC SDK installation manifest 
+# NC SDK Installation Manifest 
 These are the files and directories installed outside of repository directory as part of the NC SDK.
 
 - /usr/local/include/mvnc.h

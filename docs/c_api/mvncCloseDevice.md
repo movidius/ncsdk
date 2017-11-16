@@ -20,7 +20,7 @@ mvncStatus mvncCloseDevice(void *deviceHandle);
 
 Name|Type|Description
 ----|----|-----------
-deviceHandle|void*|Pointer to the opaque NCS Device structure that was allocated and returned from the mvncOpenDevice function.
+deviceHandle|void*|Pointer to the opaque NCS device structure that was allocated and returned from the mvncOpenDevice function.
 
 ## Return
 This function returns an appropriate value from the [mvncStatus](mvncStatus.md) enumeration.
@@ -36,7 +36,7 @@ extern "C"
 {
 #include <mvnc.h>
 }
-// somewhat arbitrary buffer size for the device name
+// Somewhat arbitrary buffer size for the device name.
 #define NAME_SIZE 100
 int main(int argc, char** argv)
 {
@@ -50,10 +50,10 @@ int main(int argc, char** argv)
         exit(-1);
     }
     
-    // Try to open the NCS device via the device name
+    // Try to open the NCS device via the device name.
     retCode = mvncOpenDevice(devName, &deviceHandle);
     if (retCode != MVNC_OK)
-    {   // failed to open the device.  
+    {   // Failed to open the device.  
         printf("Could not open NCS device\n");
         exit(-1);
     }
@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     // Pass it to other NC API calls as needed and close it when finished.
     printf("Successfully opened NCS device!\n");
     
-    // Close the device previously opened by mvncOpenDevice()
+    // Close the device previously opened by mvncOpenDevice().
     retCode = mvncCloseDevice(deviceHandle);
 }
 ```

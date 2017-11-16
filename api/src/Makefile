@@ -24,6 +24,8 @@ LDFLAGS += -shared
 OBJS := $(SRCS:%.c=$(OBJDIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 
+all: obj-$(ARCH)/libmvnc.so.0
+
 $(OBJDIR)/$(OUT): $(OBJS)
 	$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LIBS)
 	ln -fs $(OBJDIR)/$(OUT) libmvnc.so

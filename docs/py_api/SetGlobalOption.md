@@ -5,10 +5,10 @@
 |Package   |  mvnc         |
 |Module    |  mvncapi      |
 |Version   |  1.0          |
-|See also  |  GlobalOption<br>GetGlobalOption()|
+|See also  |  [GlobalOption](GlobalOption.md)<br>[GetGlobalOption()](GetGlobalOption.md)|
 
 ## Overview
-This function is used to set a global option. The available Global options and possible values can be found in the documentation for the GlobalOption enumeration.
+This function is used to set a Global option. The available Global options and possible values can be found in the documentation for the [GlobalOption](GlobalOption.md) enumeration.
 
 ## Syntax
 
@@ -20,8 +20,8 @@ SetGlobalOption(option, value)
 
 |Parameter      | Description |
 |---------------|---------------|
-|option|Member of the GlobalOptions enumeration which specifies which option to set.|
-|value |The new value to which the option will be set.  See the GlobalOption enumeration class for the type of value for each option.| 
+|option|Member of the GlobalOptions enumeration that specifies which option to set.|
+|value |The new value to which the option will be set. See the [GlobalOption](GlobalOption.md) enumeration class for the type of value for each option.| 
 
 ## Known Issues
 
@@ -29,6 +29,6 @@ SetGlobalOption(option, value)
 ```Python
 import mvnc.mvncapi as ncs
 
-# set the global logging level to verbose
+# Set the global logging level to verbose
 ncs.SetGlobalOption(ncs.GlobalOption.LOGLEVEL, 2)
 ```

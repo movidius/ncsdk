@@ -5,7 +5,7 @@
 |Package   |  mvnc         |
 |Module    |  mvncapi      |
 |Version   |  1.0          |
-|See also|Device.\_\_init\_\_()<br>Device.CloseDevice()|
+|See also|[Device.\_\_init\_\_()](Device.__init__.md) <br>[Device.CloseDevice()](Device.CloseDevice.md)|
 
 ## Overview
 This function is used to initialize the device.  
@@ -31,7 +31,7 @@ import mvnc.mvncapi as ncs
 deviceNames = ncs.EnumerateDevices()
 firstDevice = ncs.Device(deviceNames[0])
 firstDevice.OpenDevice()
-# use device
+# Use device
 firstDevice.CloseDevice()
 #############################################
 

@@ -10,6 +10,6 @@ See also|[mvncGetGlobalOption](mvncGetGlobalOption.md), [mvncSetGlobalOption](mv
 
 This enumeration is used to specify a global option that can be written or read via mvncGetDeviceOption() and mvncSetDeviceOption().  The table below provides details on the meaning of each of the values in the enumeration.
 
-constant | Option Type | Possible Values | get/set | Description
+Constant | Option Type | Possible Values | Get/Set | Description
 -------- | ------------| --------------- | ------- | -----------
-MVNC_LOGLEVEL | int |  0, 1, 2 |get, set|The logging level for application  Value meanings are: 0 = log nothing (default), 1 = log errors only, 2 = log all, verbose logging. 
+MVNC_LOGLEVEL | int |  0, 1, 2 |get, set|The logging level for application  Value meanings are: <br>0: log nothing (default)<br>1: log errors only<br>2: log all, verbose logging. 

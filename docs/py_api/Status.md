@@ -1,4 +1,4 @@
-# Status enumeration class
+# Status Enumeration Class
 
 |Info      | Value         |
 |----------|---------------|
@@ -24,6 +24,6 @@ MVNC_TIMEOUT |Timeout in the communication with the device
 MVNC_MVCMD_NOT_FOUND |The file named MvNCAPI.mvcmd is installed in the mvnc directory. This message means that the file has been moved or installer failed.
 MVNC_NO_DATA |No data to return.
 MVNC_GONE |The graph or device has been closed during the operation.
-MVNC_UNSUPPORTED_GRAPH_FILE |The graph file is corrupt or may have been created with an incompatible prior version of the NCS toolkit. Try to recompile the graph file with the version of the Toolkit that corresponds to the API version.
-MVNC_MYRIAD_ERROR |An error has been reported by the Movidius™ VPU. Use MVNC_DEBUGINFO.
+MVNC_UNSUPPORTED_GRAPH_FILE |The graph file is corrupt or may have been created with an incompatible prior version of the NCS toolkit. Try to recompile the graph file with the version of the toolkit that corresponds to the API version.
+MVNC_MYRIAD_ERROR |An error has been reported by the Intel® Movidius™ VPU. Use MVNC_DEBUGINFO.
 

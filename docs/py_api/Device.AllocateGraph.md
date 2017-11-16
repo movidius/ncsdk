@@ -5,10 +5,10 @@
 |Package   |  mvnc         |
 |Module    |  mvncapi      |
 |Version   |  1.0          |
-|See also|Graph<br>Graph.DeallocateGraph<br>|
+|See also|[Graph](Graph.md)<br>[Graph.DeallocateGraph()](Graph.DeallocateGraph.md)<br>|
 
 ## Overview
-This function is used to create an instance of a Graph that represents a neural network which can be used to infer results via methods Graph.LoadTensor() and Graph.GetResult().
+This function is used to create an instance of a Graph that represents a neural network, which can be used to infer results via methods Graph.LoadTensor() and Graph.GetResult().
 
 ## Syntax
 
@@ -20,13 +20,13 @@ dev.AllocateGraph(graphPath)
 
 |Parameter      | Description |
 |---------------|---------------|
-|graphPath      | A string that is the path to the graph file.  The graph file must have been created with the NC SDK graph compiler.|
+|graphPath      | A string that is the path to the graph file. The graph file must have been created with the NC SDK graph compiler.|
 
 ## Return
 Returns an instance of a Graph object that is ready to use.  
 
 ## Known Issues
-After the Graph that is created is no longer needed Graph.DeallocateGraph() must be called to free the graph resources. 
+After the Graph that is created is no longer needed, Graph.DeallocateGraph() must be called to free the graph resources. 
 
 ## Example
 ```python

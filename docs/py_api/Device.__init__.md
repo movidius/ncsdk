@@ -20,7 +20,7 @@ mvnc.Device("device name here")
 
 |Parameter      | Description |
 |---------------|---------------|
-|deviceName     | The name of the device to initialize.  This must come from calling mvncapi module function EnumerateDevices()|
+|deviceName     | The name of the device to initialize. This must come from calling mvncapi module function EnumerateDevices().|
 
 ## Return 
 None.
@@ -34,7 +34,7 @@ import mvnc.mvncapi as ncs
 # Enumerate devices
 deviceNames = ncs.EnumerateDevices()
 
-# create and init a Device instance.
+# Create and init a device instance
 ncsDevice = ncs.Device(deviceNames[0])
 
 # Open device, use device, close device

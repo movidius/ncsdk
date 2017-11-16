@@ -24,3 +24,7 @@ The complete Intel Movidius Neural Compute SDK documentation can be viewed at [h
 # Getting Started Video
 For installation and general instructions to get started with the NCSDK, take a look at this [video](https://www.youtube.com/watch?v=fESFVNcQVVA)
 
+# Troubleshooting and Tech Support
+Be sure to check the [NCS Troubleshooting Guide](https://ncsforum.movidius.com/discussion/370/intel-ncs-troubleshooting-help-and-guidelines#latest) if you run into any issues with the NCS or NCSDK.
+
+Also for general tech support issues the [NCS User Forum](https://developer.movidius.com/forums) is recommended and contains community discussions on many issues and resolutions.
