@@ -6,8 +6,8 @@ The following configuration has been tested with the 1.09 SDK release.
 - Virtualbox 5.1.28 (later releases should be fine, but have not been tested)
 - Guest Extensions installed
 - You will need to select USB 3.0 and create two filters: 
-  - USB2 filter with vendor ID 03e7 and product ID 2150
-  - USB3 filter with vendor ID 040e and product ID f63b
+  - USB2 filter with vendor ID 03e7
+  - USB3 filter with vendor ID 040e
 - Host OS (these have been tested, other may work):
   - OS X Yosemite 10.10.5
   - Windows 10 Enterprise
