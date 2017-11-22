@@ -11,6 +11,7 @@ help:
 	@echo "  make help - shows this message"
 	@echo "  make install - Installs the ncsdk."
 	@echo "  make examples - makes the ncsdk examples."
+	@echo "  make api - installs only the api. Ideal for RPi setup."
 	@echo "  make uninstall - uninstalls the ncsdk."
 	@echo "  make clean - removes targets and intermediate files." 
 
@@ -55,7 +56,11 @@ examples: prereqs opencv
 runexamples: prereqs opencv
 	@echo "\nmake examples starting."
 	(cd examples; make run)
-
+	
+.PHONY: api
+api: @echo "\nmake api starting."
+	(cd api/src; make; make install)
+	
 .PHONY: clean
 clean:
 	@echo "\nmake clean starting."
