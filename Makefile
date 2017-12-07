@@ -21,6 +21,10 @@ all: install examples
 opencv: 
 	./install-opencv.sh
 
+.PHONY: uninstallopencv
+uninstallopencv:
+	./uninstall-opencv.sh
+
 .PHONY: prereqs
 prereqs:
 	@sed -i 's/\r//' ncsdk.conf
@@ -35,9 +39,10 @@ prereqs:
 	@chmod +x install.sh
 	@chmod +x uninstall.sh
 	@chmod +x install-opencv.sh
+	@chmod +x uninstall-opencv.sh
 
 .PHONY: install
-install: prereqs
+install: prereqs uninstallopencv
 	@echo "\nmake install starting."
 	./install.sh
 

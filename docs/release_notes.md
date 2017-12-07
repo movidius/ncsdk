@@ -1,17 +1,21 @@
 ============================================================
 # Movidius Neural Compute SDK Release Notes
-# V1.10.01 2017-11-15
+# V1.11.00 2017-12-06
 ============================================================
 
 As of V1.09.00, SDK has been refactored and contains many new features and structural changes. It is recommended you read the documentation to familiarize with the new features and contents. Please see v1.09.00 release notes, using github tag https://github.com/movidius/ncsdk/tree/v1.09.00.06
 
 ## SDK Notes: 
 ### New features:
+1. Tensorflow 1.4 supported.  Tensorflow 1.4 is automatically installed on Ubuntu.
+2. SSD supported in Caffe.  ssd-caffe is automatically installed with this version.  If a previous version of the SDK is installed, Berkeley Caffe is preserved and the symlink at /opt/movidius/caffe is moved to ssd caffe.
 #### Networks:
-1. VGG 16 for both Caffe and Tensorflow
-2. Resnet 18 for Caffe
-3. Resnet 50 for Caffe
-   
+1. SSD Mobilenet v1 for caffe
+2. TinyYolo v2 for Tensorflow via Darkflow transformation of original TinyYolo v2
+#### Layers:
+1. L2 Normalization
+2. Input
+
 ## API Notes:
 1. No change
 
@@ -27,8 +31,9 @@ Support for the following networks has been tested.
 6. Alexnet
 7. TinyYolo v1
 8. VGG 16
-9. Resnet 18
-10. Resnet 50
+9. Resnet 50
+10. SSD Mobilenet v1
+
 
 ### Tensorflow r1.3
 1. inception-v1
@@ -54,6 +59,7 @@ Support for the following networks has been tested.
    - MobileNet_v1_0.25_192
    - MobileNet_v1_0.25_160
    - MobileNet_v1_0.25_128
+8. TinyYolo v2 via Darkflow tranformation
 
 ## Firmware Features:
 1. Convolutions
@@ -80,13 +86,16 @@ Support for the following networks has been tested.
 17. Crop
 18. ELU
 19. Batch Normalization
+20. L2 Normalization
+21. Input Layer
  
 
 ## Bug Fixes:
-     Fixed: Installation does not succeed as root user
-     Fixed: Support for larger convolutions, enabling VGG 16 support
-     Fixed: Issues blocking Resnet 18 and Resnet 50
-     
+1. Fixed: Most recent version of Inception_v4 run fails with FusedBatchNorm not supported error
+2. Fixed: Installer deletes installation script, making review of installation process difficult
+3. Fixed: Inception Resnet V2 failing with Stage Details Not Supported: FusedBatchNorm error
+4. Fixed: Input layer can't be linked to multiple hidden layers
+
 ## Errata:
 1. Python 2.7 is fully supported for making user applications, but only the helloworld_py example runs as-is in both python 2.7 and 3.5 due to dependencies on modules.
 2. SDK tools for tensorflow on Rasbpian Stretch are not supported for this release, due to lack of an integrated tensorflow installer for Rasbpian in the SDK. TF examples are provided with pre-compiled graph files to allow them to run on Rasperry Pi, however the compile, profile, and check functions will not be available on Raspberry Pi, and 'make examples' will generate failures for the tensorflow examples on Raspberry Pi.
@@ -98,3 +107,7 @@ Support for the following networks has been tested.
 8. Convolution may fail to find a solution for very large inputs.
 9. Depth convolution is tested for 3x3 kernels.
 10. A TanH layer’s “top” & “bottom” blobs must have different names.  This is different from a ReLU layer, whose “top” & “bottom” should be named the same as its previous layer.
+11. On upgrade from previous versions of SDK, the installer will detect if openCV 3.3.0 was installed, for example from http://github.com/movidius/ncappzoo/apps/stream_ty_gn/install-opencv-from_source.sh.  For this release, the installer will prompt to uninstall this specific version of openCV. This is required for ssd-caffe to run correctly.  After 1.11 installation is complete, openCV 3.3.0 can be re-installed and the ssd-caffe will continue to function.
+12. Resnet 18 is showing unexpected behavior for this release, and is being investigated.  To use Resnet 18, please use version 1.10.01 of SDK.
+13. Although mvNCCheck shows per-pixel error for some metrics for mobilenet_v1_224, classification results are not impacted.
+14. Initial validation has been done on SSD Mobilenet v1 and TinyYolo v2 but more thorough evaluation is underway.
