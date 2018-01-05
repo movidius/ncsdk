@@ -56,11 +56,11 @@ examples: prereqs opencv
 runexamples: prereqs opencv
 	@echo "\nmake examples starting."
 	(cd examples; make run)
-	
+
 .PHONY: api
 api: @echo "\nmake api starting."
 	(cd api/src; make; make install)
-	
+
 .PHONY: clean
 clean:
 	@echo "\nmake clean starting."
