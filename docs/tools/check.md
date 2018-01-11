@@ -8,9 +8,8 @@ Revision|1.08
 See also| [mvNCCompile](compile.md), [mvNCProfile](profile.md), [TensorFlow™ Info](../TensorFlowUsage.md)
 
 ## Overview
-This command line tool compiles the provided network, runs the network on the connected Intel® Movidius™ Neural Compute Stick (Intel® Movidius™ NCS), and creates a text/HTML profiling output. The profiling data contains layer-by-layer stats about the performance of the input network. This is very helpful in determining how much time is spent on each layer, and is helpful in determining changes to the network to improve the total inference time for a network on the Intel Movidius NCS.
+This command line tool checks the results for an inference on the connected Intel® Movidius™ Neural Compute Stick (Intel® Movidius™ NCS) vs. the caffe results on the host computer for the provided network.  
 
-The weights file is not required when profiling a network to determine bottlenecks.
 
 ## Syntax
 

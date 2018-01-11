@@ -42,6 +42,9 @@
 #define USB_TIMEOUT 		10000
 #define USB_MAX_PACKET_SIZE	1024 * 1024 * 10
 
+#define SLEEP_MS	100
+#define ITERATIONS 	50
+
 static int usb_write(void *f, const void *data, size_t size)
 {
 	while (size > 0) {
@@ -110,7 +113,7 @@ void usblink_resetall()
 	struct libusb_device_descriptor desc;
 	libusb_device_handle *h;
 	size_t i;
-	int rc, reset = 0;
+	int rc, iters = 0, cnt_bootrom = 0, cnt_runtime = 0, cnt_after = 0;
 
 	if ((rc = libusb_get_device_list(NULL, &devs)) < 0)
 		return;
@@ -118,8 +121,13 @@ void usblink_resetall()
 	while ((dev = devs[i++]) != NULL) {
 		if (libusb_get_device_descriptor(dev, &desc) < 0)
 			continue;
+		if (desc.idVendor == DEFAULT_VID &&
+			desc.idProduct == DEFAULT_PID)
+			cnt_bootrom++;
+		// If Runtime device found, reset it
 		if (desc.idVendor == DEFAULT_OPEN_VID &&
 		    desc.idProduct == DEFAULT_OPEN_PID) {
+			cnt_runtime++;
 			rc = libusb_open(dev, &h);
 			if (rc < -1)
 				continue;
@@ -131,11 +139,28 @@ void usblink_resetall()
 			PRINT_DEBUG(stderr, "Found stale device, resetting\n");
 			usblink_resetmyriad(h);
 			usblink_close(h);
-			reset = 1;
 		}
 	}
-	if (reset)
-		usleep(1000000);
+	// If some devices needed reset
+	if(cnt_runtime > 0){
+		iters = 0;
+		// Wait until all devices re-enumerate, or timeout occurs
+		while((cnt_after < cnt_bootrom + cnt_runtime) && (iters < ITERATIONS)){
+			usleep(SLEEP_MS*1000);
+			cnt_after = 0;
+			if ((rc = libusb_get_device_list(NULL, &devs)) < 0)
+				return;
+			i = 0;
+			while ((dev = devs[i++]) != NULL) {
+				if ((rc = libusb_get_device_descriptor(dev, &desc)) < 0)
+					continue;
+				if (desc.idVendor == DEFAULT_VID &&
+					desc.idProduct == DEFAULT_PID)
+					cnt_after++;
+			}
+			iters++;
+		}
+	}
 	libusb_free_device_list(devs, 1);
 }
 
