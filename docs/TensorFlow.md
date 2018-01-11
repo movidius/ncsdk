@@ -1,7 +1,7 @@
 # TensorFlow™ Support
 
 # Introduction
-[TensorFlow™](https://www.tensorflow.org/) is a deep learning framework pioneered by Google. The NCSDK introduced TensorFlow support with the 1.09.xx NCSDK release. Validation has been done with TensorFlow r1.3. As described on the TensorFlow website, "TensorFlow™ is an open source software library for numerical computation using data flow graphs. Nodes in the graph represent mathematical operations, while the graph edges represent the multidimensional data arrays (tensors) communicated between them."
+[TensorFlow™](https://www.tensorflow.org/) is a deep learning framework pioneered by Google. The NCSDK introduced TensorFlow™ support with the 1.09.xx NCSDK release and TensorFlow™ 1.3. Validation for each release happens on the TensorFlow™ version noted in the release notes. As described on the TensorFlow™ website, "TensorFlow™ is an open source software library for numerical computation using data flow graphs. Nodes in the graph represent mathematical operations, while the graph edges represent the multidimensional data arrays (tensors) communicated between them."
 
 * Default installation location: /opt/movidius/tensorflow
 
@@ -9,7 +9,7 @@
 TensorFlow has a model GitHub repo at https://github.com/tensorflow/models similar to the Caffe Zoo for Caffe. The TensorFlow models GitHub repository contains several models that are maintained by the respective authors, unlike Caffe, which is not a single GitHub repo.
 
 # Save Session with Graph and Checkpoint Information
-
+The code below shows one way to save a tensorflow session which can be compiled for the NCS.
 ```python
 import numpy as np
 import tensorflow as tf
@@ -34,11 +34,14 @@ def run(name, image_size, num_classes):
 run('inception-v1', 224, 1001)
 ```
 # Compile for TensorFlow
-
+The command here shows how to compile the saved session from the above code sample
 ```
 mvNCCompile output/inception-v1.meta -in=input -on=InceptionV1/Logits/Predictions/Reshape_1 -s12
 
 ```
+
+# Guidence for Compiling TensorFlow Networks
+If you are training a TensorFlow network you will want to [follow the guidance for creating an inference only version of the network](tf_compile_guidance.md) that is suitable for compiling via the ncsdk compiler.
 
 # TensorFlow Networks Supported
 * Inception V1
@@ -63,5 +66,7 @@ mvNCCompile output/inception-v1.meta -in=input -on=InceptionV1/Logits/Prediction
     * MobileNet_v1_0.25_192
     * MobileNet_v1_0.25_160
     * MobileNet_v1_0.25_128
+    
+_*see release notes for supported networks for a particular release_
 
 

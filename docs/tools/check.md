@@ -8,7 +8,7 @@ Revision|1.08
 See also| [mvNCCompile](compile.md), [mvNCProfile](profile.md), [TensorFlow™ Info](../TensorFlowUsage.md)
 
 ## Overview
-This command line tool checks the results for an inference on the connected Intel® Movidius™ Neural Compute Stick (Intel® Movidius™ NCS) vs. the caffe results on the host computer for the provided network.  
+This command line tool validates (checks) a Caffe or TensorFlow™ nerual network on the Intel® Movidius™ Neural Compute Stick (Intel® Movidius™ NCS.)  The check is done by running an inference on the NCS and also on the host computer in software using the supplied network and appropriate framework libraries.  The results for both inferences (NCS results vs. framework's expected results) are compared to determine a if the network passes or fails and the top 5 inference results are provided as output. 
 
 
 ## Syntax
@@ -26,7 +26,8 @@ mvNCCheck network.meta [-s Max Number of Shaves] [-in Input Node Name] [-on Outp
 Argument|Description
 ------------ | -------------
 network.prototxt(caffe)<br>network.meta(TensorFlow™)|Name of the network file. 
-[-w weights_file]|Weights filename from training. (Only applies to Caffe, not to be used with TensorFlow™.) If omitted, zero weights will be used. 
+[-h --help] | Display help for the command
+[-w weights_file]|Weights filename from training. For Caffe this is the .caffemodel file name.  For TensorFlow™ it must be the network name prefix. If omitted zero weights will be used for Caffe models. 
 [-s Max # of Shaves]|Default: 1<br><br>Selects the maximum number of SHAVEs (1,2,4,8, or 12) to use for network layers.<br><br>Note: The NCS runtime code may use less than the MAX SHAVE value for some layers where measurements have typically shown no inference performance degradation (and consequently a power benefit) of using fewer SHAVEs.
 [-in Input Node Name]|By default the network is processed from the input tensor. This option allows a user to select an alternative start point in the network.<br><br>This enables partial network processing. When used together with the -on option, a user can isolate one or more layers in a network for analysis.
 [-on Output Node Name]|By default the network is processed through to the output tensor. This option allows a user to select an alternative end point in the network.<br><br>This enables partial network processing. When used together with the -in option, a user can isolate one or more layers in a network for analysis.
