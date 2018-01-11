@@ -6,6 +6,7 @@
 -  <a href="{{ "index.html#Frameworks" | absolute_url }}"> Frameworks </a>
     - [Caffe Support](Caffe.md)
     - [TensorFlow™ Support](TensorFlow.md)
+      - [Guidance for Compiling TensorFlow™ Networks](tf_compile_guidance.md)
     - [Configure Networks for NCS](configure_network.md)
 
 - <a href="{{ "index.html#InstallAndExamples" | absolute_url }}"> Installation and examples </a>
