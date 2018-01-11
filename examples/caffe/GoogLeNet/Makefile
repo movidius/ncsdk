@@ -84,7 +84,7 @@ compile: prototxt caffemodel
 check: prototxt caffemodel
 	@echo "\nmaking check"
 #-${NCCHECK} -w ${CAFFEMODEL_FILENAME} -i ../../data/images/cat.jpg -s 12 -id 281 ${PROTOTXT_FILENAME} -S 255 -M ../../data/ilsvrc12/ilsvrc_2012_mean.npy
-	${NCCHECK} -w ${CAFFEMODEL_FILENAME} -i ../../data/images/nps_electric_guitar.png -s 12 -id 546  ${PROTOTXT_FILENAME} -S 255 -M 110
+	${NCCHECK} -w ${CAFFEMODEL_FILENAME} -i ../../data/images/nps_electric_guitar.png -s 12 -id 546  ${PROTOTXT_FILENAME} -S 255 -M 110 -metric top1
 
 .PHONY: run
 run: compile

@@ -449,7 +449,7 @@ mvncStatus mvncAllocateGraph(void *deviceHandle, void **graphHandle,
                                     (nstages - 1) * STAGE_LENGTH) / 2;
 
 	// A reasonable check on graph correctness
-	if (nstages > 1024 || noutputs > 64 * 1024 * 1024)
+	if (noutputs > 64 * 1024 * 1024)
 		return MVNC_UNSUPPORTED_GRAPH_FILE;
 
 	pthread_mutex_lock(&mm);

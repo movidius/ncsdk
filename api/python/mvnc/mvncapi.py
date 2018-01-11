@@ -187,8 +187,10 @@ class Device:
             for i in range(40):
                 if v.raw[i * 50] != 0:
                     ss = v.raw[i * 50:]
-                    end = ss.find(0)
-                    l.append(ss[0:end].decode())
+                    end = ss.find(b'\x00')
+                    val = ss[0:end].decode()
+                    if val:
+                        l.append(val)
             return l
         if opt == DeviceOption.THERMAL_STATS:
             return numpy.frombuffer(v.raw, dtype=numpy.float32)
