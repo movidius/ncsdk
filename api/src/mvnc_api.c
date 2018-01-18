@@ -17,14 +17,20 @@
 */
 
 #define _GNU_SOURCE
+#ifdef __linux
 #include <dlfcn.h>		// For dladdr
+#include <unistd.h>
+#include <dirent.h>
+#endif
+#if (defined WIN32) || (defined _WIN64)
+#include "usleep.h"
+#define HAVE_STRUCT_TIMESPEC
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
-#include <dirent.h>
 #include <time.h>
 #include <pthread.h>
 #include "mvnc.h"
@@ -52,7 +58,7 @@
 #define MAX_PATH_LENGTH 		255
 #define STATUS_WAIT_TIMEOUT     15
 
-static int initialized = 0;
+extern int initialized;
 static pthread_mutex_t mm = PTHREAD_MUTEX_INITIALIZER;
 
 int mvnc_loglevel = 0;
@@ -108,7 +114,8 @@ static double time_in_seconds()
 static void initialize()
 {
 	// We sanitize the situation by trying to reset the devices that have been left open
-	initialized = 1;
+	initialized = !libusb_init(NULL);
+	//initialized = 1;
 	usblink_resetall();
 }
 
@@ -137,6 +144,19 @@ static int is_device_opened(const char *name)
 	return -1;
 }
 
+#if (defined WIN32) || (defined _WIN64)
+#include <Windows.h>
+#include <windef.h>
+typedef struct _Dl_info {
+	char dli_fname[MAX_PATH];
+}Dl_info;
+
+void dladdr(const void* addr, Dl_info *info)
+{
+	strcpy_s(info->dli_fname, MAX_PATH, ".\\");
+}
+#endif
+
 static mvncStatus load_fw_file(const char *name)
 {
 	int rc;
@@ -149,11 +169,23 @@ static mvncStatus load_fw_file(const char *name)
 	Dl_info info;
 	dladdr(mvncOpenDevice, &info);
 	strncpy(mv_cmd_file, info.dli_fname, sizeof(mv_cmd_file) - 40);
+#if (defined WIN32) || (defined _WIN64)
+	p = strchr(mv_cmd_file, '\\');
+#else
 	p = strrchr(mv_cmd_file, '/');
+#endif
 	if (p)
-		strcpy(p + 1, "mvnc/MvNCAPI.mvcmd");
-	else
+#if (defined WIN32) || (defined _WIN64)
+		strcpy(mv_cmd_file, "mvnc\\MvNCAPI.mvcmd");
+#else
 		strcpy(mv_cmd_file, "mvnc/MvNCAPI.mvcmd");
+#endif
+	else
+#if (defined WIN32) || (defined _WIN64)
+		strcpy(p + 1, "mvnc\\MvNCAPI.mvcmd");
+#else
+		strcpy(p + 1, "mvnc/MvNCAPI.mvcmd");
+#endif
 
 	// Load the mvnc executable
 	fp = fopen(mv_cmd_file, "rb");
@@ -219,6 +251,39 @@ static void allocate_device(const char* name, void **deviceHandle, void* f)
 		   d->dev_file ? d->dev_file : "VSC");
 }
 
+#if (defined WIN32) || (defined _WIN64)
+char *
+strtok_r(char *s, const char *delim, char **save_ptr)
+{
+	char *end;
+	if (s == NULL)
+		s = *save_ptr;
+	if (*s == '\0')
+	{
+		*save_ptr = s;
+		return NULL;
+	}
+	/* Scan leading delimiters.  */
+	s += strspn(s, delim);
+	if (*s == '\0')
+	{
+		*save_ptr = s;
+		return NULL;
+	}
+	/* Find the end of the token.  */
+	end = s + strcspn(s, delim);
+	if (*end == '\0')
+	{
+		*save_ptr = end;
+		return s;
+	}
+	/* Terminate the token and make *SAVE_PTR point past it.  */
+	*end = '\0';
+	*save_ptr = end + 1;
+	return s;
+}
+#endif
+
 mvncStatus mvncOpenDevice(const char *name, void **deviceHandle)
 {
 	int rc;
@@ -232,7 +297,6 @@ mvncStatus mvncOpenDevice(const char *name, void **deviceHandle)
 		return MVNC_INVALID_PARAMETERS;
 
 	temp = saved_name = strdup(name);
-
 	device_name = strtok_r(saved_name, ":", &saved_name);
 	if (device_name == NULL) {
 		free(temp);
@@ -433,12 +497,16 @@ mvncStatus mvncAllocateGraph(void *deviceHandle, void **graphHandle,
 		return MVNC_INVALID_PARAMETERS;
 
 	if (graphFileLength < HEADER_LENGTH + STAGE_LENGTH ||
-	    graphFileLength > 512 * 1024 * 1024)
+		graphFileLength > 512 * 1024 * 1024)
+	{
 		return MVNC_UNSUPPORTED_GRAPH_FILE;
+	}
 
 	unsigned char *graph = (unsigned char *) graphFile;
 	if (graph[VERSION_OFFSET] != GRAPH_VERSION)
+	{
 		return MVNC_UNSUPPORTED_GRAPH_FILE;
+	}
 
 	unsigned nstages = graph[N_STAGES_OFFSET] + (graph[N_STAGES_OFFSET + 1] << 8);
 	unsigned noutputs = read_32bits(graph + N_OUTPUTS_OFFSET +
@@ -450,7 +518,9 @@ mvncStatus mvncAllocateGraph(void *deviceHandle, void **graphHandle,
 
 	// A reasonable check on graph correctness
 	if (noutputs > 64 * 1024 * 1024)
+	{
 		return MVNC_UNSUPPORTED_GRAPH_FILE;
+	}
 
 	pthread_mutex_lock(&mm);
 	struct Device *d = devices;

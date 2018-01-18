@@ -19,12 +19,19 @@ import numpy
 import warnings
 from enum import Enum
 from ctypes import *
+from platform import *
 
 # The toolkit wants its local version
 try:
-    f = CDLL("./libmvnc.so")
+    if system() == 'Linux':
+        f = CDLL("./libmvnc.so")
+    if system() == 'Windows':
+	    f = CDLL("./libmvnc.dll")
 except:
-    f = CDLL("libmvnc.so")
+    if system() == 'Linux':
+        f = CDLL("libmvnc.so")
+    if system() == 'Windows':
+        f = CDLL('libmvnc.dll')
 
 warnings.simplefilter('default', DeprecationWarning)
 
