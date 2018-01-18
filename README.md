@@ -28,3 +28,9 @@ For installation and general instructions to get started with the NCSDK, take a 
 Be sure to check the [NCS Troubleshooting Guide](https://ncsforum.movidius.com/discussion/370/intel-ncs-troubleshooting-help-and-guidelines#latest) if you run into any issues with the NCS or NCSDK.
 
 Also for general tech support issues the [NCS User Forum](https://developer.movidius.com/forums) is recommended and contains community discussions on many issues and resolutions.
+
+The api/winsrc is a WINDOWS support project. You can compile it on VS2017.
+To use it, you need compile it and copy the libusb-1.0.dll, pthread.dll, mvnc/MvNCAPI.mvcmd the run DIR. AND copy the python/mvnc to your PYTHON_LIBRARY path.
+You must install the WINUSB driver by zadig-2.3.exe, when your first call OpenDevice over. Because there a new device will be found.
+
+ENJOY it!
