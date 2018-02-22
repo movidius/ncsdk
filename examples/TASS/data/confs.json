@@ -1,0 +1,36 @@
+{
+    "IoTJumpWay": {
+        "Location": YourLocationID,
+        "Zone": YourZoneID,
+        "Device": YourDeviceID,
+        "App": YourAppID
+    },
+    "IoTJumpWayApp": {
+        "Name" : "YourAppName"
+    },
+    "IoTJumpWayDevice": {
+        "Name" : "YourDeviceName"
+    },
+    "IoTJumpWayMQTT": {
+        "Username": "YourMQTTusername",
+        "Password": "YourMQTTpassword"
+    },
+    "Actuators": {},
+    "Cameras": [
+        {
+            "ID": YourCameraID,
+            "URL": 0,
+            "Name": "YourCameraName"
+        }
+    ],
+    "Sensors": {},
+    "ClassifierSettings":{
+        "MODE":"InceptionTest",
+        "NetworkPath":"",
+        "InceptionImagePath":"data/testing/inception/",
+        "InceptionThreshold": 0.50,
+        "YoloImagePath":"data/testing/yolo/",
+        "YoloThreshold": 0,
+        "Graph":"graph"
+    }
+}
