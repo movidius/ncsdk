@@ -29,9 +29,34 @@ This tutorial can be used on a number of devices:
 
 - Laptop / PC running Ubuntu
 - Intel® NUC running Ubuntu / Ubuntu LTS
-- Raspberry Pi running Ubuntu LTS ([Ubuntu Classic Server 16.04 Raspberry Pi 3](https://ubuntu-pi-flavour-maker.org/download/ "Ubuntu Classic Server 16.04 Raspberry Pi 3") ) 
+- Raspberry Pi running Raspian Stretch ([Raspian Stretch](https://www.raspberrypi.org/downloads/raspbian/ "Raspian Stretch") ) 
 
-## Before You Begin
+## Install NCSDK
+
+The first thing you will need to do once you have your operating system on your device is to install the **NCSDK**. 
+
+### Install NCSDK On Raspbery Pi 3:
+
+TO BE CONTINUED 
+
+### Install NCSDK On Other Linux Device:
+
+```
+ $ mkdir -p ~/workspace
+ $ cd ~/workspace
+ $ git clone https://github.com/movidius/ncsdk.git
+ $ cd ~/workspace/ncsdk
+ $ make install
+```
+
+Next plug your Movidius into your device and issue the following commands:
+
+```
+ $ cd ~/workspace/ncsdk
+ $ make examples
+```
+
+## Getting Started With The IoT JumpWay
 
 There are a few tutorials that you should follow before beginning, especially if it is the first time you have used the **IoT JumpWay Developer Program**. If you do not already have one, you will require an **IoT JumpWay Developer Program developer account**, and some basics to be set up before you can start creating your IoT devices. Visit the following [IoT JumpWay Developer Program Docs (5-10 minute read/setup)](https://github.com/TechBubbleTechnologies/IoT-JumpWay-Docs/ "IoT JumpWay Developer Program Docs (5-10 minute read/setup)") and check out the guides that take you through registration and setting up your Location Space, Zones, Devices and Applications (About 5 minutes read).
 
@@ -40,7 +65,7 @@ There are a few tutorials that you should follow before beginning, especially if
 Next install the IoT JumpWay MQTT Client. For this you can execute the following command:
 
 ```
-pip3 install techbubbleiotjumpwaymqtt 
+ $ pip3 install techbubbleiotjumpwaymqtt 
 ```
 
 ## IoT JumpWay Device Connection Credentials & Settings
@@ -88,43 +113,17 @@ Follow the [IoT JumpWay Developer Program (BETA) Location Device Doc](https://gi
 }
 ```
 
-## Install NCSDK
-
-The first thing you will need to do once you have your operating system on your device is to install the **NCSDK**. For this you can follow the code below.
-
-On the Raspbery Pi 3 I had to:
-
-```
-sudo apt install make
-```
-
-After installing make, or for all other devices continue with:
-
-```
-mkdir -p ~/workspace
-cd ~/workspace
-git clone https://github.com/movidius/ncsdk.git
-cd ~/workspace/ncsdk
-make install
-```
-
-Next plug your Movidius into your device and issue the following commands:
-
-```
-cd ~/workspace/ncsdk
-make examples
-```
-
 ## Cloning The Repo
 
 You will need to clone this repository to a location on your development terminal. Navigate to the directory you would like to download it to and issue the following commands.
 
     $ git clone https://github.com/TechBubbleTechnologies/IoT-JumpWay-Intel-Examples.git
 	
-Once you have the repo, you will need to find the files in this folder located in [Intel-Movidius/TASS directory](https://github.com/AdamMiltonBarker/IoT-JumpWay-Intel-Examples/tree/master/Intel-Movidius/TASS "Intel-Movidius/TASS directory"). You will need to navigate to this directory in your terminal also, once you are there, execute the following command:
+Once you have the repo, you will need to find the files in this folder located in [Intel-Movidius/TASS directory](https://github.com/AdamMiltonBarker/IoT-JumpWay-Intel-Examples/tree/master/Intel-Movidius/TASS "Intel-Movidius/TASS directory"). You will need to navigate to this directory in your terminal also. Execute the following commands:
 
 ```
-make run
+ $ cd IoT-JumpWay-Intel-Examples/Intel-Movidius/TASS
+ $ make run
 ```
 
 This will run ncprofile, nccompile and run:
@@ -147,7 +146,7 @@ This tutorial provides a number of configuration modes. For ease, all of the cla
 Now that everything is working, you can execute the following command which will start the program in Inception V3 object detection testing mode. To be in test mode you must edit the **ClassifierSettings->MODE** setting in **data/confs.json** to be **InceptionTest**. You can add new images to the testing folder by adding images to **data/testing/inception**.
 
 ```
-python3 tass.py
+ $ python3 tass.py
 ```
 
 If all went well, it should of taken about 0.3 seconds to identify each image, and out of the 11 images tested 10 were identified with a confidence higher than 50%, and the whole process should take around 4 or 5 seconds on an Intel® NUC. 
@@ -196,13 +195,13 @@ First of all you need to download the weights:
 Then compile the graph:
 
 ```
-mvNCCompile prototxt/yolo_tiny_deploy.prototxt -w weights/yolo_tiny.caffemodel -s 12
+ $ mvNCCompile prototxt/yolo_tiny_deploy.prototxt -w weights/yolo_tiny.caffemodel -s 12
 ```
 
 You can execute the following command which will start the program in Yolo object detection testing mode. To be in Yolo object detection testing mode you must edit the **ClassifierSettings->MODE** setting in **data/confs.json** to be **YoloTest**. You can add new images to the testing folder by adding images to **data/testing/yolo**.
 
 ```
-python3 tass.py
+ $ python3 tass.py
 ```
 
 If all went well, it should of taken about 0.7 seconds to identify the car and the bicycle, it does not however identify the dog. The **TESTING TIME** includes the time to publish the notification to the IoT JumpWay, the whole process should take around 1.4 seconds on an Intel® NUC. 
@@ -264,13 +263,13 @@ Next, if you have not already done so by using **YoloTest** mode, you need to do
 Then compile the graph:
 
 ```
-mvNCCompile prototxt/yolo_tiny_deploy.prototxt -w weights/yolo_tiny.caffemodel -s 12
+ $ mvNCCompile prototxt/yolo_tiny_deploy.prototxt -w weights/yolo_tiny.caffemodel -s 12
 ```
 
 You can execute the following command which will start the program in Yolo object detection live mode. To be in Yolo object detection live mode you must edit the **ClassifierSettings->MODE** setting in **data/confs.json** to be **YoloLive**.
 
 ```
-python3 tass.py
+ $ python3 tass.py
 ```
 
 ![Live Yolo Object Recognition](images/YoloTestFrame.jpg)
