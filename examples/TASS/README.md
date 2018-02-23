@@ -31,32 +31,7 @@ This tutorial can be used on a number of devices:
 - Intel® NUC running Ubuntu / Ubuntu LTS
 - Raspberry Pi running Raspian Stretch ([Raspian Stretch](https://www.raspberrypi.org/downloads/raspbian/ "Raspian Stretch") ) 
 
-## Install NCSDK
-
-The first thing you will need to do once you have your operating system on your device is to install the **NCSDK**. 
-
-### Install NCSDK On Raspbery Pi 3:
-
-TO BE CONTINUED 
-
-### Install NCSDK On Other Linux Device:
-
-```
- $ mkdir -p ~/workspace
- $ cd ~/workspace
- $ git clone https://github.com/movidius/ncsdk.git
- $ cd ~/workspace/ncsdk
- $ make install
-```
-
-Next plug your Movidius into your device and issue the following commands:
-
-```
- $ cd ~/workspace/ncsdk
- $ make examples
-```
-
-## Getting Started With The IoT JumpWay
+## Before You Begin
 
 There are a few tutorials that you should follow before beginning, especially if it is the first time you have used the **IoT JumpWay Developer Program**. If you do not already have one, you will require an **IoT JumpWay Developer Program developer account**, and some basics to be set up before you can start creating your IoT devices. Visit the following [IoT JumpWay Developer Program Docs (5-10 minute read/setup)](https://github.com/TechBubbleTechnologies/IoT-JumpWay-Docs/ "IoT JumpWay Developer Program Docs (5-10 minute read/setup)") and check out the guides that take you through registration and setting up your Location Space, Zones, Devices and Applications (About 5 minutes read).
 
@@ -65,7 +40,7 @@ There are a few tutorials that you should follow before beginning, especially if
 Next install the IoT JumpWay MQTT Client. For this you can execute the following command:
 
 ```
- $ pip3 install techbubbleiotjumpwaymqtt 
+pip3 install techbubbleiotjumpwaymqtt 
 ```
 
 ## IoT JumpWay Device Connection Credentials & Settings
@@ -111,6 +86,64 @@ Follow the [IoT JumpWay Developer Program (BETA) Location Device Doc](https://gi
         "Graph":"graph"
     }
 }
+```
+
+## Install NCSDK
+
+The first thing you will need to do once you have your operating system on your device is to install the **NCSDK**. 
+
+### Install NCSDK On Raspbery Pi 3:
+
+```
+ $ sudo apt-get update && sudo apt-get upgrade
+ $ sudo apt install make
+ $ sudo apt-get install -y libusb-1.0-0-dev libprotobuf-dev
+ $ sudo apt-get install -y libleveldb-dev libsnappy-dev
+ $ sudo apt-get install -y libopencv-dev
+ $ sudo apt-get install -y libhdf5-serial-dev protobuf-compiler
+ $ sudo apt-get install -y libatlas-base-dev git automake 
+ $ sudo apt-get install -y byacc lsb-release cmake 
+ $ sudo apt-get install -y libgflags-dev libgoogle-glog-dev 
+ $ sudo apt-get install -y liblmdb-dev swig3.0 graphviz 
+ $ sudo apt-get install -y libxslt-dev libxml2-dev 
+ $ sudo apt-get install -y gfortran 
+ $ sudo apt-get install -y python3-dev python-pip python3-pip 
+ $ sudo apt-get install -y python3-setuptools python3-markdown 
+ $ sudo apt-get install -y python3-pillow python3-yaml python3-pygraphviz
+ $ sudo apt-get install -y python3-h5py python3-nose python3-lxml 
+ $ sudo apt-get install -y python3-matplotlib python3-numpy 
+ $ sudo apt-get install -y python3-protobuf python3-dateutil 
+ $ sudo apt-get install -y python3-skimage python3-scipy 
+ $ sudo apt-get install -y python3-six python3-networkx
+```
+
+ $ wget https://github.com/lhelontra/tensorflow-on-arm/releases/download/v1.3.1/tensorflow-1.3.1-cp35-none-linux_armv7l.whl
+ $ pip3 install tensorflow-1.3.1-cp35-none-linux_armv7l.whl
+
+```
+ $ mkdir -p ~/workspace
+ $ cd ~/workspace
+ $ git clone https://github.com/movidius/ncsdk.git
+ $ cd ~/workspace/ncsdk/api/src
+ $ make 
+ $ sudo make install
+```
+
+### Install NCSDK On Other Linux Device:
+
+```
+ $ mkdir -p ~/workspace
+ $ cd ~/workspace
+ $ git clone https://github.com/movidius/ncsdk.git
+ $ cd ~/workspace/ncsdk
+ $ make install
+```
+
+Next plug your Movidius into your device and issue the following commands:
+
+```
+ $ cd ~/workspace/ncsdk
+ $ make examples
 ```
 
 ## Cloning The Repo
