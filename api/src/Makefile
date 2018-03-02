@@ -8,6 +8,14 @@ INSTALLDIR := ${DESTDIR}/usr/local
 PYTHON3DIST := $(shell python3 -c "import site; print(site.getsitepackages()[0])")
 PYTHON2DIST := $(shell python -c "import site; print(site.getsitepackages()[0])")
 
+# Determine platform
+UNAME := $(shell uname -s)
+ifeq ($(UNAME), Linux)
+	LINUX := 1
+else ifeq ($(UNAME), Darwin)
+	OSX := 1
+endif
+
 SRCS := \
 	usb_boot.c \
 	usb_link_vsc.c \
@@ -16,7 +24,7 @@ SRCS := \
 INCLUDES := \
 	-I. \
 	-I../include \
-	-I$(SYSROOT)/usr/include/libusb-1.0 \
+	`pkg-config   --cflags libusb-1.0`
 
 CFLAGS += -O2 -Wall -pthread -fPIC -MMD -MP
 LDFLAGS += -shared
@@ -47,8 +55,10 @@ basicinstall: $(OBJDIR)/$(OUT)
 	cp ../include/*.h $(INSTALLDIR)/include/
 	mkdir -p $(INSTALLDIR)/lib/mvnc
 	cp mvnc/MvNCAPI.mvcmd $(INSTALLDIR)/lib/mvnc/
+ifeq ($(LINUX), 1)
 	mkdir -p ${DESTDIR}/etc/udev/rules.d/
 	cp 97-usbboot.rules ${DESTDIR}/etc/udev/rules.d/
+endif
 
 pythoninstall:
 	mkdir -p ${DESTDIR}$(PYTHON3DIST)
@@ -57,9 +67,11 @@ pythoninstall:
 	cp -r ../python/mvnc ${DESTDIR}$(PYTHON2DIST)/
 
 postinstall:
+ifeq ($(LINUX), 1)
 	udevadm control --reload-rules
 	udevadm trigger
 	ldconfig
+endif
 
 install: basicinstall pythoninstall postinstall
 
@@ -72,7 +84,9 @@ uninstall:
 	rm -rf $(INSTALLDIR)/lib/mvnc
 	rm -rf ${DESTDIR}$(PYTHON3DIST)/mvnc
 	rm -rf ${DESTDIR}$(PYTHON2DIST)/mvnc
+ifeq ($(LINUX), 1)
 	rm -f ${DESTDIR}/etc/udev/rules.d/97-usbboot.rules
+endif
 
 clean:
 	rm -f $(OUT)

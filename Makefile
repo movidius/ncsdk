@@ -28,15 +28,15 @@ uninstallopencv:
 
 .PHONY: prereqs
 prereqs:
-	@sed -i 's/\r//' ncsdk.conf
+	@sed -i -e 's/\r//' ncsdk.conf
 	@if [ -e ncsdk_redirector.txt ] ; \
 	then \
-		@sed -i 's/\r//' ncsdk_redirector.txt ; \
+		@sed -i -e 's/\r//' ncsdk_redirector.txt ; \
 	fi
 
-	@sed -i 's/\r//' install.sh
-	@sed -i 's/\r//' uninstall.sh
-	@sed -i 's/\r//' README.md
+	@sed -i -e 's/\r//' install.sh
+	@sed -i -e 's/\r//' uninstall.sh
+	@sed -i -e 's/\r//' README.md
 	@chmod +x install.sh
 	@chmod +x uninstall.sh
 	@chmod +x install-opencv.sh
@@ -63,7 +63,8 @@ runexamples: prereqs opencv
 	(cd examples; make run)
 
 .PHONY: api
-api: @echo "\nmake api starting."
+api:
+	@echo "\nmake api starting."
 	(cd api/src; make; make install)
 
 .PHONY: clean
