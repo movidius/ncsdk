@@ -11,7 +11,8 @@ then
 	cd /tmp
 else
 	cd /tmp
-	wget --no-cache http://ncs-forum-uploads.s3.amazonaws.com/ncsdk/ncsdk_01_12/ncsdk_redirector.txt
+	#wget --no-cache http://ncs-forum-uploads.s3.amazonaws.com/ncsdk/ncsdk_01_12/ncsdk_redirector.txt
+	wget --no-cache -O ncsdk_redirector.txt "https://ncs-forum-uploads.s3-us-west-1.amazonaws.com/ncsdk/ncsdk_01_012_B/ncsdk_redirector.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJPV7SAH5YZ2U3ARA/20180314/us-west-1/s3/aws4_request&X-Amz-Date=20180314T233615Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=8886c9b49d0017ef736c9d226ff6763552f46fa501163fcbe769035c63b84456"
 fi
 
 download_filename=NCSDK-1.12.tar.gz
