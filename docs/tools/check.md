@@ -8,7 +8,7 @@ Revision|1.08
 See also| [mvNCCompile](compile.md), [mvNCProfile](profile.md), [TensorFlow™ Info](../TensorFlowUsage.md)
 
 ## Overview
-This command line tool validates (checks) a Caffe or TensorFlow™ neural network on the Intel® Movidius™ Neural Compute Stick (Intel® Movidius™ NCS.)  The check is done by running an inference on the NCS and also on the host computer in software using the supplied network and appropriate framework libraries.  The results for both inferences (NCS results vs. framework's expected results) are compared to determine a if the network passes or fails and the top 5 inference results are provided as output. 
+This command line tool validates (checks) a Caffe or TensorFlow™ nerual network on the Intel® Movidius™ Neural Compute Stick (Intel® Movidius™ NCS.)  The check is done by running an inference on the NCS and also on the host computer in software using the supplied network and appropriate framework libraries.  The results for both inferences (NCS results vs. framework's expected results) are compared to determine a if the network passes or fails and the top 5 inference results are provided as output. 
 
 
 ## Syntax
@@ -35,9 +35,9 @@ network.prototxt(caffe)<br>network.meta(TensorFlow™)|Name of the network file.
 [-o Output Graph Filename]|Default: "graph"<br><br>Output graph container filename. If not provided, “graph” will be used.
 [-i image filename]|Image to use as input to validation run.<br>If not set, a randomly generated image will be used.
 [-id Top-1 Validation ID]|Expected id for Top-1 validation.
-[-S scale factor]|Divisor used to scale each value of the input.<br>E.g., Typically images are stored with data for each input channel in the range from 0-255.  If using this tool with one of these typical images, and the neural network expects input values in the range 0.0 - 1.0, then -S 255 will scale the values to the network's expected range because each value will be divided by 255.  If the network expects values between -1.0 and 1.0 then -S 128 and -M 128 can be used.
-[-M Mean Subtraction Number or npy filename]|Subtract this value from the input prior to passing to the neural network.  If the network expects input values between -1.0 and 1.0 then -S 128 and -M 128 can be used.
-[-cs Color Sequence]|Color Sequence of Input channels the neural network expects:<br>  2,1,0: network expects BGR (Default) <br>  0,1,2 : network expects RGB
+[-S scale factor]|Scale each value of the input by this amount.<br>E.g., if the network expects input values in the range 0-255, put 255 here (1 is default, as the range 0-1 is the default).
+[-M Mean Subtraction Number or npy filename]|Subtract this from the input (applied after scale). E.g., if the network expects a mean file to be subtracted from the input image, put it here.
+[-cs Color Sequence]|Color Sequence of Input channels:<br>  2,1,0: BGR (Default) <br>  0,1,2 : RGB
 
 ## Known Issues
 
