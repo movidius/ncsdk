@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="fiforead_elem">Fifo.read_elem()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Fifo.html">Fifo</a>, <a href="Fifo.write_elem.html">Fifo.write_elem()</a>, <a href="Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_With_fifo_elem()</a>, <a href="Graph.queue_inference.html">Graph.queue_inference()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>This method returns an element from the <a href="Fifo.html">Fifo</a>, usually the result of an inference, along with the associated user-defined object that was passed to <a href="Fifo.write_elem.html">Fifo.write_elem()</a> or <a href="Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_with_fifo_elem()</a>.</p>
+
+<p>This will also remove the element from the queue.</p>
+
+<h2 id="syntax">Syntax</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">output_tensor</span><span class="p">,</span> <span class="n">user_obj</span> <span class="o">=</span> <span class="n">fifo</span><span class="o">.</span><span class="n">read_elem</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="parameters">Parameters</h2>
+<p>None.</p>
+
+<h2 id="return">Return</h2>
+<p><em>tensor, user_obj</em></p>
+
+<p>A numpy.ndarray with output tensor data of the type specified by the <a href="FifoDataType.html">FifoDataType</a> option, and the user-defined data that was passed to <a href="Fifo.write_elem.html">Fifo.write_elem()</a> or <a href="Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_with_fifo_elem()</a>.</p>
+
+<h2 id="raises">Raises</h2>
+<p>Exception with a status code from <a href="Status.html">Status</a> if underlying function calls return a status other than Status.OK.</p>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>The <a href="FifoType.html">FifoType</a> set during initialization must allow read access for the API.</li>
+  <li>The <a href="Fifo.html">Fifo</a> cannot be written to or read from until it is allocated with <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a> or <a href="Fifo.allocate.html">Fifo.allocate()</a>. The <a href="FifoState.html">FifoState</a> must be ALLOCATED.</li>
+  <li>The API can only read each element once even if <a href="FifoOption.html">FifoOption.RW_CONSUMER_COUNT</a> is greater than 1.</li>
+  <li>This is a blocking call if <a href="FifoOption.html">FifoOption.RW_DONT_BLOCK</a> is false. If the <a href="Fifo.html">Fifo</a> is empty this method will not return until there is an element to read.
+    <ul>
+      <li>You can check the current fill level of the <a href="Fifo.html">Fifo</a> with <a href="Fifo.get_option.html">Fifo.get_option()</a> for <a href="FifoOption.html">FifoOption.RO_READ_FILL_LEVEL</a>.</li>
+      <li>After an inference is queued there is a delay while device communication occurs and the inference is performed before the element is removed from the input <a href="Fifo.html">Fifo</a> and placed into the output <a href="Fifo.html">Fifo</a>.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="example">Example</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">mvnc</span> <span class="kn">import</span> <span class="n">mvncapi</span>
+
+<span class="c">#</span>
+<span class="c"># Open a Device, create a Graph, and load graph data from file...</span>
+<span class="c">#</span>
+
+<span class="c"># Allocate the Graph and create and allocate two associate Fifos for input and output</span>
+<span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">allocate_with_fifos</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">graph_buffer</span><span class="p">)</span>
+
+<span class="c">#</span>
+<span class="c"># Write elements to an input Fifo with Fifo.write_elem() and initiate inferences with Graph.queue_inference()</span>
+<span class="c">#</span>
+
+<span class="c"># Read the result to the output Fifo</span>
+<span class="n">result_tensor</span><span class="p">,</span> <span class="n">user_obj</span> <span class="o">=</span> <span class="n">output_fifo</span><span class="o">.</span><span class="n">read_elem</span><span class="p">()</span>
+
+<span class="c">#</span>
+<span class="c"># Do something with the result...</span>
+<span class="c">#</span>
+
+<span class="c"># Destroy the Fifos</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">output_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+
+<span class="c">#</span>
+<span class="c"># Perform other clean up...</span>
+<span class="c">#</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

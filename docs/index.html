@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <p><a name="Introduction"></a></p>
+<h1 id="introduction">Introduction</h1>
+<p>The Intel® Movidius™ Neural Compute SDK (Intel® Movidius™ NCSDK) enables rapid prototyping and deployment of deep neural networks (DNNs) on compatible neural compute devices like the <a href="ncs.html">Intel® Movidius™ Neural Compute Stick</a>. The NCSDK includes a set of software tools to compile, profile, and validate (check) DNNs as well as the Neural Compute API (NCAPI) for application development in C/C++ or Python.</p>
+
+<p>The NCSDK has two general usages:</p>
+<ul>
+  <li>Profiling, tuning, and compiling a DNN model on a development computer (host system) with the <a href="#NcSdkTools">tools</a> provided in the NCSDK.</li>
+  <li>Prototyping a user application on a development computer (host system), which accesses the neural compute device hardware to accelerate DNN inferences via the <a href="#NcApi">NCAPI</a>.</li>
+</ul>
+
+<p>The following diagram shows the typical workflow for development with the NCSDK:</p>
+
+<p><img src="images/ncs_workflow.jpg" alt="" /></p>
+
+<p>Note that network training phase does not utilize the NCSDK.</p>
+
+<p><a name="Frameworks"></a></p>
+<h1 id="frameworks">Frameworks</h1>
+
+<p>The NCSDK currently supports two deep learning frameworks:</p>
+<ol>
+  <li><a href="caffe.html">Caffe</a> from Berkeley Vision Labs</li>
+  <li><a href="tensorflow.html">TensorFlow™</a> from Google</li>
+</ol>
+
+<p><a href="configure_network.html">See here</a> for more directions for using networks from these frameworks with the NCSDK.</p>
+
+<p><a name="NcSdkTools"></a></p>
+<h1 id="ncsdk-tools">NCSDK Tools</h1>
+
+<ul>
+  <li><a href="tools/compile.html">mvNCCompile</a>: Converts a Caffe/TensorFlow™ network and associated weights to an internal Intel® Movidius™ compiled format.</li>
+  <li><a href="tools/profile.html">mvNCProfile</a>: Provides layer-by-layer statistics to evaluate the performance of Caffe/TensorFlow™ networks on your neural compute device.</li>
+  <li><a href="tools/check.html">mvNCCheck</a>: Compares the inference results from running the network on your neural compute device vs. Caffe/TensorFlow™ for network compilation validation.</li>
+</ul>
+
+<p><a name="NcApi"></a></p>
+<h1 id="ncapi">NCAPI</h1>
+
+<p>Applications for performing inferences with the NCAPI can be developed either in C/C++ or Python. The NCAPI provides a software interface to communicate with neural compute devices, load compiled network files, manage input/output, and perform inferences.</p>
+
+<ul>
+  <li><a href="ncapi/readme.html">Documentation Overview</a>
+    <ul>
+      <li><a href="ncapi/ncapi2/py_api/readme.html">Python API</a>
+        <ul>
+          <li><a href="ncapi/python_api_migration.html">Python NCAPI v1 to NCAPI v2 Migration</a></li>
+        </ul>
+      </li>
+      <li><a href="ncapi/ncapi2/c_api/readme.html">C API</a>
+        <ul>
+          <li><a href="ncapi/c_api_migration.html">C NCAPI v1 to NCAPI v2 Migration</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><a name="Installation"></a></p>
+<h1 id="installation">Installation</h1>
+
+<p>View the <a href="install.html">NCSDK installation instructions</a> or choose an alternate installation method:</p>
+<ul>
+  <li><a href="vm_config.html">Install in a virtual machine</a></li>
+  <li><a href="docker.html">Install in a Docker container</a></li>
+  <li><a href="virtualenv.html">Install with a Python virtualenv</a></li>
+</ul>
+
+<p><a name="Examples"></a></p>
+<h1 id="base-examples">Base Examples</h1>
+
+<p>There are several example applications and networks included with the NCSDK:</p>
+<ul>
+  <li>Caffe
+    <ul>
+      <li>GoogLeNet</li>
+      <li>AlexNet</li>
+      <li>SqueezeNet</li>
+    </ul>
+  </li>
+  <li>TensorFlow™
+    <ul>
+      <li>Inception v1</li>
+      <li>Inception v3</li>
+    </ul>
+  </li>
+  <li>Apps
+    <ul>
+      <li>hello_ncs_py</li>
+      <li>hello_ncs_cpp</li>
+      <li>multistick_cpp</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Each example contains a Makefile. Running <code class="highlighter-rouge">make help</code> in the example’s base directory will give possible make targets. Running <code class="highlighter-rouge">make examples</code> in the base ncsdk directory will build all examples.</p>
+
+<p><a name="AppZoo"></a></p>
+<h1 id="neural-compute-app-zoo">Neural Compute App Zoo</h1>
+<p>Many more examples, including user-submitted networks and applications, can be found at our <a href="https://github.com/movidius/ncappzoo">Neural Compute App Zoo</a> GitHub repository.</p>
+
+<p><a name="ReleaseNotes"></a></p>
+<h1 id="release-notes">Release Notes</h1>
+
+<p>See the latest <a href="release_notes.html">Release Notes</a>.</p>
+
+<p><a name="UserForum"></a></p>
+
+<h1 id="intel-movidius-user-forum">Intel® Movidius™ User Forum</h1>
+
+<p>There is an active user forum for users of the NCSDK to discuss ideas and seek troubleshooting help at <a href="https://ncsforum.movidius.com">https://ncsforum.movidius.com</a>.</p>
+
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

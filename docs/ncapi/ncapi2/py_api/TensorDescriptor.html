@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="class-tensordescriptorctypesstructure">class TensorDescriptor(ctypes.Structure)</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Graph.html">Graph</a>, <a href="Fifo.html">Fifo</a>, <a href="GraphOption.html">GraphOption</a>, <a href="FifoOption.html">FifoOption</a>, <a href="Graph.get_option.html">Graph.get_option()</a>, <a href="Fifo.get_option.html">Fifo.get_option()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>TensorDescriptor is a structure that describes graph inputs and outputs.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n</td>
+      <td>int</td>
+      <td>The number of tensors in the batch.</td>
+    </tr>
+    <tr>
+      <td>c</td>
+      <td>int</td>
+      <td>The number of channels per tensor data element. For image tensors, this is the number of channels per pixel.</td>
+    </tr>
+    <tr>
+      <td>w</td>
+      <td>int</td>
+      <td>For image tensors, this is the width in pixels. For non-image tensors, this is always 1.</td>
+    </tr>
+    <tr>
+      <td>h</td>
+      <td>int</td>
+      <td>For image tensors, this is the height in pixels. For non-image tensors, this is always 1.</td>
+    </tr>
+    <tr>
+      <td>totalSize</td>
+      <td>int</td>
+      <td>The total size of the data. This is the number of bytes required to hold the entire tensor.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>You can use <a href="Graph.get_option.html">Graph.get_option()</a> to get lists of input and output <a href="TensorDescriptor.html">TensorDescriptors</a> for a <a href="Graph.html">Graph</a>.</li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="graphoption-enumeration-class">GraphOption Enumeration Class</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Graph.SetGraphOption.html">Graph.SetGraphOption()</a> <br /><a href="Graph.GetGraphOption.html">Graph.GetGraphOption()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>The GraphOption class is an enumeration class that defines the options that are passed to and received from the SetDeviceOption and the GetDeviceOption functions.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>enum</th>
+      <th>option type</th>
+      <th>possible values</th>
+      <th>get/set</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>DONTBLOCK</td>
+      <td>int</td>
+      <td>0 or 1</td>
+      <td>get/set</td>
+      <td>0: Calls to Graph.LoadTensor() and Graph.GetResult() will block (won’t return until the action is completed) (Default)<br />1: Calls to those functions don’t block (they will return immediately).  If the action coudn’t be completed the return value will indicate why.  Graph.LoadTensor() will return MVNC_BUSY when the NCS isn’t able to perform the action because its busy, try again later.  Graph.GetResult() will return MVNC_NO_DATA unless there is an inference that is ready to be returned.  In this case try again later and when there is a completed inference the results will be returned.</td>
+    </tr>
+    <tr>
+      <td>TIMETAKEN</td>
+      <td>numpy float array</td>
+      <td>any</td>
+      <td>get</td>
+      <td>Return a numpy float array of inference times per layer in float data type.</td>
+    </tr>
+    <tr>
+      <td>DEBUGINFO</td>
+      <td>string</td>
+      <td>any</td>
+      <td>get</td>
+      <td>Return a string with the error text as returned by the device.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

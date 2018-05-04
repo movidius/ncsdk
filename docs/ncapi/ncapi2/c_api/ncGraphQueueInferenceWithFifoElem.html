@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="ncgraphqueueinferencewithfifoelem">ncGraphQueueInferenceWithFifoElem()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Library</td>
+      <td>libmvnc.so</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncGraphHandle_t.html">struct ncGraphHandle_t</a>, <a href="ncFifoHandle_t.html">struct ncFifoHandle_t</a>, <a href="ncGraphQueueInference.html">ncGraphQueueInference()</a>, <a href="ncFifoWriteElem.html">ncFifoWriteElem()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>This function writes an element to a FIFO, usually an input tensor for inference, and queues an inference to be processed by a graph. This is a convenient way to write an input tensor and queue an inference in one call.</p>
+
+<h2 id="prototype">Prototype</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ncStatus_t</span> <span class="n">ncGraphQueueInferenceWithFifoElem</span><span class="p">(</span>
+    <span class="k">struct</span> <span class="n">ncGraphHandle_t</span><span class="o">*</span> <span class="n">graphHandle</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">ncFifoHandle_t</span><span class="o">*</span> <span class="n">fifoIn</span><span class="p">,</span>
+    <span class="k">struct</span> <span class="n">ncFifoHandle_t</span><span class="o">*</span> <span class="n">fifoOut</span><span class="p">,</span> 
+    <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">inputTensor</span><span class="p">,</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span><span class="o">*</span> <span class="n">inputTensorLength</span><span class="p">,</span> 
+    <span class="kt">void</span><span class="o">*</span> <span class="n">userParam</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>graphHandle</td>
+      <td><a href="ncGraphHandle_t.html">struct ncGraphHandle_t</a>*</td>
+      <td>A pointer to an ncGraphHandle_t struct for the graph that will be used for inference. The graph state must be <a href="ncGraphState_t.html">NC_GRAPH_ALLOCATED</a>.</td>
+    </tr>
+    <tr>
+      <td>fifoIn</td>
+      <td><a href="ncFifoHandle_t.html">struct ncFifoHandle_t</a>*</td>
+      <td>A pointer to the ncFifoHandle_t struct for the input queue from which the tensor will be read. The FIFO state must be <a href="ncFifoState_t.html">NC_FIFO_ALLOCATED</a>.</td>
+    </tr>
+    <tr>
+      <td>fifoOut</td>
+      <td><a href="ncFifoHandle_t.html">struct ncFifoHandle_t</a>*</td>
+      <td>A pointer to the ncFifoHandle_t struct for the output queue on which the inference result will be placed. The FIFO state must be <a href="ncFifoState_t.html">NC_FIFO_ALLOCATED</a>.</td>
+    </tr>
+    <tr>
+      <td>inputTensor</td>
+      <td>const void*</td>
+      <td>A pointer to a tensor data buffer that contains data in the format specified by the FIFO’s <a href="ncFifoDataType_t.html">NC_RW_FIFO_DATA_TYPE</a> option.  This data is typically a representation of each color channel in each pixel of an image.</td>
+    </tr>
+    <tr>
+      <td>inputTensorLength</td>
+      <td>unsigned int*</td>
+      <td>A pointer to an unsigned int that contains the length, in bytes, of the buffer that the inputTensor parameter points to.<br /><br />If the size of the input tensor does not match the expected input size for this FIFO, the return status code will be <a href="ncStatus_t.html">NC_INVALID_DATA_LENGTH</a> and inputTensorLength will be set to the expected input size.</td>
+    </tr>
+    <tr>
+      <td>userParam</td>
+      <td>void*</td>
+      <td>A pointer to additional user data to associate with the input tensor, or NULL. The pointer value (not the data that it points to) will be copied, stored, and then returned with the inference result with <a href="ncFifoReadElem.html">ncFifoReadElem()</a>. This pointer can point to anything that the caller would like to associate with the inference result, such as the original inference input or a window handle. The caller is responsible for allocating and freeing any memory that this pointer references.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>An appropriate value from the <a href="ncStatus_t.html">ncStatus_t</a> enumeration.</p>
+
+<p>If the size of the input tensor does not match the expected input size for this FIFO, the return status code will be <a href="ncStatus_t.html">NC_INVALID_DATA_LENGTH</a> and the inputTensorLength will be set to the expected input size.</p>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>This function takes the place of explicit calls to <a href="ncFifoWriteElem.html">ncFifoWriteElem()</a> and <a href="ncGraphQueueInference.html">ncGraphQueueInference()</a>.</li>
+  <li>The input FIFO must allow <a href="ncFifoType_t.html">write access</a> for the API and the output FIFO must allow <a href="ncFifoType_t.html">read access</a> for the API.</li>
+  <li><a href="ncFifoWriteElem.html">ncFifoWriteElem()</a>, which is called internally by this function, is a blocking call if <a href="ncFifoOption_t.html">NC_RW_FIFO_DONT_BLOCK</a> is false. If the input FIFO is full this function will not return until there is space to write to the FIFO.
+    <ul>
+      <li>The input FIFO’s capacity is set when the FIFO is allocated with <a href="ncGraphAllocateWithFifos.html">ncGraphAllocateWithFifos()</a>/<a href="ncGraphAllocateWithFifosEx.html">ncGraphAllocateWithFifosEx()</a> or <a href="ncFifoAllocate.html">ncFifoAllocate()</a>.</li>
+      <li>You can check the capacity and the current fill level of the input FIFO with <a href="ncFifoGetOption.html">ncFifoGetOption()</a> for <a href="ncFifoOption_t.html">NC_RO_FIFO_CAPACITY</a> and <a href="ncFifoOption_t.html">NC_RO_FIFO_WRITE_FILL_LEVEL</a>.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="example">Example</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;mvnc.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// You can check that this return code is equal to NC_OK after each API function call</span>
+    <span class="c1">// This is omitted in this example for better readability</span>
+    <span class="n">ncStatus_t</span> <span class="n">retCode</span><span class="p">;</span>
+
+    <span class="c1">// Initialize and open a device</span>
+    <span class="k">struct</span> <span class="n">ncDeviceHandle_t</span><span class="o">*</span> <span class="n">deviceHandle</span><span class="p">;</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncDeviceCreate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceHandle</span><span class="p">);</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncDeviceOpen</span><span class="p">(</span><span class="n">deviceHandle</span><span class="p">);</span>
+
+    <span class="c1">// Load a graph from file</span>
+    <span class="c1">// void* graphBuffer = ...</span>
+    <span class="c1">// unsigned int graphBufferLength = ...</span>
+    
+    <span class="c1">// Initialize the graph</span>
+    <span class="k">struct</span> <span class="n">ncGraphHandle_t</span><span class="o">*</span> <span class="n">graphHandle</span><span class="p">;</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncGraphCreate</span><span class="p">(</span><span class="s">"graph1"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">graphHandle</span><span class="p">);</span>
+       
+    <span class="c1">// CONVENIENCE FUNCTION: Allocate the graph to the device and create input/output FIFOs with default options</span>
+    <span class="c1">// Alternatively, use ncGraphAllocateWithFifosEx() to do this with explicit FIFO options</span>
+    <span class="k">struct</span> <span class="n">ncFifoHandle_t</span><span class="o">*</span> <span class="n">inputFIFO</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">ncFifoHandle_t</span><span class="o">*</span> <span class="n">outputFIFO</span><span class="p">;</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncGraphAllocateWithFifos</span><span class="p">(</span><span class="n">deviceHandle</span><span class="p">,</span> <span class="n">graphHandle</span><span class="p">,</span> <span class="n">graphBuffer</span><span class="p">,</span> <span class="n">graphBufferLength</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">inputFIFO</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outputFIFO</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">graphBuffer</span><span class="p">);</span>
+
+    <span class="c1">// Read and preprocess input...</span>
+    <span class="c1">// float* imageBuffer = ...</span>
+    <span class="c1">// unsigned int imageBufferLength = ...</span>
+
+    <span class="c1">// Write the image to the input FIFO and queue the inference</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncGraphQueueInferenceWithFifoElem</span><span class="p">(</span>
+                    <span class="n">graphHandle</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">inputFIFO</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">outputFIFO</span><span class="p">,</span>
+                    <span class="n">imageBuffer</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">imageBufferLength</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>    
+    
+    <span class="c1">// Get the results from the output FIFO</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">result</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">fifoOutputSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">optionDataLen</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">fifoOutputSize</span><span class="p">);</span>
+    <span class="n">ncFifoGetOption</span><span class="p">(</span><span class="n">outFifoHandlePtr</span><span class="p">,</span> <span class="n">NC_RO_FIFO_ELEMENT_DATA_SIZE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fifoOutputSize</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">optionDataLen</span><span class="p">);</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">fifoOutputSize</span><span class="p">);</span>    
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncFifoReadElem</span><span class="p">(</span><span class="n">outputFIFO</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fifoOutputSize</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+
+    <span class="c1">// Do something with the results...</span>
+
+    <span class="c1">// Clean up</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncFifoDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">inputFIFO</span><span class="p">);</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncFifoDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">outputFIFO</span><span class="p">);</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncGraphDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">graphHandle</span><span class="p">);</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncDeviceClose</span><span class="p">(</span><span class="n">deviceHandle</span><span class="p">);</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncDeviceDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">deviceHandle</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

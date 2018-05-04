@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="caffe-support">Caffe Support</h1>
+
+<h2 id="introduction">Introduction</h2>
+<p><a href="http://caffe.berkeleyvision.org/">Caffe</a> is a deep learning framework developed by Berkeley AI Research (<a href="http://bair.berkley.edu">BAIR</a>) and by community contributors.</p>
+
+<p>Each version of the Intel® Movidius™ Neural Compute SDK (Intel® Movidius™ NCSDK) installs and is validated with a single version of Caffe that provides broad network support for that release. The specific version installed may change from release to release. Other versions of Caffe may work with the NCSDK but are not officially supported and may require customization for your specific development machine.</p>
+
+<p>The setup script currently downloads <a href="https://github.com/weiliu89/caffe/tree/master">SSD Caffe</a> and installs it in a system location.<br />
+A soft link to the Caffe installation is available at <em>/opt/movidius/caffe</em></p>
+
+<h2 id="caffe-models">Caffe Models</h2>
+
+<p>Caffe models consist of two files that are used for compiling the caffe model using the NCSDK <a href="tools/compile.html">mvNCCompile</a> tool:</p>
+<ul>
+  <li><strong>.prototxt</strong> - Text file that describes the topology and layers of the network</li>
+  <li><strong>.caffemodel</strong> - Binary file that contains the weights for each layer that are obtained after training a model</li>
+</ul>
+
+<p>Further reading: <a href="https://movidius.github.io/blog/deploying-custom-caffe-models/">Deploying Your Customized Caffe Models on Intel® Movidius™ Neural Compute Stick</a></p>
+
+<h2 id="caffe-layer-support">Caffe Layer Support</h2>
+<p>The following layers are supported in Caffe by the NCSDK. The NCSDK does not support network training, so some layers that are only required for training are not supported.</p>
+
+<h3 id="activationneuron">Activation/Neuron</h3>
+<ul>
+  <li>bias</li>
+  <li>elu</li>
+  <li>prelu</li>
+  <li>relu</li>
+  <li>scale</li>
+  <li>sigmoid</li>
+  <li>tanh</li>
+</ul>
+
+<h3 id="common">Common</h3>
+<ul>
+  <li>inner_product</li>
+</ul>
+
+<h3 id="normalization">Normalization</h3>
+<ul>
+  <li>batch_norm</li>
+  <li>lrn</li>
+</ul>
+
+<h3 id="utility">Utility</h3>
+<ul>
+  <li>concat</li>
+  <li>eltwise</li>
+  <li>flatten</li>
+  <li>parameter</li>
+  <li>reshape</li>
+  <li>slice</li>
+  <li>softmax</li>
+</ul>
+
+<h3 id="vision">Vision</h3>
+<ul>
+  <li>conv
+    <ul>
+      <li>Regular Convolution - 1x1s1, 3x3s1, 5x5s1, 7x7s1, 7x7s2, 7x7s4</li>
+      <li>Group Convolution - &lt;1024 groups total</li>
+    </ul>
+  </li>
+  <li>deconv</li>
+  <li>pooling</li>
+</ul>
+
+<h1 id="known-issues">Known Issues</h1>
+<h3 id="caffe-input-layer">Caffe Input Layer</h3>
+
+<p>Limitation: Batch Size, which is the first dimension, must always be 1</p>
+
+<p>Limitation: The number of inputs must be 1</p>
+
+<p>Limitation: We don’t support this “input_param” format for the input layer:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 name: "GoogleNet" 
+2 layer { 
+3   name: "data" 
+4   type: "Input" 
+5   top: "data" 
+6   input_param { shape: { dim: *10* dim: 3 dim: 224 dim: 224 } } 
+7 } 
+</code></pre></div></div>
+
+<p>We only support this “input_shape” format for the input layer:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>name: "GoogleNet" 
+input: "data"
+ input_shape 
+{ dim:1 dim:3 dim:224 dim:224 } 
+</code></pre></div></div>
+
+<h3 id="input-name">Input Name</h3>
+<p>Input should be always called “data”.</p>
+
+<p>This works:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>name: "GoogleNet" 
+input: "data"
+ input_shape 
+{ dim:1 dim:3 dim:224 dim:224 } 
+</code></pre></div></div>
+
+<p>This does not:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>name: "GoogleNet" 
+input: "data_x"
+ input_shape 
+{ dim:1 dim:3 dim:224 dim:224 } 
+</code></pre></div></div>
+
+<h3 id="crop-layer">Crop Layer</h3>
+<p>Limitation: Crop layer cannot take reference size layer from input:”data”.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>layer {
+  name: "score"
+  type: "Crop"
+  bottom: "upscore"
+  bottom: "data"
+  top: "score"
+  crop_param {
+    axis: 2
+    offset: 18
+  }
+}
+</code></pre></div></div>
+
+<h3 id="size-limitations">Size Limitations</h3>
+<p>Compiled Movidius™ “graph” file &lt; 320 MB;
+Intermediate layer buffer size &lt; 100 MB</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Error 35] Setup Error: Not enough resources on Myriad to process this network
+</code></pre></div></div>
+
+<p>Scratch Memory size &lt; 112 KB</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Error 25] Myriad Error: "Matmul scratch memory [112640] lower than required [165392]"
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

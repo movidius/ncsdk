@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="ncdevicesetoption">ncDeviceSetOption()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Library</td>
+      <td>libmvnc.so</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncDeviceHandle_t.html">struct ncDeviceHandle_t</a>, <a href="ncDeviceOption_t.html">ncDeviceOption_t</a>, <a href="ncDeviceGetOption.html">ncDeviceGetOption()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>This function sets an option value for a neural compute device. The available options and possible values can be found in the <a href="ncDeviceOption_t.html">ncDeviceOption_t</a> enumeration.</p>
+
+<h2 id="prototype">Prototype</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ncStatus_t</span> <span class="n">ncDeviceSetOption</span><span class="p">(</span><span class="k">struct</span> <span class="n">ncDeviceHandle_t</span><span class="o">*</span> <span class="n">deviceHandle</span><span class="p">,</span>
+                             <span class="kt">int</span> <span class="n">option</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+                             <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">dataLength</span><span class="p">);</span>
+</code></pre></div></div>
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>deviceHandle</td>
+      <td><a href="ncDeviceHandle_t.html">struct ncDeviceHandle_t</a>*</td>
+      <td>A pointer to an ncDeviceHandle_t struct for the device for which the option value will be set. The device state must be <a href="ncDeviceState_t.html">NC_DEVICE_CREATED</a> or <a href="ncDeviceState_t.html">NC_DEVICE_OPENED</a>.</td>
+    </tr>
+    <tr>
+      <td>option</td>
+      <td>int</td>
+      <td>A value from the <a href="ncDeviceOption_t.html">ncDeviceOption_t</a> enumeration that specifies which option’s value will be set.</td>
+    </tr>
+    <tr>
+      <td>data</td>
+      <td>const void*</td>
+      <td>A pointer to a buffer containing the new value for the option.<br /><br />The type of data this points to depends on the option that is specified. Check <a href="ncDeviceOption_t.html">ncDeviceOption_t</a> for option data types.</td>
+    </tr>
+    <tr>
+      <td>dataLength</td>
+      <td>unsigned int</td>
+      <td>An unsigned int that contains the length, in bytes, of the buffer that the data parameter points to.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>An appropriate value from the <a href="ncStatus_t.html">ncStatus_t</a> enumeration.</p>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>There are currently no settable device options.</li>
+</ul>
+
+<h2 id="example">Example</h2>
+<p>N/A</p>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="mvncgraphoptions-enumeration">mvncGraphOptions enumeration</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value/s</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="mvncGetGraphOption.html">mvncGetGraphOption</a>, <a href="mvncSetGraphOption.html">mvncSetGraphOption</a>, <a href="mvncAllocateGraph.html">mvncAllocateGraph</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>This enumeration is used to specify an option on the graph that can be written or read via mvncGetGraphOption() and mvncSetGraphOption(). The table below provides details on the meaning of each of the values in the enumeration.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Constant</th>
+      <th>Option Type</th>
+      <th>Possible Values</th>
+      <th>Get/Set</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MVNC_DONT_BLOCK</td>
+      <td>int</td>
+      <td>0, 1</td>
+      <td>get, set</td>
+      <td>0: Calls to mvncLoadTensor and mvncGetResult will block (won’t return until the action is completed) (Default)<br />1: Calls to those functions don’t block (they will return immediately).  If the action coudn’t be completed the return value will indicate why.  mvncLoadTensor() will return MVNC_BUSY when the NCS isn’t able to perform the action because its busy, try again later.  mvncGetResult() will return MVNC_NO_DATA unless there is an inference that is ready to be returned.  In this case try again later and when there is a completed inference the results will be returned.</td>
+    </tr>
+    <tr>
+      <td>MVNC_TIME_TAKEN</td>
+      <td>float*</td>
+      <td>any</td>
+      <td>get</td>
+      <td>An array containing inference time per graph layer for the last inference returned by mvncGetResult.</td>
+    </tr>
+    <tr>
+      <td>MVNC_DEBUG_INFO</td>
+      <td>char*</td>
+      <td>any</td>
+      <td>get</td>
+      <td>A string that provides more details when the result of a function call was MVNC_MYRIADERROR.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>
