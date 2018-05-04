@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="graphloadtensor">Graph.LoadTensor()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Graph.GetResult.html">Graph.GetResult()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>This function initiates an inference on the specified graph via the associated Intel® Movidius™ NCS device. After calling this function, use the Graph.GetResult() function to retrieve the inference result.</p>
+
+<h2 id="syntax">Syntax</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">graph</span><span class="o">.</span><span class="n">LoadTensor</span><span class="p">(</span><span class="n">inputTensor</span><span class="p">,</span> <span class="n">userObject</span><span class="p">)</span>
+</code></pre></div></div>
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>inputTensor</td>
+      <td>Input data on which an inference will be run. The data must be passed in a numpy ndarray of half precision floats (float 16).</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>userObject</td>
+      <td>A user-defined parameter that is returned by the GetResult function along with the inference result for this tensor.</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>Returns True if the function works, False if not. When the graph is in non-blocking mode (GraphOption.DONTBLOCK), this function will return False if the device is busy.</p>
+
+<h2 id="known-issues">Known Issues</h2>
+
+<h2 id="example">Example</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c"># Enumerate Device</span>
+<span class="c"># Open Device, # Allocate Graph, # Set Graph Option</span>
+<span class="c"># Read an image, resize the image and adjust for mean if necessary to match the network expected size</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">LoadTensor</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float16</span><span class="p">),</span> <span class="s">'user object'</span><span class="p">)):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"LoadTensor success"</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">,</span> <span class="n">userobj</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">GetResult</span><span class="p">()</span>
+
+<span class="c"># Deallocate the graph and Close the device</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

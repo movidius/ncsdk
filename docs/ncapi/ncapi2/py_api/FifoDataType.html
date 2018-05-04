@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="class-fifodatatypeenumenum">class FifoDataType(enum.Enum)</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Fifo.html">Fifo</a>, <a href="FifoOption.html">FifoOption</a>, <a href="Fifo.get_option.html">Fifo.get_option()</a>, <a href="Fifo.set_option.html">Fifo.set_option()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>FifoDataType is an enumeration that defines <a href="Fifo.html">Fifo</a> data types, which can be read with <a href="Fifo.get_option.html">Fifo.get_option()</a> or set with <a href="Fifo.set_option.html">Fifo.set_option()</a> or <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a>.</p>
+
+<p>The default data type is FP32. If the input <a href="Fifo.html">Fifo’s</a> <a href="FifoDataType.html">FifoDataType</a> is configured to FP32, the API will convert the data to the FP16 data type automatically when performing inferences. If the output <a href="Fifo.html">Fifo’s</a> <a href="FifoDataType.html">FifoDataType</a> is configured to 32FP, the API will convert the output back to the FP32 data type.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Enumeration Member</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>FP16</td>
+      <td>The data is in half precision (16 bit) floating point format (FP16).</td>
+    </tr>
+    <tr>
+      <td>FP32</td>
+      <td>The data is in full precision (32 bit) floating point format (FP32).<br /><br />This is the C float type for many compilers and computer architectures.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

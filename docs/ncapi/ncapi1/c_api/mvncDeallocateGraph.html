@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="mvncdeallocategraph">mvncDeallocateGraph()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Library</td>
+      <td>libmvnc.so</td>
+    </tr>
+    <tr>
+      <td>Return</td>
+      <td><a href="mvncStatus.html">mvncStatus</a></td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="mvncOpenDevice.html">mvncOpenDevice</a>, <a href="mvncAllocateGraph.html">mvncAllocateGraph</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>This function deallocates a graph that was previously allocated with mvncAllocateGraph(). After successful return from this function, the passed graphHandle will be invalid and should not be used.</p>
+
+<h2 id="prototype">Prototype</h2>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mvncStatus</span> <span class="n">mvncDeallocateGraph</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">graphHandle</span><span class="p">);</span>
+</code></pre></div></div>
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>graphHandle</td>
+      <td>void**</td>
+      <td>Pointer to opaque graph data type that was initialized with the mvncAllocateGraph() function.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>This function returns an appropriate value from the <a href="mvncStatus.html">mvncStatus</a> enumeration.</p>
+
+<h2 id="known-issues">Known Issues</h2>
+<p>Using a deallocated graph handle can lead to hard-to-find bugs. To prevent this, it’s good practice to set the handle to NULL (or nullptr for C++ 11) after deallocating, as shown in this code snippet:</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mvncDeallocateGraph</span><span class="p">(</span><span class="n">graphHandle</span><span class="p">);</span>
+<span class="n">graphHandle</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="example">Example</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Graph file name</span>
+<span class="cp">#define GRAPH_FILE_NAME "graphfile"
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">deviceHandle</span><span class="p">;</span> 
+    
+    <span class="p">.</span>
+    <span class="p">.</span>
+    <span class="p">.</span>
+    
+    <span class="c1">//</span>
+    <span class="c1">// Assume NCS device opened here and deviceHandle is valid now</span>
+    <span class="c1">// and the graph file is in graphFileBuf and length in bytes  </span>
+    <span class="c1">// is in graphFileLen.</span>
+    <span class="c1">//</span>
+
+    <span class="c1">// Allocate the graph</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">graphHandle</span><span class="p">;</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">mvncAllocateGraph</span><span class="p">(</span><span class="n">deviceHandle</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">graphHandle</span><span class="p">,</span> <span class="n">graphFileBuf</span><span class="p">,</span> <span class="n">graphFileLen</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">retCode</span> <span class="o">!=</span> <span class="n">MVNC_OK</span><span class="p">)</span>
+    <span class="p">{</span>   <span class="c1">// Error allocating graph</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Could not allocate graph for file: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">GRAPH_FILE_NAME</span><span class="p">);</span> 
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>   <span class="c1">// Successfully allocated graph. Now graphHandle is ready to go.  </span>
+        <span class="c1">// Use graphHandle for other API calls, and call mvncDeallocateGraph</span>
+        <span class="c1">// when done with it.</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Successfully allocated graph for %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">GRAPH_FILE_NAME</span><span class="p">);</span>
+        
+        <span class="n">retCode</span> <span class="o">=</span> <span class="n">mvncDeallocateGraph</span><span class="p">(</span><span class="n">graphHandle</span><span class="p">);</span>
+        <span class="n">graphHandle</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">.</span>
+<span class="p">.</span>
+<span class="p">.</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

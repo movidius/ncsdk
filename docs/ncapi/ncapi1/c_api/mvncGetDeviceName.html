@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="mvncgetdevicename">mvncGetDeviceName()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Library</td>
+      <td>libmvnc.so</td>
+    </tr>
+    <tr>
+      <td>Return</td>
+      <td><a href="mvncStatus.html">mvncStatus</a></td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="mvncOpenDevice.html">mvncOpenDevice</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>This function is used to get the name of a particular Intel® Movidius™ NCS device. Typical usage is to call the function repeatedly, starting with index = 0, and incrementing the index each time until an error is returned. These successive calls will give you the names of all the devices in the system.</p>
+
+<h2 id="prototype">Prototype</h2>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mvncStatus</span> <span class="n">mvncGetDeviceName</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nameSize</span><span class="p">);</span>
+</code></pre></div></div>
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>index</td>
+      <td>int</td>
+      <td>Index of the device for which the name should be retrieved.</td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td>char*</td>
+      <td>Pointer to a character buffer into which the name will be copied. This buffer should be allocated by the caller.</td>
+    </tr>
+    <tr>
+      <td>nameSize</td>
+      <td>unsigned int</td>
+      <td>The number of characters allocated to the buffer pointed to by the name parameter.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>This function returns an appropriate value from the <a href="mvncStatus.html">mvncStatus</a> enumeration.</p>
+
+<h2 id="known-issues">Known Issues</h2>
+
+<h2 id="example">Example</h2>
+<p>The following example shows how to get the name of all Intel® Movidius™ NCS devices attached to the system. mvncGetDeviceName is called repeatedly until it returns MVNC_DEVICE_NOT_FOUND.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+</span><span class="k">extern</span> <span class="s">"C"</span> 
+<span class="p">{</span>
+<span class="cp">#include &lt;mvnc.h&gt;
+</span><span class="p">}</span>
+<span class="c1">// somewhat arbitrary buffer size for the device name</span>
+<span class="cp">#define NAME_SIZE 100
+</span><span class="kt">int</span> <span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">mvncStatus</span> <span class="n">retCode</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">deviceCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">devName</span><span class="p">[</span><span class="n">NAME_SIZE</span><span class="p">];</span>
+<span class="err">   </span> <span class="k">while</span> <span class="p">((</span><span class="n">retCode</span> <span class="o">=</span> <span class="n">mvncGetDeviceName</span><span class="p">(</span><span class="n">deviceCount</span><span class="p">,</span> <span class="n">devName</span><span class="p">,</span> <span class="n">NAME_SIZE</span><span class="p">))</span> <span class="o">!=</span> <span class="n">MVNC_DEVICE_NOT_FOUND</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Found NCS device named: </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"\n</span><span class="s">"</span><span class="p">,</span> <span class="n">devName</span><span class="p">);</span><span class="err"> </span>
+        <span class="n">deviceCount</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Total number of NCS devices found: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">deviceCount</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Output from the example code above with two Intel® Movidius™ NCS devices in the system.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Found NCS device named: "2.3"
+Found NCS device named: "1"
+Total number of NCS devices found: 2
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="using-the-intel-movidius-neural-compute-sdk-with-virtualenv">Using the Intel® Movidius™ Neural Compute SDK with virtualenv</h1>
+
+<p><strong>NOTE: This feature is only available with Intel® Movidius™ Neural Compute SDK 2.x.</strong></p>
+
+<p><a href="https://virtualenv.pypa.io/en/stable/">virtualenv</a> is a tool to create isolated Python environments that help avoid issues caused by conflicting package dependencies for different applications.</p>
+
+<p>To use virtualenv with the Intel® Movidius™ Neural Compute SDK (Intel® Movidius™ NCSDK), you must enable virtualenv in the NCSDK configuration <strong>before</strong> installing the NCSDK.</p>
+
+<h2 id="enabling-virtualenv">Enabling virtualenv</h2>
+
+<p>Before running the <strong>ncsdk/install.sh</strong> script, open <strong>ncsdk/ncsdk.conf</strong> for editing and set <code class="highlighter-rouge">USE_VIRTUALENV=yes</code> (by default it will say <code class="highlighter-rouge">USE_VIRTUALENV=no</code>).</p>
+
+<p>Save the change and then proceed with NCSDK <a href="install.html">installation</a>.</p>
+
+<h2 id="usage">Usage</h2>
+
+<p>You must activate the virtualenv any time that you want to use the NCSDK.</p>
+
+<ul>
+  <li>
+    <h3 id="activation">Activation</h3>
+
+    <p>To activate the virtualenv for use, enter the following command:</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source</span> /opt/movidius/virtualenv-python/bin/activate
+</code></pre></div>    </div>
+
+    <p>If the virtualenv was successfully activated, you will see <code class="highlighter-rouge">(virtualenv-python)</code> amended to your command prompt.</p>
+  </li>
+  <li>
+    <h3 id="deactivation">Deactivation</h3>
+
+    <p>To leave the virtualenv, enter the following command:</p>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>deactivate
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <h3 id="python-package-location">Python Package Location</h3>
+
+    <p>When using the virtualenv, Python packages will be installed to <strong>/opt/movidius/virtualenv-python/lib/python3.5/site-packages</strong>.</p>
+  </li>
+</ul>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">ImportError</code> when running an NCSDK example or tool:</p>
+
+    <p>Make sure that you have activated the virtualenv as shown above.</p>
+  </li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

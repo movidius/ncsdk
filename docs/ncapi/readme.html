@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="neural-compute-api">Neural Compute API</h1>
+<p>Applications for performing inferences with the Intel® Movidius™ Neural Compute SDK (Intel® Movidius™ NCSDK) can be developed in either C/C++ or Python.
+The Neural Compute API (NCAPI) provides a software interface to load network graphs and run inferences on neural compute devices.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>NCAPI v2 Documentation</th>
+      <th>NCAPI v1 Documentation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="ncapi2/c_api/readme.html">C API v2</a><br /><a href="ncapi2/py_api/readme.html">Python API v2</a></td>
+      <td><a href="ncapi1/c_api/readme.html">C API v1 (legacy)</a><br /><a href="ncapi1/py_api/readme.html">Python API v1 (legacy)</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ncapi-v1-vs-ncapi-v2">NCAPI v1 vs. NCAPI v2</h2>
+
+<p>The original NCSDK used NCAPI v1.
+That version has been superseded by NCAPI v2, which is not backwards-compatible (i.e. programs written with NCAPI v1 will not compile or run with NCAPI v2).</p>
+
+<p>NCAPI v2 was created to provide developers with more flexibility when developing applications for neural compute devices. Key advantages to NCAPI v2 are:</p>
+
+<ul>
+  <li>Multiple network graphs can be allocated to a single neural compute device (up to 10 graphs per device, limited by device memory)</li>
+  <li>Input/output is handled with first-in, first-out (FIFO) queues, which support queueing multiple inference inputs/outputs</li>
+  <li>32 bit floating point (FP32) input/output is supported</li>
+</ul>
+
+<p>NCAPI v1 is no longer being updated so NCAPI v2 should be used for all new application development.
+Documentation for NCAPI v1 will still be provided for legacy applications.</p>
+
+<h3 id="migrating-applications-from-ncapi-v1-to-ncapi-v2">Migrating Applications from NCAPI v1 to NCAPI v2</h3>
+
+<p>For information about migrating a Python application from NCAPI v1 to NCAPI v2, see:</p>
+<ul>
+  <li><a href="python_api_migration.html">Migrating Python Applications from NCAPI v1 to NCAPI v2</a></li>
+</ul>
+
+<p>For information about migrating a C/C++ application from NCAPI v1 to NCAPI v2, see:</p>
+<ul>
+  <li><a href="c_api_migration.html">Migrating C/C++ Applications from NCAPI v1 to NCAPI v2</a></li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>
