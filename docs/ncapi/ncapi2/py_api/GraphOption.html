@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="class-graphoptionenumenum">class GraphOption(enum.Enum)</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Graph.html">Graph</a>, <a href="Graph.get_option.html">Graph.get_option()</a>, <a href="Graph.set_option.html">Graph.set_option()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>GraphOption is an enumeration that defines <a href="Graph.html">Graph</a> options that can be read with <a href="Graph.get_option.html">Graph.get_option()</a> or set with <a href="Graph.set_option.html">Graph.set_option()</a>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Option Type</th>
+      <th>Possible Values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>RO_GRAPH_STATE</td>
+      <td>int</td>
+      <td>Values in the <a href="GraphState.html">GraphState</a> enumeration</td>
+      <td>The current state of the <a href="Graph.html">Graph</a>.</td>
+    </tr>
+    <tr>
+      <td>RO_TIME_TAKEN</td>
+      <td>numpy.ndarray of floats</td>
+      <td>Unbounded positive floats</td>
+      <td>The times taken per graph layer for the last inference.</td>
+    </tr>
+    <tr>
+      <td>RO_INPUT_COUNT</td>
+      <td>int</td>
+      <td>1</td>
+      <td>The number of inputs expected by the graph. This is the length of the RO_INPUT_TENSOR_DESCRIPTORS list.<br /><br /><em>Only 1 currently supported.</em></td>
+    </tr>
+    <tr>
+      <td>RO_OUTPUT_COUNT</td>
+      <td>int</td>
+      <td>1</td>
+      <td>The number of outputs expected by the graph.  This is the length of the RO_OUTPUT_TENSOR_DESCRIPTORS list.<br /><br /><em>Only 1 currently supported.</em></td>
+    </tr>
+    <tr>
+      <td>RO_INPUT_TENSOR_<br />DESCRIPTORS</td>
+      <td>list(<a href="TensorDescriptor.html">TensorDescriptor</a>)</td>
+      <td>N/A</td>
+      <td>A list of <a href="TensorDescriptor.html">TensorDescriptor</a> objects that describe the graph inputs.</td>
+    </tr>
+    <tr>
+      <td>RO_OUTPUT_TENSOR_<br />DESCRIPTORS</td>
+      <td>list(<a href="TensorDescriptor.html">TensorDescriptor</a>)</td>
+      <td>N/A</td>
+      <td>A list of <a href="TensorDescriptor.html">TensorDescriptor</a> objects that describe the graph outputs.</td>
+    </tr>
+    <tr>
+      <td>RO_DEBUG_INFO</td>
+      <td>str</td>
+      <td>Any</td>
+      <td>More detailed debug info when the result of a function call was <a href="Status.html">Status.MYRIAD_ERROR</a>.</td>
+    </tr>
+    <tr>
+      <td>RO_GRAPH_NAME</td>
+      <td>str</td>
+      <td>Any</td>
+      <td>The name of the <a href="Graph.html">Graph</a> that was set when the <a href="Graph.html">Graph</a> was created.</td>
+    </tr>
+    <tr>
+      <td>RO_CLASS_LIMIT</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The highest option class supported.</td>
+    </tr>
+    <tr>
+      <td>RO_GRAPH_VERSION</td>
+      <td>numpy.ndarray of unsigned ints</td>
+      <td>[<em>major, minor</em>]</td>
+      <td>The version of the compiled graph file.</td>
+    </tr>
+    <tr>
+      <td>RO_TIME_TAKEN<br />_ARRAY_SIZE</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The size of the array for RO_TIME_TAKEN.</td>
+    </tr>
+    <tr>
+      <td>RW_EXECUTORS_NUM</td>
+      <td>int</td>
+      <td>Positive int up to <a href="DeviceOption.html">RO_MAX_EXECUTORS_NUM</a></td>
+      <td><em>Reserved for future use.</em></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li><strong>Options prefixed with ‘RW’ have read/write permission and are both gettable and settable.</strong></li>
+  <li><strong>Options prefixed with ‘RO’ have read-only permission and are only gettable.</strong></li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

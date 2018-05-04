@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="enum-ncfifostate_t">enum ncFifoState_t</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncFifoGetOption.html">ncFifoGetOption()</a>, <a href="ncFifoSetOption.html">ncFifoSetOption()</a>, <a href="ncFifoHandle_t.html">struct ncFifoHandle_t</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>The ncFifoState_t enumeration defines states of a FIFO and associated <a href="ncFifoHandle_t.html">ncFifoHandle_t</a> struct, which can be read with <a href="ncFifoGetOption.html">ncFifoGetOption()</a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Constant</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NC_FIFO_CREATED</td>
+      <td>The <a href="ncFifoHandle_t.html">ncFifoHandle_t</a> struct has been initialized with <a href="ncFifoCreate.html">ncFifoCreate()</a> but the FIFO has not been allocated for a device.</td>
+    </tr>
+    <tr>
+      <td>NC_FIFO_ALLOCATED</td>
+      <td>The FIFO handle has been initialized, and the FIFO has been allocated for a device with <a href="ncFifoAllocate.html">ncFifoAllocate()</a> or <a href="ncGraphAllocateWithFifos.html">ncGraphAllocateWithFifos()</a>.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

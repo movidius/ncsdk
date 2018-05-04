@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="mvnccompile-error-codes">mvNCCompile Error Codes</h1>
+
+<h3 id="error--1-setup-error-caffe-import-error">Error  1: “Setup Error: Caffe Import Error.”</h3>
+<h3 id="error--2-setup-error-using-a-version-of-python-that-is-unsupported">Error  2: “Setup Error: Using a version of Python that is unsupported.”</h3>
+<h3 id="error--3-setup-error-caffe-syntax-error-">Error  3: “Setup Error: Caffe Syntax Error: …”</h3>
+<h3 id="error--4-toolkit-error-stage-type-not-supported-">Error  4: “Toolkit Error: Stage Type Not Supported: …”</h3>
+<h3 id="error--5-toolkit-error-stage-details-not-supported-">Error  5: “Toolkit Error: Stage Details Not Supported: …”</h3>
+<h3 id="error--6-setup-error-no-myriad-executable-detected">Error  6: “Setup Error: no Myriad Executable detected.”</h3>
+<h3 id="error--7-toolkit-error-usb-failure-code-">Error  7: “Toolkit Error: USB Failure. Code: …”</h3>
+<h3 id="error--8-argument-error-network-description-cannot-be-found">Error  8: “Argument Error: Network description cannot be found.”</h3>
+<h3 id="error--9-argument-error-network-weight-cannot-be-found">Error  9: “Argument Error: Network weight cannot be found.”</h3>
+<h3 id="error-10-toolkit-error-no-such-mode-">Error 10: “Toolkit Error: No such Mode …”</h3>
+<h3 id="error-11-argument-error-expected-id-not-provided">Error 11: “Argument Error: Expected ID not provided.”</h3>
+<h3 id="error-12-argument-error-image-cannot-be-found">Error 12: “Argument Error: Image cannot be found.”</h3>
+<h3 id="error-13-toolkit-error-provided-outputnodeinputnode-name-does-not-exist-or-does-not-match-with-one-contained-in-caffemodel-file-provided-">Error 13: “Toolkit Error: Provided OutputNode/InputNode name does not exist or does not match with one contained in caffemodel file Provided: …”</h3>
+<h3 id="error-14-toolkit-error-data-type-not-supported-">Error 14: “Toolkit Error: Data Type Not Supported: …”</h3>
+<h3 id="error-15-toolkit-error-parser-not-supported-">Error 15: “Toolkit Error: Parser Not Supported: …”</h3>
+<h3 id="error-16-toolkit-error-internal-error-input-stage-is-not-first-layer">Error 16: “Toolkit Error: Internal Error: Input Stage is not first layer.”</h3>
+<h3 id="error-17-toolkit-error-internal-error-could-not-build-graph-missing-link-">Error 17: “Toolkit Error: Internal Error: Could not build graph. Missing link: …”</h3>
+<h3 id="error-18-toolkit-error-internal-error-invalid-conversion-optimization-from-">Error 18: “Toolkit Error: Internal Error: Invalid Conversion Optimization. From: …”</h3>
+<h3 id="error-19-toolkit-error-setup-error-not-all-required-arguments-were-passed--erroneous-arguments">Error 19: “Toolkit Error: Setup Error: Not all required arguments were passed / Erroneous arguments.”</h3>
+<h3 id="error-20-toolkit-error-input-layer-must-be-in-an-input_shape-construct">Error 20: “Toolkit Error: Input Layer must be in an input_shape construct.”</h3>
+<h3 id="error-21-argument-error-validation-metric-not-supported-">Error 21: “Argument Error: Validation metric not supported “</h3>
+<h3 id="error-22-toolkit-error-unable-to-tell-what-parser-is-required-consider-overriding-with-parser-argument">Error 22: “Toolkit Error: Unable to tell what parser is required. Consider overriding with –parser argument.”</h3>
+<h3 id="error-23-toolkit-error-mismatch-between-input-layer-of-network-and-given-input-file">Error 23: “Toolkit Error: Mismatch between input layer of network and given input file.”</h3>
+<h3 id="error-24-toolkit-error-1-image-inference-not-supported">Error 24: “Toolkit Error: &gt;1 image inference not supported.”</h3>
+<h3 id="error-26-toolkit-error-no-moviusbboot-executable-detected">Error 26: “Toolkit Error: No moviUsbBoot Executable detected.”</h3>
+<h3 id="error-25-myriad-error-">Error 25: “Myriad Error: …”</h3>
+<h3 id="error-27-setup-error-too-many--too-few-shave-processors-selected">Error 27: “Setup Error: Too Many / Too Few Shave Processors Selected.”</h3>
+<h3 id="error-28-caffe-error-memoryerror-potential-cause-available-ram-not-sufficient-for-network-to-be-loaded-into-caffe">Error 28: “Caffe Error: MemoryError. Potential Cause: Available RAM not sufficient for Network to be loaded into Caffe”</h3>
+<h3 id="error-29-setup-error-tuple-syntax-incorrect-should-be-in-form-xyz-">Error 29: “Setup Error: Tuple Syntax Incorrect, should be in form x,y,z “</h3>
+<h3 id="error-30-toolkit-error-filetype-not-supported-as-a-input">Error 30: “Toolkit Error: Filetype not supported as a input.”</h3>
+<h3 id="error-31-usb-error-problem-transferring-data">Error 31: “USB Error: Problem Transferring data.”</h3>
+<h3 id="error-32-setup-error-problem-parsing-configuration-file">Error 32: “Setup Error: Problem parsing configuration File.”</h3>
+<h3 id="error-33-toolkit-error-no-temperature-read-from-device">Error 33: “Toolkit Error: No Temperature Read from device.”</h3>
+<h3 id="error-34-setup-error-values-for-input-contain-placeholder-pass-an-absolute-value">Error 34: “Setup Error: Values for input contain placeholder. Pass an absolute value.”</h3>
+<h3 id="error-35-setup-error-not-enough-resources-on-myriad-to-process-this-network">Error 35: “Setup Error: Not enough resources on Myriad to process this network.”</h3>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

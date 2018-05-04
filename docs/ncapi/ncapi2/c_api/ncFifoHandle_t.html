@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="struct-ncfifohandle_t">struct ncFifoHandle_t</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncDeviceHandle_t.html">struct ncDeviceHandle_t</a>, <a href="ncGraphHandle_t.html">struct ncGraphHandle_t</a>, <a href="ncFifoOption_t.html">ncFifoOption_t</a>, <a href="ncFifoCreate.html">ncFifoCreate()</a>, <a href="ncFifoAllocate.html">ncFifoAllocate()</a>, <a href="ncFifoDestroy.html">ncFifoDestroy()</a>, <a href="ncFifoWriteElem.html">ncFifoWriteElem()</a>, <a href="ncFifoReadElem.html">ncFifoReadElem()</a>, <a href="ncFifoRemoveElem.html">ncFifoRemoveElem()</a>, <a href="ncFifoGetOption.html">ncFifoGetOption()</a>, <a href="ncFifoSetOption.html">ncFifoSetOption()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>The <a href="ncFifoHandle_t.html">ncFifoHandle_t</a> struct is an abstraction for a first in, first out queue (FIFO) that is used throughout the API.</p>
+
+<h2 id="typical-usage">Typical Usage</h2>
+<ul>
+  <li>Create and allocate input and output FIFOs with <a href="ncGraphAllocateWithFifos.html">ncGraphAllocateWithFifos()</a> or <a href="ncGraphAllocateWithFifosEx.html">ncGraphAllocateWithFifosEx()</a>.
+    <ul>
+      <li>Alternatively, initialize <a href="ncFifoHandle_t.html">ncFifoHandle_t</a> structs for input and output queues with <a href="ncFifoCreate.html">ncFifoCreate()</a> and then allocate each with <a href="ncFifoAllocate.html">ncFifoAllocate()</a>.</li>
+    </ul>
+  </li>
+  <li>Write input tensors to an input FIFO with <a href="ncGraphQueueInferenceWithFifoElem.html">ncGraphQueueInferenceWithFifoElem()</a> or <a href="ncFifoWriteElem.html">ncFifoWriteElem()</a>.</li>
+  <li>Read output tensors from an output FIFO with <a href="ncFifoReadElem.html">ncFifoReadElem()</a>.</li>
+  <li>When finished, destroy the FIFO handle and free associated resources with <a href="ncFifoDestroy.html">ncFifoDestroy()</a>.</li>
+</ul>
+
+<p>See the <a href="readme.html">C API Overview</a> for more information about typical API usage.</p>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="enum-ncgraphstate_t">enum ncGraphState_t</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncGraphHandle_t.html">struct ncGraphHandle_t</a>, <a href="ncGraphOption_t.html">ncGraphOption_t</a>, <a href="ncGraphGetOption.html">ncGraphGetOption()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>The ncGraphState_t enumeration defines states of a network graph and associated <a href="ncGraphHandle_t.html">ncGraphHandle_t</a> struct, which can be read with <a href="ncGraphGetOption.html">ncGraphGetOption()</a>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Constant</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NC_GRAPH_CREATED</td>
+      <td>The <a href="ncGraphHandle_t.html">ncGraphHandle_t</a> struct has been initialized with <a href="ncGraphCreate.html">ncGraphCreate()</a> but the graph has not been allocated for a device.</td>
+    </tr>
+    <tr>
+      <td>NC_GRAPH_ALLOCATED</td>
+      <td>The graph handle has been initialized, and the graph has been allocated for a device with <a href="ncGraphAllocate.html">ncGraphAllocate()</a> or <a href="ncGraphAllocateWithFifos.html">ncGraphAllocateWithFifos()</a>.</td>
+    </tr>
+    <tr>
+      <td>NC_GRAPH_WAITING_FOR_BUFFERS</td>
+      <td>The graph is waiting for input.</td>
+    </tr>
+    <tr>
+      <td>NC_GRAPH_RUNNING</td>
+      <td>The graph is currently running an inference.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="mvncgetgraphoption">mvncGetGraphOption()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Library</td>
+      <td>libmvnc.so</td>
+    </tr>
+    <tr>
+      <td>Return</td>
+      <td><a href="mvncStatus.html">mvncStatus</a></td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="mvncAllocateGraph.html">mvncAllocateGraph</a>, <a href="mvncGraphOptions.html">mvncGraphOptions</a>, <a href="mvncSetGraphOption.html">mvncSetGraphOption</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>This function gets the current value of an option for a graph. The available options can be found in the GraphOptions enumeration.</p>
+
+<h2 id="prototype">Prototype</h2>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mvncStatus</span> <span class="n">mvncGetGraphOption</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">graphHandle</span><span class="p">,</span> <span class="kt">int</span> <span class="n">option</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="o">*</span><span class="n">datalength</span><span class="p">);</span>
+</code></pre></div></div>
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>graphHandle</td>
+      <td>void*</td>
+      <td>Pointer to opaque graph data type that was initialized with the mvncAllocateGraph() function, which represents the neural network. This specifies which graph’s option value will be retrieved.</td>
+    </tr>
+    <tr>
+      <td>option</td>
+      <td>int</td>
+      <td>A value from the GraphOptions enumeration that specifies which option will be retrieved.</td>
+    </tr>
+    <tr>
+      <td>data</td>
+      <td>void*</td>
+      <td>For pointer option types, address of a pointer that will be set to point to a buffer containing the option value. For other types, pointer to a buffer where the value of the option will be copied. The type of data this points to will depend on the option that is specified. Check mvncGraphOptions for the data types that each option requires.</td>
+    </tr>
+    <tr>
+      <td>dataLength</td>
+      <td>unsigned int*</td>
+      <td>Pointer to an unsigned int, which must point to the size, in bytes, of the buffer allocated to the data parameter when called. Upon successfull return, it will be set to the number of bytes copied to the data buffer.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>This function returns an appropriate value from the <a href="mvncStatus.html">mvncStatus</a> enumeration.</p>
+
+<h2 id="known-issues">Known Issues</h2>
+
+<h2 id="example">Example</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span>
+<span class="p">.</span>
+<span class="p">.</span>
+    <span class="c1">// Open device to get device handle, </span>
+    <span class="c1">// allocate the graph to get graph handle.</span>
+
+    <span class="c1">// Set the graph option for blocking calls</span>
+    <span class="kt">int</span> <span class="n">dontBlockValue</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">sizeOfValue</span><span class="p">;</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">mvncGetGraphOption</span><span class="p">(</span><span class="n">graphHandle</span><span class="p">,</span> <span class="n">MVNC_DONTBLOCK</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">**</span><span class="p">)(</span><span class="o">&amp;</span><span class="n">dontBlockValue</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">sizeOfValue</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">retCode</span> <span class="o">==</span> <span class="n">MVNC_OK</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Successfully got graph option, value is: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">dontBlockValue</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Could not get graph option</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Error returned from mvncGetGraphOption: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">retCode</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Use graph, deallocate graph, close device, etc.</span>
+    
+    <span class="p">.</span>
+    <span class="p">.</span>
+    <span class="p">.</span>
+
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

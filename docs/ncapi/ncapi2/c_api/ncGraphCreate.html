@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="ncgraphcreate">ncGraphCreate()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Library</td>
+      <td>libmvnc.so</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncGraphHandle_t.html">struct ncGraphHandle_t</a>, <a href="ncGraphAllocateWithFifos.html">ncGraphAllocateWithFifos()</a>, <a href="ncGraphAllocateWithFifosEx.html">ncGraphAllocateWithFifosEx()</a>, <a href="ncGraphAllocate.html">ncGraphAllocate()</a>, <a href="ncGraphDestroy.html">ncGraphDestroy()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>This function initializes a <a href="ncGraphHandle_t.html">ncGraphHandle_t</a> struct.</p>
+
+<p>Create a graph handle for each network graph. A neural compute device can have more than one graph allocated to it, but each graph can only be allocated to a single device.</p>
+
+<p><a href="ncGraphDestroy.html">ncGraphDestroy()</a> frees the memory that is allocated for the <a href="ncGraphHandle_t.html">ncGraphHandle_t</a> struct.</p>
+
+<h2 id="prototype">Prototype</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ncStatus_t</span> <span class="n">ncGraphCreate</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ncGraphHandle_t</span><span class="o">**</span> <span class="n">graphHandle</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td>const char*</td>
+      <td>A null-terminated array of characters that specify a name for the graph; this can be can be anything you like up to NC_MAX_NAME_SIZE characters, or just an empty string.<br /><br />The name can be retrieved later with <a href="ncGraphGetOption.html">ncGraphGetOption()</a>.</td>
+    </tr>
+    <tr>
+      <td>graphHandle</td>
+      <td><a href="ncGraphHandle_t.html">struct ncGraphHandle_t</a>**</td>
+      <td>The address of a pointer to the <a href="ncGraphHandle_t.html">ncGraphHandle_t</a> struct that will be created and initialized by this function.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>An appropriate value from the <a href="ncStatus_t.html">ncStatus_t</a> enumeration.</p>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>The <a href="ncGraphHandle_t.html">ncGraphHandle_t</a> struct must be created and initialized with this function before being passed to any other API functions. When the graph handle is properly initialized, the graph state will be <a href="ncGraphState_t.html">NC_GRAPH_CREATED</a>.</li>
+  <li>After initialization, the <a href="ncGraphHandle_t.html">ncGraphHandle_t</a> struct must be passed to <a href="ncGraphAllocateWithFifos.html">ncGraphAllocateWithFifos()</a>/<a href="ncGraphAllocateWithFifosEx.html">ncGraphAllocateWithFifosEx()</a> or <a href="ncGraphAllocate.html">ncGraphAllocate()</a> before being passed to any API functions other than <a href="ncGraphGetOption.html">ncGraphGetOption()</a> or <a href="ncGraphSetOption.html">ncGraphSetOption()</a>.</li>
+</ul>
+
+<h2 id="example">Example</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;mvnc.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ncStatus_t</span> <span class="n">retCode</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">ncDeviceHandle_t</span><span class="o">*</span> <span class="n">deviceHandlePtr</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">ncGraphHandle_t</span><span class="o">*</span> <span class="n">graphHandlePtr</span><span class="p">;</span>
+    
+    <span class="n">ncDeviceCreate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+    <span class="n">ncDeviceOpen</span><span class="p">(</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+
+    <span class="c1">// Initialize the graph and give it a name.</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncGraphCreate</span><span class="p">(</span><span class="s">"My Graph"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">graphHandlePtr</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">retCode</span> <span class="o">!=</span> <span class="n">NC_OK</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Error creating graph[%d]</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">retCode</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="c1">// Graph is initialized. User can now call ncGraphAllocate and then</span>
+        <span class="c1">// other API functions with the graph handle.</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Graph created OK!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// clean up the graph and device</span>
+    <span class="n">ncGraphDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">graphHandlePtr</span><span class="p">);</span>
+    <span class="n">ncDeviceClose</span><span class="p">(</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+    <span class="n">ncDeviceDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

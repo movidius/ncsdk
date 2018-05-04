@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="ncfifocreate">ncFifoCreate()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Library</td>
+      <td>libmvnc.so</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncFifoHandle_t.html">struct ncFifoHandle_t</a>, <a href="ncFifoAllocate.html">ncFifoAllocate()</a>, <a href="ncFifoDestroy.html">ncFifoDestroy()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>This function initializes a <a href="ncFifoHandle_t.html">ncFifoHandle_t</a> struct.</p>
+
+<p>Typically, two FIFOs are created for each network graph - one for input and one for output.</p>
+
+<p><a href="ncFifoDestroy.html">ncFifoDestroy()</a> frees the memory that is allocated with this function.</p>
+
+<h2 id="prototype">Prototype</h2>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ncStatus_t</span> <span class="n">ncFifoCreate</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">,</span> <span class="n">ncFifoType_t</span> <span class="n">type</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ncFifoHandle_t</span><span class="o">**</span> <span class="n">fifoHandle</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td>const char*</td>
+      <td>A null-terminated array of characters that specify a name for the FIFO; this can be can be anything you like up to NC_MAX_NAME_SIZE characters, or just an empty string.<br /><br />The name can be retrieved later with <a href="ncFifoGetOption.html">ncFifoGetOption()</a>.</td>
+    </tr>
+    <tr>
+      <td>type</td>
+      <td><a href="ncFifoType_t.html">ncFifoType_t</a></td>
+      <td>A member of the ncFifoType_t enumeration that specifies the FIFO access type. The API should be able to write to input FIFOs and read from output FIFOs.</td>
+    </tr>
+    <tr>
+      <td>fifoHandle</td>
+      <td><a href="ncFifoHandle_t.html">struct ncFifoHandle_t</a>**</td>
+      <td>The address of a pointer to a ncFifoHandle_t struct that will be created and initialized by this function.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>An appropriate value from the <a href="ncStatus_t.html">ncStatus_t</a> enumeration.</p>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>The <a href="ncFifoHandle_t.html">ncFifoHandle_t</a> struct must be created and initialized with this function before being passed to any API functions. When the FIFO handle is properly initialized, the FIFO state will be <a href="ncFifoState_t.html">NC_FIFO_CREATED</a>.</li>
+  <li>After initialization, the <a href="ncFifoHandle_t.html">ncFifoHandle_t</a> struct must be passed to <a href="ncFifoAllocate.html">ncFifoAllocate()</a> before being passed to any API function other than <a href="ncFifoGetOption.html">ncFifoGetOption()</a> or <a href="ncFifoSetOption.html">ncFifoSetOption()</a>.</li>
+  <li><a href="ncGraphAllocateWithFifos.html">ncGraphAllocateWithFifos()</a> or <a href="ncGraphAllocateWithFifosEx.html">ncGraphAllocateWithFifosEx()</a> can be used to easily initialize and allocate an input and an output FIFO in addition to allocating a graph to a device; these internally call <a href="ncFifoCreate.html">ncFifoCreate()</a> and <a href="ncFifoAllocate.html">ncFifoAllocate()</a> for both <a href="ncFifoHandle_t.html">ncFifoHandle_t</a> structs and <a href="ncGraphAllocate.html">ncGraphAllocate()</a> for the graph.</li>
+</ul>
+
+<h2 id="example">Example</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;mvnc.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ncStatus_t</span> <span class="n">retCode</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">ncDeviceHandle_t</span><span class="o">*</span> <span class="n">deviceHandlePtr</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">ncGraphHandle_t</span><span class="o">*</span> <span class="n">graphHandlePtr</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">ncFifoHandle_t</span><span class="o">*</span> <span class="n">inFifoHandlePtr</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="n">ncDeviceCreate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+    <span class="n">ncDeviceOpen</span><span class="p">(</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+    <span class="n">ncGraphCreate</span><span class="p">(</span><span class="s">"My Graph"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">graphHandlePtr</span><span class="p">);</span>
+    
+    <span class="n">ncFifoCreate</span><span class="p">(</span><span class="s">"MY Input FIFO"</span><span class="p">,</span> <span class="n">NC_FIFO_HOST_WO</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">inFifoHandlePtr</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">retCode</span> <span class="o">!=</span> <span class="n">NC_OK</span><span class="p">)</span>
+    <span class="p">{</span>   <span class="c1">// Could not create FIFO </span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Error creating FIFO [%d]</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">retCode</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="c1">// FIFO created write only FIFO.  </span>
+        <span class="c1">// Now allocate it and then Write graph input to it and then queue inferences. </span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"FIFO created OK!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// clean up the graph and device</span>
+    <span class="n">ncFifoDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">inFifoHandlePtr</span><span class="p">);</span>
+    <span class="n">ncGraphDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">graphHandlePtr</span><span class="p">);</span>
+    <span class="n">ncDeviceClose</span><span class="p">(</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+    <span class="n">ncDeviceDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

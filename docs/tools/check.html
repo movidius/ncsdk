@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="mvnccheck">mvNCCheck</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Library</td>
+      <td>Command Line Tools</td>
+    </tr>
+    <tr>
+      <td>Output</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="compile.html">mvNCCompile</a>, <a href="profile.html">mvNCProfile</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>mvNCCheck is a command line tool that checks the validity of a Caffe or TensorFlow™ neural network on a neural compute device.</p>
+
+<p>The check is done by running an inference on both the device and in software on the host computer using the supplied network and appropriate framework libraries.  The results for both inferences are compared to determine a if the network passes or fails. The top 5 inference results are provided as output. This tool works best with image classification networks.</p>
+
+<h2 id="syntax">Syntax</h2>
+
+<h3 id="caffe">Caffe</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvNCCheck network.prototxt <span class="o">[</span><span class="nt">-w</span> network.caffemodel] <span class="o">[</span><span class="nt">-s</span> max_number_of_shaves] <span class="o">[</span><span class="nt">-in</span> input_node_name] <span class="o">[</span><span class="nt">-on</span> output_node_name] <span class="o">[</span><span class="nt">-is</span> input_width input_height] <span class="o">[</span><span class="nt">-i</span> input_filename] <span class="o">[</span><span class="nt">-id</span> top1_validation_ID] <span class="o">[</span><span class="nt">-S</span> scale_factor] <span class="o">[</span><span class="nt">-M</span> mean_subtraction_number/npy_filename] <span class="o">[</span><span class="nt">-cs</span> color_sequence] <span class="o">[</span><span class="nt">-es</span><span class="o">]</span>
+</code></pre></div></div>
+
+<h3 id="tensorflow">TensorFlow™</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvNCCheck network.meta <span class="o">[</span><span class="nt">-s</span> max_number_of_shaves] <span class="o">[</span><span class="nt">-in</span> input_node_name] <span class="o">[</span><span class="nt">-on</span> output_node_name] <span class="o">[</span><span class="nt">-is</span> input_width input_height] <span class="o">[</span><span class="nt">-i</span> input_filename] <span class="o">[</span><span class="nt">-id</span> top1_validation_ID] <span class="o">[</span><span class="nt">-S</span> scale_factor] <span class="o">[</span><span class="nt">-M</span> mean_subtraction_number/npy_filename] <span class="o">[</span><span class="nt">-cs</span> color_sequence] <span class="o">[</span><span class="nt">-es</span><span class="o">]</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><em>Caffe</em>:<br />network.prototxt<br /><br /><em>TensorFlow™</em>:<br />network.meta<br />network.pb</td>
+      <td>Name of the network file (required).</td>
+    </tr>
+    <tr>
+      <td>[-h –help]</td>
+      <td>Display help for the command.</td>
+    </tr>
+    <tr>
+      <td>[-w weights_file]</td>
+      <td>Specify the weights filename from training. For Caffe this is the .caffemodel file. If omitted, zero weights will be used.<br /><br /><em>This option is not to be used for TensorFlow™ networks.</em></td>
+    </tr>
+    <tr>
+      <td>[-s max_number_of_shaves]</td>
+      <td>Specify the maximum number of SHAVEs to use for network layers (<em>default: 1</em>).<br /><br />The number of available SHAVEs depends on your neural compute device. The device runtime code may use fewer SHAVEs for some layers where measurements have typically shown no inference performance degradation (and consequently show a power benefit) from using fewer SHAVEs.</td>
+    </tr>
+    <tr>
+      <td>[-in input_node_name]</td>
+      <td>Specify an alternative start point for the network. By default the network’s start point is the input layer. This option enables partial network processing. When used together with the -on option, the user can isolate one or more layers in a network for analysis.<br /><br />This option is required for TensorFlow™ networks. You can use the name parameter (available for most layers) when creating your network and pass that name into this option.<br />To add a named node that doesn’t change the network you can use the following:<br /><code class="highlighter-rouge">x = tensorflow.identity(prev_tensor, name='new_node')</code></td>
+    </tr>
+    <tr>
+      <td>[-on output_node_name]</td>
+      <td>Specify an alternative end point for the network. By default the network’s end point is the output layer. This option enables partial network processing. When used together with the -in option, the user can isolate one or more layers in a network for analysis.<br /><br />Be aware that the parser will stop at the first instance of this node name (e.g., a Relu following a Conv will not be processed if it shares the same name).<br /><br />This option is required for TensorFlow™ networks. You can use the name parameter (available for most layers) when creating your network and pass that name into this option.<br />To add a named node that doesn’t change the network you can use the following:<br /><code class="highlighter-rouge">x = tensorflow.identity(prev_tensor, name='new_node')</code></td>
+    </tr>
+    <tr>
+      <td>[-is input_width input_height]</td>
+      <td>Specify input dimensions for networks that do not have dimension constraints on the input layer.<br /><br />This option assumes that the batch size is 1 and the number of channels is 3.</td>
+    </tr>
+    <tr>
+      <td>[-i input_filename]</td>
+      <td>Specify an input tensor to use for validation. If this is not set, a tensor with randomly generated data will be used.</td>
+    </tr>
+    <tr>
+      <td>[-S scale_factor]</td>
+      <td>Use a divisor to scale each value of the input.<br /><br />Typically images are stored with data for each input channel in range 0 to 255.  If the neural network expects input values in range 0.0 to 1.0, using <code class="highlighter-rouge">-S 255</code> will scale the data to the network’s expected range because each value will be divided by 255. If the network expects values in range -1.0 to 1.0, using <code class="highlighter-rouge">-S 128</code> and <code class="highlighter-rouge">-M 128</code> will scale the data to the network’s expected range.</td>
+    </tr>
+    <tr>
+      <td>[-M mean_subtraction_number]<br />[-M npy_filename]</td>
+      <td>Subtract mean values from the input data prior to passing to the neural network. This can be one value or a numpy mean file filename.</td>
+    </tr>
+    <tr>
+      <td>[-id top1_validation_ID]</td>
+      <td>Provide the expected id for Top-1 validation.</td>
+    </tr>
+    <tr>
+      <td>[-cs color_sequence]</td>
+      <td>Specify the color sequence that the neural network expects:<br />2,1,0 = BGR <em>(default)</em><br />0,1,2 = RGB</td>
+    </tr>
+    <tr>
+      <td>[-ec]</td>
+      <td>Skip certain compiler optimizations for concatenation; this may correct some issues with invalid results from concat layers or compile failures.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="examples">Examples</h2>
+
+<h3 id="caffe-1">Caffe</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvNCCheck deploy.prototxt <span class="nt">-w</span> bvlc_googlenet.caffemodel <span class="nt">-s</span> 12 <span class="nt">-in</span> input <span class="nt">-on</span> prob <span class="nt">-is</span> 224 224 <span class="nt">-cs</span> 2,1,0
+</code></pre></div></div>
+
+<h3 id="tensorflow-1">TensorFlow™</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvNCCheck inception_v1.meta <span class="nt">-s</span> 12 <span class="nt">-in</span><span class="o">=</span>input <span class="nt">-on</span><span class="o">=</span>InceptionV1/Logits/Predictions/Reshape_1 <span class="nt">-is</span> 224 224 <span class="nt">-cs</span> 0,1,2
+</code></pre></div></div>
+
+<h2 id="further-reading">Further Reading</h2>
+
+<ul>
+  <li><a href="https://movidius.github.io/blog/mvNCCheck/">Using and Understanding the Neural Compute SDK: mvNCCheck</a></li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

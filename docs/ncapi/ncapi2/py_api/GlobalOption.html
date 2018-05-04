@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="class-globaloptionenumenum">class GlobalOption(enum.Enum)</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="global_set_option.html">global_set_option()</a>, <a href="global_get_option.html">global_get_option()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>GlobalOption is an enumeration that defines application-level options that can be read with <a href="global_get_option.html">global_get_option()</a> or set with <a href="global_set_option.html">global_set_option()</a>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Option Type</th>
+      <th>Possible Values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>RW_LOG_LEVEL</td>
+      <td>int</td>
+      <td>0, 1, 2, 3, 4</td>
+      <td>The logging level for the application:<br />0 = MVLOG_DEBUG, debug and above (full verbosity)<br />1 = MVLOG_INFO, info and above<br />2 = MVLOG_WARN, warnings and above <em>(default)</em> <br />3 = MVLOG_ERROR, errors and above<br />4 = MVLOG_FATAL, fatal only</td>
+    </tr>
+    <tr>
+      <td>RO_API_VERSION</td>
+      <td>numpy.ndarray of 4 unsigned ints</td>
+      <td>[<em>major, minor, hotfix, release</em>]</td>
+      <td>The API version.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li><strong>Options prefixed with ‘RW’ have read/write permission and are both gettable and settable.</strong></li>
+  <li><strong>Options prefixed with ‘RO’ have read-only permission and are only gettable.</strong></li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

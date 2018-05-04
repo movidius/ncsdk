@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="graphdestroy">Graph.destroy()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Graph.html">Graph</a>, <a href="Device.html">Device</a>, <a href="Graph.allocate.html">Graph.allocate()</a>, <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>This method frees resources associated with a <a href="Graph.html">Graph</a>. This must be called for every <a href="Graph.html">Graph</a> created.</p>
+
+<h2 id="syntax">Syntax</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">graph</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="parameters">Parameters</h2>
+<p>None.</p>
+
+<h2 id="return">Return</h2>
+<p>None</p>
+
+<h2 id="raises">Raises</h2>
+<p>Exception with a status code from <a href="Status.html">Status</a> if underlying function calls return a status other than Status.OK.</p>
+
+<h2 id="notes">Notes</h2>
+<p>None.</p>
+
+<h2 id="example">Example</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">mvnc</span> <span class="kn">import</span> <span class="n">mvncapi</span>
+
+<span class="c"># Create a Graph</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="s">'graph1'</span><span class="p">)</span>
+
+<span class="c"># Destroy the Graph</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>
