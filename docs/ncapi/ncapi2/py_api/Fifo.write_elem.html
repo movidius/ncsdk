@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="fifowrite_elem">Fifo.write_elem()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Fifo.html">Fifo</a>, <a href="Fifo.read_elem.html">Fifo.read_elem()</a>, <a href="Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_with_fifo_elem()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>This method writes an element to the <a href="Fifo.html">Fifo</a>, usually the input tensor for an inference.</p>
+
+<p>After the tensor data is written to the <a href="Fifo.html">Fifo</a>, an inference can be queued with <a href="Graph.queue_inference.html">Graph.queue_inference()</a>. Alternatively, <a href="Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_with_fifo_elem()</a> can be used to write the tensor to the input <a href="Fifo.html">Fifo</a> and queue the inference in one call.</p>
+
+<h2 id="syntax">Syntax</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fifo</span><span class="o">.</span><span class="n">write_elem</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">user_obj</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>input_tensor</td>
+      <td>numpy.ndarray</td>
+      <td>Input tensor data of the type specified by the <a href="FifoDataType.html">FifoDataType</a> option. This data is typically a representation of each color channel in each pixel of an image.</td>
+    </tr>
+    <tr>
+      <td>user_obj</td>
+      <td><em>any</em></td>
+      <td>User-defined data that will be returned along with the inference result. This can be anything that you want associated with the inference result, such as the original inference input or a window handle, or can be None.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>None</p>
+
+<h2 id="raises">Raises</h2>
+<p>Exception with a status code from <a href="Status.html">Status</a> if underlying function calls return a status other than Status.OK.</p>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>The <a href="FifoType.html">FifoType</a> set during initialization must allow write access for the API.</li>
+  <li>The <a href="Fifo.html">Fifo</a> cannot be written to or read from until it is allocated with <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a> or <a href="Fifo.allocate.html">Fifo.allocate()</a>.</li>
+  <li>This is a blocking call if <a href="FifoOption.html">FifoOption.RW_DONT_BLOCK</a> is false. If the <a href="Fifo.html">Fifo</a> is full this method will not return until there is space to successfully write.
+    <ul>
+      <li>The Fifo’s capacity is set when the Fifo is allocated with <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a> or <a href="Fifo.allocate.html">Fifo.allocate()</a>. The <a href="FifoState.html">FifoState</a> must be ALLOCATED.</li>
+      <li>You can check the capacity and the current fill level of the <a href="Fifo.html">Fifo</a> with <a href="Fifo.get_option.html">Fifo.get_option()</a> for <a href="FifoOption.html">FifoOption.RO_CAPACITY</a> and <a href="FifoOption.html">FifoOption.RO_WRITE_FILL_LEVEL</a>.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="example">Example</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">mvnc</span> <span class="kn">import</span> <span class="n">mvncapi</span>
+
+<span class="c">#</span>
+<span class="c"># Open a Device, create a Graph, and load graph data from file...</span>
+<span class="c">#</span>
+
+<span class="c"># Allocate the Graph and create and allocate two associate Fifos for input and output</span>
+<span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">allocate_with_fifos</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">graph_buffer</span><span class="p">)</span>
+
+<span class="c">#</span>
+<span class="c"># Get an input tensor and do pre-processing</span>
+<span class="c">#</span>
+
+<span class="c"># Write the input tensor to the Fifo</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">write_elem</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="s">'input1'</span><span class="p">)</span>
+
+<span class="c">#</span>
+<span class="c"># Queue an inference with Graph.queue_inference(), read the result and do something with it...</span>
+<span class="c">#</span>
+
+<span class="c"># Destroy the Fifos</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">output_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+
+<span class="c">#</span>
+<span class="c"># Perform other clean up...</span>
+<span class="c">#</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

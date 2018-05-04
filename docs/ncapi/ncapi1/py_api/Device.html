@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="device-class">Device Class</h1>
+
+<p>The Device class represents the Intel® Movidius™ Neural Compute Stick (Intel® Movidius™ NCS) device. Typically one instance of this class is created for each physical NCS device that is plugged into the system, so multiple instances may exist if you have multiple devices attached to your system.</p>
+
+<h2 id="usage">Usage</h2>
+<p>To use the Device class, you must create and initialize it by name. The valid names to use can be determined by calling the mvncapi module function EnumerateDevices(). Once you have successfully created an instance of this class, the typical usage is to call OpenDevice(), AllocateGraph(), use the graph, and CloseDevice().</p>
+
+<h2 id="device-methods">Device methods</h2>
+<ul>
+  <li><a href="Device.__init__.html">__init__</a></li>
+  <li><a href="Device.OpenDevice.html">OpenDevice</a></li>
+  <li><a href="Device.CloseDevice.html">CloseDevice</a></li>
+  <li><a href="Device.SetDeviceOption.html">SetDeviceOption</a></li>
+  <li><a href="Device.GetDeviceOption.html">GetDeviceOption</a></li>
+  <li><a href="Device.AllocateGraph.html">AllocateGraph</a></li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

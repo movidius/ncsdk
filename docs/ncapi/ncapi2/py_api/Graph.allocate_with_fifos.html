@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="graphallocate_with_fifos">Graph.allocate_with_fifos()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Device.html">Device</a>, <a href="Graph.html">Graph</a>, <a href="Fifo.html">Fifo</a>, <a href="Graph.allocate.html">Graph.allocate()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>This method allocates a network graph to the device and creates and allocates two associated <a href="Fifo.html">Fifos</a> for graph input and output. This is a convenient way to set up a <a href="Graph.html">Graph</a> for inference without setting up <a href="Fifo.html">Fifos</a> explicitly. Each <a href="Graph.html">Graph</a> instance can only be allocated to a single <a href="Device.html">Device</a> instance.</p>
+
+<p>Upon successful return from this method, the <a href="Graph.html">Graph</a> will be ready to perform inferences and the input and output <a href="Fifo.html">Fifos</a> will be ready for reading/writing.</p>
+
+<p>Calling <a href="Graph.destroy.html">Graph.destroy()</a> for the <a href="Graph.html">Graph</a> and <a href="Fifo.destroy.html">Fifo.destroy()</a> for each <a href="Fifo.html">Fifo</a> frees the memory allocated with this method.</p>
+
+<h2 id="syntax">Syntax</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">allocate_with_fifos</span><span class="p">(</span>
+        <span class="n">device</span><span class="p">,</span> <span class="n">graph_buffer</span><span class="p">,</span>
+        <span class="n">input_fifo_type</span><span class="o">=</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoType</span><span class="o">.</span><span class="n">HOST_WO</span><span class="p">,</span> 
+        <span class="n">input_fifo_num_elem</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">input_fifo_data_type</span><span class="o">=</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoDataType</span><span class="o">.</span><span class="n">FP32</span><span class="p">,</span>
+        <span class="n">output_fifo_type</span><span class="o">=</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoType</span><span class="o">.</span><span class="n">HOST_RO</span><span class="p">,</span> 
+        <span class="n">output_fifo_num_elem</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">output_fifo_data_type</span><span class="o">=</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoDataType</span><span class="o">.</span><span class="n">FP32</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>device</td>
+      <td><a href="Device.html">Device</a></td>
+      <td> </td>
+      <td>A <a href="Device.html">Device</a> that this <a href="Graph.html">Graph</a> will be allocated to. The <a href="DeviceState.html">DeviceState</a> must be OPENED.</td>
+    </tr>
+    <tr>
+      <td>graph_buffer</td>
+      <td>bytes</td>
+      <td> </td>
+      <td>Raw data read from a neural network graph file that was created with the Intel® Movidius™ Neural Compute SDK <a href="../../../tools/compile.html">mvNCCompile</a> tool.</td>
+    </tr>
+    <tr>
+      <td>input_fifo_type</td>
+      <td>int</td>
+      <td><a href="FifoType.html">FifoType.HOST_WO</a></td>
+      <td>A member of the <a href="FifoType.html">FifoType</a> enumeration, which sets read/write access to the Fifo.</td>
+    </tr>
+    <tr>
+      <td>input_fifo_num_elem</td>
+      <td>int</td>
+      <td>2</td>
+      <td>The maximum number of elements that the input Fifo can hold.</td>
+    </tr>
+    <tr>
+      <td>input_fifo_data_type</td>
+      <td>int</td>
+      <td><a href="FifoDataType.html">FifoDataType.FP32</a></td>
+      <td>A member of the <a href="FifoDataType.html">FifoDataType</a> enumeration.</td>
+    </tr>
+    <tr>
+      <td>output_fifo_type</td>
+      <td>int</td>
+      <td><a href="FifoType.html">FifoType.HOST_RO</a></td>
+      <td>A member of the <a href="FifoType.html">FifoType</a> enumeration, which sets read/write access to the Fifo.</td>
+    </tr>
+    <tr>
+      <td>output_fifo_num_elem</td>
+      <td>int</td>
+      <td>2</td>
+      <td>The maximum number of elements that the output Fifo can hold.</td>
+    </tr>
+    <tr>
+      <td>output_fifo_data_type</td>
+      <td>int</td>
+      <td><a href="FifoDataType.html">FifoDataType.FP32</a></td>
+      <td>A member of the <a href="FifoDataType.html">FifoDataType</a> enumeration.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p><a href="Fifo.html">input_fifo</a>, <a href="Fifo.html">output_fifo</a></p>
+
+<p>The input and output <a href="Fifo.html">Fifos</a> that were created and allocated by this method.</p>
+
+<h2 id="raises">Raises</h2>
+<p>Exception with a status code from <a href="Status.html">Status</a> if underlying function calls return a status other than Status.OK.</p>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>This method takes the place of explicit calls for <a href="Graph.allocate.html">Graph.allocate()</a>, <a href="Fifo.html">Fifo</a> creation, and <a href="Fifo.allocate.html">Fifo.allocate()</a>.</li>
+</ul>
+
+<h2 id="example">Example</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">mvnc</span> <span class="kn">import</span> <span class="n">mvncapi</span>
+
+<span class="c"># Get a list of valid device identifiers</span>
+<span class="n">device_list</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">enumerate_devices</span><span class="p">()</span>
+
+<span class="c"># Create a Device instance for the first device found</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">device_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c"># Open communication with the device</span>
+<span class="n">device</span><span class="o">.</span><span class="nb">open</span><span class="p">()</span>
+
+<span class="c"># Create a Graph</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="s">'graph1'</span><span class="p">)</span>
+
+<span class="c"># Read a compiled network graph from file (set the graph_filepath correctly for your graph file)</span>
+<span class="n">graph_filepath</span> <span class="o">=</span> <span class="s">'./graph'</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">graph_filepath</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">graph_buffer</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="c"># Allocate the graph on the device</span>
+<span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">allocate_with_fifos</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">graph_buffer</span><span class="p">)</span>
+
+<span class="c">#</span>
+<span class="c"># Use the device...</span>
+<span class="c">#</span>
+
+<span class="c"># Deallocate and destroy the graph handle and fifo handles, close the device, and destroy the device handle</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">output_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">device</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

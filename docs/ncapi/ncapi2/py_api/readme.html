@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="intel-movidius-neural-compute-sdk-python-api">Intel® Movidius™ Neural Compute SDK Python API</h1>
+
+<p>The Intel® Movidius™ Neural Compute SDK (Intel® Movidius™ NCSDK) comes with a Python Language API that enables applications that utilize hardware accelerated Deep Neural Networks via neural compute devices such as the <a href="../../../ncs.html">Intel® Movidius™ Neural Compute Stick</a>.</p>
+
+<p>The Python API is provided as a single Python module (mvncapi.py), which is placed on the development computer when the NCSDK is installed. It has been validated with Python 2.7 and 3.5.</p>
+
+<h2 id="python-api-documentation">Python API Documentation</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Enumerations</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="DeviceHwVersion.html">DeviceHwVersion</a></td>
+      <td>Contains neural compute device hardware versions.</td>
+    </tr>
+    <tr>
+      <td><a href="DeviceOption.html">DeviceOption</a></td>
+      <td>Contains neural compute device options.</td>
+    </tr>
+    <tr>
+      <td><a href="DeviceState.html">DeviceState</a></td>
+      <td>Contains neural compute device NCAPI states.</td>
+    </tr>
+    <tr>
+      <td><a href="FifoDataType.html">FifoDataType</a></td>
+      <td>Contains FIFO queue element data types.</td>
+    </tr>
+    <tr>
+      <td><a href="FifoOption.html">FifoOption</a></td>
+      <td>Contains FIFO queue options.</td>
+    </tr>
+    <tr>
+      <td><a href="FifoState.html">FifoState</a></td>
+      <td>Contains FIFO queue NCAPI states.</td>
+    </tr>
+    <tr>
+      <td><a href="FifoType.html">FifoType</a></td>
+      <td>Contains FIFO queue access types.</td>
+    </tr>
+    <tr>
+      <td><a href="GlobalOption.html">GlobalOption</a></td>
+      <td>Contains global (application-level) options.</td>
+    </tr>
+    <tr>
+      <td><a href="GraphOption.html">GraphOption</a></td>
+      <td>Contains network graph options.</td>
+    </tr>
+    <tr>
+      <td><a href="GraphState.html">GraphState</a></td>
+      <td>Contains network graph NCAPI states.</td>
+    </tr>
+    <tr>
+      <td><a href="Status.html">Status</a></td>
+      <td>Contains status code return values for NCAPI functions.</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Structures</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="TensorDescriptor.html">TensorDescriptor</a></td>
+      <td>Holds information that describes the shape of a tensor.</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Global Functions</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="enumerate_devices.html">enumerate_devices()</a></td>
+      <td>Returns a list of identifiers for neural compute devices present in the system.</td>
+    </tr>
+    <tr>
+      <td><a href="global_get_option.html">global_get_option()</a></td>
+      <td>Gets the value of a global option for the application.</td>
+    </tr>
+    <tr>
+      <td><a href="global_set_option.html">global_set_option()</a></td>
+      <td>Sets the value of a global option for the application.</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Classes</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="Device.html">Device</a></td>
+      <td>Represents a neural compute device and provides methods to communicate with the device.</td>
+    </tr>
+    <tr>
+      <td><a href="Fifo.html">Fifo</a></td>
+      <td>Represents a first in, first out (FIFO) queue for network input and output.</td>
+    </tr>
+    <tr>
+      <td><a href="Graph.html">Graph</a></td>
+      <td>Represents a neural network graph and provides methods to perform inferences.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<h2 id="python-ncapi-overview">Python NCAPI Overview</h2>
+
+<h3 id="1-import-the-ncapi-module">1. Import the NCAPI module</h3>
+
+<p>The Python NCAPI is in the mvncapi module within the mvnc package.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">mvnc</span> <span class="kn">import</span> <span class="n">mvncapi</span>
+</code></pre></div></div>
+
+<p>You can get and set application-level information and options with <a href="global_get_option.html">global_get_option()</a> and <a href="global_set_option.html">global_set_option()</a> for options in the <a href="GlobalOption.html">GlobalOption</a> enumeration.</p>
+
+<h3 id="2-set-up-a-neural-compute-device">2. Set up a neural compute device</h3>
+
+<p>The <a href="Device.html">Device</a> class represents a neural compute device and provides methods to communicate with the device.</p>
+
+<p>The global function <a href="enumerate_devices.html">enumerate_devices()</a> is used to get a list of neural compute devices that are attached to your host system.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Get a list of available device identifiers</span>
+<span class="n">device_list</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">enumerate_devices</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Initialize the <a href="Device.html">Device</a> with one of the device identifiers obtained from the call to <a href="enumerate_devices.html">enumerate_devices()</a>.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Initialize a Device</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">device_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>Initialize the neural compute device and open communication with <a href="Device.open.html">Device.open()</a>.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Initialize the device and open communication</span>
+<span class="n">device</span><span class="o">.</span><span class="nb">open</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>You can get information about the device using <a href="Device.get_option.html">Device.get_option()</a> for options in the <a href="DeviceOption.html">DeviceOption</a> enumeration.</p>
+
+<p><em>Note: If you are using more than one neural compute device, you must create and open a separate <a href="Device.html">Device</a> for each.</em></p>
+
+<h3 id="3-set-up-a-network-graph-and-associated-fifo-queues-for-the-device">3. Set up a network graph and associated FIFO queues for the device</h3>
+
+<p>The NCSDK requires a neural network graph file compiled with the <a href="../../../tools/compile.html">mvNCCompile</a> NCSDK tool.
+Many network models from <a href="../../../tensorflow.html">TensorFlow™</a> and <a href="../../../caffe.html">Caffe</a> are supported.
+See <a href="../../../configure_network.html">Configuring Your Network for the Intel® Movidius™ Neural Compute SDK</a> for more information about preparing your network model for use with the NCSDK.</p>
+
+<p>When you have a compiled graph, load the graph file data to a buffer.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Load graph file data</span>
+<span class="n">GRAPH_FILEPATH</span> <span class="o">=</span> <span class="s">'./graph'</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">GRAPH_FILEPATH</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">graph_buffer</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>The <a href="Graph.html">Graph</a> class provides methods for utilizing your network graph.</p>
+
+<p>Initialize the <a href="Graph.html">Graph</a> with a name string. The name string can be anything you like up to mvncapi.MAX_NAME_SIZE characters, or just an empty string.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Initialize a Graph object</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="s">'graph1'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Graph input and output is done with FIFO (first-in, first-out) queues. The <a href="Fifo.html">Fifo</a> class represents one of these queues and provides methods for managing it.</p>
+
+<p>Create input and output <a href="Fifo.html">Fifo</a> queues for your <a href="Graph.html">Graph</a> and allocate the graph to your device with <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a>. You can omit the keyword parameters to use default Fifo settings or you can specify other values as needed.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Allocate the graph to the device and create input and output Fifos with default arguments</span>
+<span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">allocate_with_fifos</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">graph_file_buffer</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Allocate the graph to the device and create input and output Fifos with keyword arguments (default values shown)</span>
+<span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">allocate_with_fifos</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">graph_file_buffer</span><span class="p">,</span>
+        <span class="n">input_fifo_type</span><span class="o">=</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoType</span><span class="o">.</span><span class="n">HOST_WO</span><span class="p">,</span> <span class="n">input_fifo_data_type</span><span class="o">=</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoDataType</span><span class="o">.</span><span class="n">FP32</span><span class="p">,</span> <span class="n">input_fifo_num_elem</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
+        <span class="n">output_fifo_type</span><span class="o">=</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoType</span><span class="o">.</span><span class="n">HOST_RO</span><span class="p">,</span> <span class="n">output_fifo_data_type</span><span class="o">=</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoDataType</span><span class="o">.</span><span class="n">FP32</span><span class="p">,</span> <span class="n">output_fifo_num_elem</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+<p>Optional parameters:</p>
+<ul>
+  <li><strong>input_fifo_type/output_fifo_type:</strong> This sets the read/write access for the Fifo. The input_fifo will be used to provide input to your network graph and should be a HOST_WO (write-only) <a href="FifoType.html">FifoType</a>, which allows the API (“HOST”) to write to the Fifo. The output_fifo  will be used to get output from your network graph and should be a HOST_RO (read-only) <a href="FifoType.html">FifoType</a>, which allows the API to read from the Fifo.</li>
+  <li><strong>input_fifo_data_type/output_fifo_data_type:</strong> This sets the type of data the the Fifo will store. The default <a href="FifoDataType.html">data type</a> for Fifos is 32-bit floating point (32FP). You can also set the data type to 16-bit floating point (16FP). Note: Regardless of what data types the input and output Fifos are configured for, the API will convert tensors to 16FP while performing inferences.</li>
+  <li><strong>input_fifo_num_elem/output_fifo/num_elem:</strong> This sets the size of the Fifo queue, or the maximum number of elements that each Fifo will hold. Choose a number that makes sense for your application flow and memory constraints. Also keep in mind that the method to write to the input Fifo will block if the input Fifo is full, and the method to read from the output Fifo will block if the output Fifo is empty.</li>
+</ul>
+
+<p>See the <a href="Fifo.html">Fifo</a> class documentation for more information about individual <a href="Fifo.html">Fifo</a> creation and allocation for greater control over <a href="Fifo.html">Fifo</a> set up.</p>
+
+<p>You can get information about a Graph using <a href="Graph.get_option.html">Graph.get_option()</a> for options in the <a href="GraphOption.html">GraphOption</a> enumeration. You can get information about a Fifo using <a href="Fifo.get_option.html">Fifo.get_option()</a> and <a href="Fifo.set_option.html">Fifo.set_option()</a> for options in the <a href="FifoOption.html">FifoOption</a> enumeration.</p>
+
+<p>*Note: You must create and allocate a <a href="Graph.html">Graph</a> for each network graph file that you wish to use. A <a href="Device.html">Device</a> can have more than one <a href="Graph.html">Graph</a> allocated to it, but each <a href="Graph.html">Graph</a> can only be allocated to a single <a href="Device.html">Device</a>.</p>
+
+<h3 id="4-get-an-input-tensor">4. Get an input tensor</h3>
+
+<p>The way that you obtain and pre-process your input tensor will depend on your individual application. If you are using Python3, the <a href="https://pypi.python.org/pypi/opencv-python">cv2</a> module provides an easy way to load images from file or a camera feed. GStreamer is a popular alternative.</p>
+
+<p>Here is an example of using the cv2 module to read an image from file and resize it to fit your network’s requirements. However, additional pre-processing specific to the network model that you are using and the image that you are loading is probably necessary.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="c"># Read an image from file</span>
+<span class="n">tensor</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s">'img.jpg'</span><span class="p">)</span>
+<span class="c"># Do pre-processing specific to this network model (resizing, subtracting network means, etc.)</span>
+</code></pre></div></div>
+
+<p>You can also use <a href="http://www.numpy.org/">numpy</a> to manipulate tensors.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="c"># Convert an input tensor to 32FP data type</span>
+<span class="n">tensor</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Input tensor data must be the data type specified by the <a href="FifoOption.html">RW_DATA_TYPE</a> option for the input <a href="Fifo.html">Fifo</a>. The default is 32-bit floating point, but <a href="Fifo.html">Fifos</a> can also be configured to store 16-bit floating point data. See the <a href="FifoDataType.html">FifoDataType</a> enumeration.</p>
+
+<p><strong>Tensor data should be stored in a numpy ndarray.</strong></p>
+
+<h3 id="5-perform-an-inference">5. Perform an inference</h3>
+
+<p>Use <a href="Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_with_fifo_elem()</a> to write the input tensor to your input <a href="Fifo.html">Fifo</a> and queue it for inference.
+When the inference is complete the input tensor will be removed from the input_fifo queue and the result tensor will be placed in the output_fifo queue.
+The third parameter must be None. The fourth parameter can be any object that you wish to have associated with this particular tensor when you read the inference results, such as the original tensor or a window handle, or None.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Write the tensor to the input_fifo and queue an inference</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">queue_inference_with_fifo_elem</span><span class="p">(</span><span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span><span class="p">,</span> <span class="n">tensor</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'user object'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>If the input <a href="Fifo.html">Fifo</a> is full, this method call will block until there is room to write to the <a href="Fifo.html">Fifo</a>.
+You can check how many elements are in the input and output <a href="Fifo.html">Fifos</a> with <a href="Fifo.get_option.html">Fifo.get_option()</a> for RO_WRITE_FILL_LEVEL and RO_READ_FILL_LEVEL, respectively.
+Note that the inference will take some amount of time to complete, depending on network model speed and device communication latency, so you may need to wait to see updated levels.</p>
+
+<p>After the inference is complete, you can get the inference result with <a href="Fifo.read_elem.html">Fifo.read_elem()</a>. This will also return the user object that you passed to <a href="Fifo.write_elem.html">Fifo.write_elem()</a>.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Get the results from the output queue</span>
+<span class="n">output</span><span class="p">,</span> <span class="n">user_obj</span> <span class="o">=</span> <span class="n">output_fifo</span><span class="o">.</span><span class="n">read_elem</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>You can then use the output result as intended for your particular network model.</p>
+
+<h3 id="6-clean-up">6. Clean up</h3>
+
+<p>Before closing communication with the device, use <a href="Graph.destroy.html">Graph.destroy()</a> and <a href="Fifo.destroy.html">Fifo.destroy()</a> to destroy the <a href="Graph.html">Graph</a> and <a href="Fifo.html">Fifo</a> objects and clean up associated memory. The <a href="Fifo.html">Fifos</a> must be empty before being destroyed.
+Then use <a href="Device.close.html">Device.close()</a> to close the device and <a href="Device.destroy.html">Device.destroy()</a> to destroy the <a href="Device.html">Device</a> object and clean up associated memory.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Clean up</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">output_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">device</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

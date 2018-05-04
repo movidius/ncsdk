@@ -19,7 +19,7 @@ multistick_cpp: googlenet squeezenet
 	@echo "\nmaking multistick_cpp"
 	cp googlenet.graph cpp/googlenet.graph;
 	cp squeezenet.graph cpp/squeezenet.graph;
-	g++ cpp/multistick.cpp cpp/fp16.c -o cpp/multistick_cpp -lmvnc
+	g++ cpp/multistick.cpp -o cpp/multistick_cpp -lmvnc
 	@echo "Created cpp/multistick_cpp executable"
 
 .PHONY: run

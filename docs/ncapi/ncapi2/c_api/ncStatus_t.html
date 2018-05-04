@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="enum-ncstatus_t">enum ncStatus_t</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>A value from this enumeration is returned from most of the C API functions.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Constant</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NC_OK</td>
+      <td>The function call worked as expected.</td>
+    </tr>
+    <tr>
+      <td>NC_BUSY</td>
+      <td>The device is busy; retry later.</td>
+    </tr>
+    <tr>
+      <td>NC_ERROR</td>
+      <td>An unexpected error was encountered during the function call.</td>
+    </tr>
+    <tr>
+      <td>NC_OUT_OF_MEMORY</td>
+      <td>The host is out of memory.</td>
+    </tr>
+    <tr>
+      <td>NC_DEVICE_NOT_FOUND</td>
+      <td>There is no device at the given index or name.</td>
+    </tr>
+    <tr>
+      <td>NC_INVALID_PARAMETERS</td>
+      <td>At least one of the given parameters is invalid in the context of the function call.</td>
+    </tr>
+    <tr>
+      <td>NC_TIMEOUT</td>
+      <td>Timeout in the communication with the device.</td>
+    </tr>
+    <tr>
+      <td>NC_MVCMD_NOT_FOUND</td>
+      <td>The file to boot the device was not found.  This file typically has the extension .mvcmd and should be installed during the NCSDK installation. This message may mean that the installation failed.</td>
+    </tr>
+    <tr>
+      <td>NC_NOT_ALLOCATED</td>
+      <td>The graph or fifo has not been allocated.</td>
+    </tr>
+    <tr>
+      <td>NC_UNAUTHORIZED</td>
+      <td>An unauthorized operation has been attempted.</td>
+    </tr>
+    <tr>
+      <td>NC_UNSUPPORTED_GRAPH_FILE</td>
+      <td>The graph file may have been created with an incompatible prior version of the Toolkit. Try to recompile the graph file with the version of the Toolkit that corresponds to the API version.</td>
+    </tr>
+    <tr>
+      <td>NC_UNSUPPORTED_CONFIGURATION_FILE</td>
+      <td><em>Reserved for future use.</em></td>
+    </tr>
+    <tr>
+      <td>NC_UNSUPPORTED_FEATURE</td>
+      <td>Operation attempted a feature that is not supported by this firmware version.</td>
+    </tr>
+    <tr>
+      <td>NC_MYRIAD_ERROR</td>
+      <td>An error has been reported by Intel® Movidius™ VPU. Use <a href="ncGraphGetOption.html">ncGraphGetOption()</a> for <a href="ncGraphOption_t.html">NC_RO_GRAPH_DEBUG_INFO</a> and <a href="ncDeviceGetOption.html">ncDeviceGetOption</a> for <a href="ncDeviceOption_t.html">NC_RO_DEVICE_DEBUG_INFO</a> to get more information on the error.</td>
+    </tr>
+    <tr>
+      <td>NC_INVALID_DATA_LENGTH</td>
+      <td>An invalid data length has been passed when getting or setting an option.</td>
+    </tr>
+    <tr>
+      <td>NC_INVALID_HANDLE</td>
+      <td>An invalid handle has been passed to a function.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

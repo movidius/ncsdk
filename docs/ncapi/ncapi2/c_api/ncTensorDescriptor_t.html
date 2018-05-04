@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="struct-nctensordescriptor_t">struct ncTensorDescriptor_t</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncGraphHandle_t.html">struct ncGraphHandle_t</a>, <a href="ncFifoHandle_t.html">struct ncFifoHandle_t</a>, <a href="ncGraphOption_t.html">ncGraphOption_t</a>, <a href="ncFifoOption_t.html">ncFifoOption_t</a>, <a href="ncGraphGetOption.html">ncGraphGetOption()</a>, <a href="ncFifoGetOption.html">ncFifoGetOption()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>The ncTensorDescriptor_t struct describes graph inputs and outputs.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Member</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n</td>
+      <td>unsigned int</td>
+      <td>The number of images in the batch.</td>
+    </tr>
+    <tr>
+      <td>c</td>
+      <td>unsigned int</td>
+      <td>The number of channels in the image.  For image tensors, this is the number of channels per pixel.</td>
+    </tr>
+    <tr>
+      <td>w</td>
+      <td>unsigned int</td>
+      <td>The width of the image. For non-image tensors, this is always 1.</td>
+    </tr>
+    <tr>
+      <td>h</td>
+      <td>unsigned int</td>
+      <td>The height of the image. For non-image tensors, this is always 1.</td>
+    </tr>
+    <tr>
+      <td>totalSize</td>
+      <td>unsigned int</td>
+      <td>The total size of the data. This is the number of bytes required to hold the entire tensor.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>You can use <a href="ncGraphGetOption.html">ncGraphGetOption()</a> to get arrays of input or output <a href="ncTensorDescriptor_t.html">ncTensorDescriptor_t</a> structs for a graph.</li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

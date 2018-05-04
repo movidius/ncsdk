@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="tensorflow-support">TensorFlow™ Support</h1>
+
+<p><a href="https://www.tensorflow.org/">TensorFlow™</a> is a deep learning framework pioneered by Google. The Intel® Movidius™ Neural Compute SDK (Intel® Movidius™ NCSDK) introduced TensorFlow support with the NCSDK v1.09.xx release. TensorFlow validation for each release happens on the TensorFlow version noted in the release notes.</p>
+
+<p><em>Default installation location: /opt/movidius/tensorflow</em></p>
+
+<h3 id="tensorflow-model-zoo">TensorFlow™ Model Zoo</h3>
+
+<p>TensorFlow™ has a GitHub repository for models at <a href="https://github.com/tensorflow/models">https://github.com/tensorflow/models</a>. It contains several models that are maintained by the respective authors.</p>
+
+<h1 id="compiling-tensorflow-networks">Compiling TensorFlow™ Networks</h1>
+
+<ul>
+  <li>If you are compiling a model from the <a href="https://github.com/tensorflow/models">TensorFlow™ Model Zoo</a> for use with the NCSDK and Neural Compute API, follow the <a href="tf_modelzoo.html">Guidance for Compiling TensorFlow™ Model Zoo Networks</a>.</li>
+  <li>If you are compiling a TensorFlow-Slim network for use with the NCSDK and Neural Compute API, follow the <a href="tf_slim.html">Guidance for Compiling TensorFlow-Slim Networks</a>.</li>
+  <li>If you are otherwise training your own TensorFlow™ network model for use with the NCSDK and Neural Compute API, follow the <a href="tf_compile_guidance.html">Guidance for Compiling TensorFlow™ Networks</a>.</li>
+</ul>
+
+<h1 id="supported-networks">Supported Networks</h1>
+<ul>
+  <li>Inception v1</li>
+  <li>Inception v2</li>
+  <li>Inception v3</li>
+  <li>Inception v4</li>
+  <li>Inception ResNet v2</li>
+  <li>MobileNet_v1_1.0 variants:
+    <ul>
+      <li>MobileNet_v1_1.0_224</li>
+      <li>MobileNet_v1_1.0_192</li>
+      <li>MobileNet_v1_1.0_160</li>
+      <li>MobileNet_v1_1.0_128</li>
+      <li>MobileNet_v1_0.75_224</li>
+      <li>MobileNet_v1_0.75_192</li>
+      <li>MobileNet_v1_0.75_160</li>
+      <li>MobileNet_v1_0.75_128</li>
+      <li>MobileNet_v1_0.5_224</li>
+      <li>MobileNet_v1_0.5_192</li>
+      <li>MobileNet_v1_0.5_160</li>
+      <li>MobileNet_v1_0.5_128</li>
+      <li>MobileNet_v1_0.25_224</li>
+      <li>MobileNet_v1_0.25_192</li>
+      <li>MobileNet_v1_0.25_160</li>
+      <li>MobileNet_v1_0.25_128</li>
+    </ul>
+  </li>
+</ul>
+
+<p><em>See <a href="release_notes.html">release notes</a> for supported networks for a particular release.</em></p>
+
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

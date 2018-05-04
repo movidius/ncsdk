@@ -1,4 +1,4 @@
-// Copyright 2017 Intel Corporation. 
+// Copyright 2018 Intel Corporation.
 // The source code, information and material ("Material") contained herein is  
 // owned by Intel Corporation or its suppliers or licensors, and title to such  
 // Material remains with Intel Corporation or its suppliers or licensors.  
@@ -23,12 +23,7 @@
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "stb_image_resize.h"
 
-#include "fp16.h"
 #include <mvnc.h>
-
-
-// somewhat arbitrary buffer size for the device name
-#define NAME_SIZE 100
 
 // from current director to examples base director
 // #define APP_BASE_DIR "../"
@@ -44,10 +39,6 @@
 #define SQUEEZENET_IMAGE_FILE_NAME EXAMPLES_BASE_DIR "data/images/nps_baseball.png"
 
 
-// 16 bits.  will use this to store half precision floats since C++ has no 
-// built in support for it.
-typedef unsigned short half;
-
 // GoogleNet image dimensions, network mean values for each channel in BGR order.
 const int networkDimGoogleNet = 224;
 const int networkDimSqueezeNet = 227;
@@ -56,7 +47,7 @@ float networkMeanSqueezeNet[] = {0.40787054*255.0, 0.45752458*255.0, 0.48109378*
 
 // Prototypes
 void *LoadGraphFile(const char *path, unsigned int *length);
-half *LoadImage(const char *path, int reqsize, float *mean);
+float *LoadImage(const char *path, int reqsize, float *mean);
 // end prototypes
 
 // Reads a graph file from the file system and copies it to a buffer
@@ -65,37 +56,37 @@ half *LoadImage(const char *path, int reqsize, float *mean);
 //            graph file on disk before calling
 // Param length must must point to an integer that will get set to the number of bytes 
 //              allocated for the buffer
-// Returns pointer to the buffer allcoated. 
+// Returns pointer to the buffer allcoated.
 // Note: The caller must free the buffer returned.
 void *LoadGraphFile(const char *path, unsigned int *length)
 {
-	FILE *fp;
-	char *buf;
+    FILE *fp;
+    char *buf;
 
-	fp = fopen(path, "rb");
-	if(fp == NULL)
-		return 0;
-	fseek(fp, 0, SEEK_END);
-	*length = ftell(fp);
-	rewind(fp);
-	if(!(buf = (char*) malloc(*length)))
-	{
-		fclose(fp);
-		return 0;
-	}
-	if(fread(buf, 1, *length, fp) != *length)
-	{
-		fclose(fp);
-		free(buf);
-		return 0;
-	}
-	fclose(fp);
-	return buf;
+    fp = fopen(path, "rb");
+    if(fp == NULL)
+        return 0;
+    fseek(fp, 0, SEEK_END);
+    *length = ftell(fp);
+    rewind(fp);
+    if(!(buf = (char*) malloc(*length)))
+    {
+        fclose(fp);
+        return 0;
+    }
+    if(fread(buf, 1, *length, fp) != *length)
+    {
+        fclose(fp);
+        free(buf);
+        return 0;
+    }
+    fclose(fp);
+    return buf;
 }
 
 // Reads an image file from disk (8 bit per channel RGB .jpg or .png or other formats 
 // supported by stbi_load.)  Resizes it, subtracts the mean from each channel, and then 
-// converts to an array of half precision floats that is suitable to pass to mvncLoadTensor.  
+// converts to an array of half precision floats that is suitable to pass to ncFifoWriteElem.  
 // The returned array will contain 3 floats for each pixel in the image the first float 
 // for a pixel is it's the Blue channel value the next is Green and then Red.  The array 
 // contains the pixel values in row major order.
@@ -107,64 +98,52 @@ void *LoadGraphFile(const char *path, unsigned int *length)
 //            numbers are the mean values for the blue, green, and red channels in that order.
 //            each B, G, and R value from the image will have this value subtracted from it.
 // Returns a pointer to a buffer that is allocated internally via malloc.  this buffer contains
-//         the 16 bit float values that can be passed to mvncLoadTensor().  The returned buffer 
+//         the 32 bit float values that can be passed to ncFifoWriteElem().  The returned buffer
 //         will contain reqSize*reqSize*3 half floats.
-half *LoadImage(const char *path, int reqSize, float *mean)
+float *LoadImage(const char *path, int reqSize, float *mean)
 {
-	int width, height, cp, i;
-	unsigned char *img, *imgresized;
-	float *imgfp32;
-	half *imgfp16;
+    int width, height, cp, i;
+    unsigned char *img, *imgresized;
+    float *imgfp32;
 
-	img = stbi_load(path, &width, &height, &cp, 3);
-	if(!img)
-	{
-		printf("Error - the image file %s could not be loaded\n", path);
-		return NULL;
-	}
-	imgresized = (unsigned char*) malloc(3*reqSize*reqSize);
-	if(!imgresized)
-	{
-		free(img);
-		perror("malloc");
-		return NULL;
-	}
-	stbir_resize_uint8(img, width, height, 0, imgresized, reqSize, reqSize, 0, 3);
-	free(img);
-	imgfp32 = (float*) malloc(sizeof(*imgfp32) * reqSize * reqSize * 3);
-	if(!imgfp32)
-	{
-		free(imgresized);
-		perror("malloc");
-		return NULL;
-	}
-	for(i = 0; i < reqSize * reqSize * 3; i++)
-		imgfp32[i] = imgresized[i];
-	free(imgresized);
-	imgfp16 = (half*) malloc(sizeof(*imgfp16) * reqSize * reqSize * 3);
-	if(!imgfp16)
-	{
-		free(imgfp32);
-		perror("malloc");
-		return NULL;
-	}
-	for(i = 0; i < reqSize*reqSize; i++)
-	{
-		float blue, green, red;
-                blue = imgfp32[3*i+2];
-                green = imgfp32[3*i+1];
-                red = imgfp32[3*i+0];
+    img = stbi_load(path, &width, &height, &cp, 3);
+    if(!img)
+    {
+        printf("Error - the image file %s could not be loaded\n", path);
+        return NULL;
+    }
+    imgresized = (unsigned char*) malloc(3*reqSize*reqSize);
+    if(!imgresized)
+    {
+        free(img);
+        perror("malloc");
+        return NULL;
+    }
+    stbir_resize_uint8(img, width, height, 0, imgresized, reqSize, reqSize, 0, 3);
+    free(img);
+    imgfp32 = (float*) malloc(sizeof(*imgfp32) * reqSize * reqSize * 3);
+    if(!imgfp32)
+    {
+        free(imgresized);
+        perror("malloc");
+        return 0;
+    }
+    for(i = 0; i < reqSize * reqSize * 3; i++)
+        imgfp32[i] = imgresized[i];
+    free(imgresized);
 
-                imgfp32[3*i+0] = blue-mean[0];
-                imgfp32[3*i+1] = green-mean[1]; 
-                imgfp32[3*i+2] = red-mean[2];
+    for(i = 0; i < reqSize*reqSize; i++)
+    {
+        float blue, green, red;
+        blue = imgfp32[3*i+2];
+        green = imgfp32[3*i+1];
+        red = imgfp32[3*i+0];
 
-                // uncomment to see what values are getting passed to mvncLoadTensor() before conversion to half float
-                //printf("Blue: %f, Grean: %f,  Red: %f \n", imgfp32[3*i+0], imgfp32[3*i+1], imgfp32[3*i+2]);
-	}
-	floattofp16((unsigned char *)imgfp16, imgfp32, 3*reqSize*reqSize);
-	free(imgfp32);
-	return imgfp16;
+        imgfp32[3*i+0] = blue-mean[0];
+        imgfp32[3*i+1] = green-mean[1];
+        imgfp32[3*i+2] = red-mean[2];
+    }
+    return imgfp32;
 }
 
 
@@ -173,20 +152,19 @@ half *LoadImage(const char *path, int reqSize, float *mean)
 // Param deviceHandle is the address of a device handle that will be set 
 //                    if opening is successful
 // Returns true if works or false if doesn't.
-bool OpenOneNCS(int deviceIndex, void** deviceHandle)
+bool OpenOneNCS(int deviceIndex, struct ncDeviceHandle_t **deviceHandle)
 {
-    mvncStatus retCode;
-    char devName[NAME_SIZE];
-    retCode = mvncGetDeviceName(deviceIndex, devName, NAME_SIZE);
-    if (retCode != MVNC_OK)
+    ncStatus_t retCode;
+    retCode = ncDeviceCreate(deviceIndex, deviceHandle);
+    if (retCode != NC_OK)
     {   // failed to get this device's name, maybe none plugged in.
         printf("Error - NCS device at index %d not found\n", deviceIndex);
         return false;
     }
     
     // Try to open the NCS device via the device name
-    retCode = mvncOpenDevice(devName, deviceHandle);
-    if (retCode != MVNC_OK)
+    retCode = ncDeviceOpen(*deviceHandle);
+    if (retCode != NC_OK)
     {   // failed to open the device.  
         printf("Error - Could not open NCS device at index %d\n", deviceIndex);
         return false;
@@ -194,7 +172,7 @@ bool OpenOneNCS(int deviceIndex, void** deviceHandle)
     
     // deviceHandle is ready to use now.  
     // Pass it to other NC API calls as needed and close it when finished.
-    printf("Successfully opened NCS device at index %d!\n", deviceIndex);
+    printf("Successfully opened NCS device at index %d %p!\n", deviceIndex, *deviceHandle);
     return true;
 }
 
@@ -205,26 +183,44 @@ bool OpenOneNCS(int deviceIndex, void** deviceHandle)
 // Param graphHandle is the address of the graph handle that will be created internally.
 //                   the caller must call mvncDeallocateGraph when done with the handle.
 // Returns true if works or false if doesn't.
-bool LoadGraphToNCS(void* deviceHandle, const char* graphFilename, void** graphHandle)
+bool LoadGraphToNCS(struct ncDeviceHandle_t* deviceHandle, const char* graphFilename, struct ncGraphHandle_t** graphHandle)
 {
-    mvncStatus retCode;
+    ncStatus_t retCode;
+    int rc = 0;
+    unsigned int mem, memMax, length;
 
     // Read in a graph file
     unsigned int graphFileLen;
     void* graphFileBuf = LoadGraphFile(graphFilename, &graphFileLen);
 
+    length = sizeof(unsigned int);
+    // Read device memory info
+    rc = ncDeviceGetOption(deviceHandle, NC_RO_DEVICE_CURRENT_MEMORY_USED, (void **)&mem, &length);
+    rc += ncDeviceGetOption(deviceHandle, NC_RO_DEVICE_MEMORY_SIZE, (void **)&memMax, &length);
+    if(rc)
+        printf("ncDeviceGetOption failed, rc=%d\n", rc);
+    else
+        printf("Current memory used on device is %d out of %d\n", mem, memMax);
+
     // allocate the graph
-    retCode = mvncAllocateGraph(deviceHandle, graphHandle, graphFileBuf, graphFileLen);
-    free(graphFileBuf);
-    if (retCode != MVNC_OK)
+    retCode = ncGraphCreate("graph", graphHandle);
+    if (retCode)
+    {
+        printf("ncGraphCreate failed, retCode=%d\n", retCode);
+        return retCode;
+    }
+
+    // Send graph to device
+    retCode = ncGraphAllocate(deviceHandle, *graphHandle, graphFileBuf, graphFileLen);
+    if (retCode != NC_OK)
     {   // error allocating graph
         printf("Could not allocate graph for file: %s\n", graphFilename); 
-        printf("Error from mvncAllocateGraph is: %d\n", retCode);
+        printf("Error from ncGraphAllocate is: %d\n", retCode);
         return false;
     }
 
     // successfully allocated graph.  Now graphHandle is ready to go.  
-    // use graphHandle for other API calls and call mvncDeallocateGraph
+    // use graphHandle for other API calls and call ncGraphDestroy
     // when done with it.
     printf("Successfully allocated graph for %s\n", graphFilename);
 
@@ -242,121 +238,183 @@ bool LoadGraphToNCS(void* deviceHandle, const char* graphFilename, void** graphH
 // Param networkMean is pointer to array of 3 floats that are the mean values for the network
 //                   for each color channel, blue, green, and red in that order.
 // Returns tru if works or false if doesn't
-bool DoInferenceOnImageFile(void* graphHandle, const char* imageFileName, int networkDim, float* networkMean)
+bool DoInferenceOnImageFile(struct ncGraphHandle_t *graphHandle, struct ncDeviceHandle_t *dev,
+                            struct ncFifoHandle_t *bufferIn, struct ncFifoHandle_t *bufferOut,
+                            const char* imageFileName, int networkDim, float* networkMean)
 {
-    mvncStatus retCode;
+    ncStatus_t retCode;
+    struct ncTensorDescriptor_t td;
+    struct ncTensorDescriptor_t resultDesc;
+    unsigned int length;
 
     // LoadImage will read image from disk, convert channels to floats
-    // subtract network mean for each value in each channel.  Then, convert 
-    // floats to half precision floats and return pointer to the buffer 
-    // of half precision floats (Fp16s)
-    half* imageBufFp16 = LoadImage(imageFileName, networkDim, networkMean);
+    // subtract network mean for each value in each channel.  Then, 
+    // return pointer to the buffer of 32Bit floats
+    float* imageBuf = LoadImage(imageFileName, networkDim, networkMean);
 
-    // calculate the length of the buffer that contains the half precision floats. 
-    // 3 channels * width * height * sizeof a 16bit float 
-    unsigned int lenBufFp16 = 3*networkDim*networkDim*sizeof(*imageBufFp16);
+    // calculate the length of the buffer that contains the floats. 
+    // 3 channels * width * height * sizeof a 32bit float 
+    unsigned int lenBuf = 3*networkDim*networkDim*sizeof(*imageBuf);
 
-    // start the inference with mvncLoadTensor()
-    retCode = mvncLoadTensor(graphHandle, imageBufFp16, lenBufFp16, NULL);
-    free(imageBufFp16);
-    if (retCode != MVNC_OK)
-    {   // error loading tensor
-        printf("Error - Could not load tensor\n");
-        printf("    mvncStatus from mvncLoadTensor is: %d\n", retCode);
+    // Read descriptor for input tensor
+    length = sizeof(struct ncTensorDescriptor_t);
+    retCode = ncFifoGetOption(bufferIn, NC_RO_FIFO_TENSOR_DESCRIPTOR, &td, &length);
+    if (retCode || length != sizeof(td)){
+        printf("ncFifoGetOption failed, retCode=%d\n", retCode);
         return false;
     }
 
-    // the inference has been started, now call mvncGetResult() for the
+    // Write tensor to input fifo
+    retCode = ncFifoWriteElem(bufferIn, imageBuf, &lenBuf, NULL);
+    if (retCode != NC_OK)
+    {   // error loading tensor
+        printf("Error - Could not load tensor\n");
+        printf("    ncStatus_t from mvncLoadTensor is: %d\n", retCode);
+        return false;
+    }
+
+    // Start inference
+    retCode = ncGraphQueueInference(graphHandle, &bufferIn, 1, &bufferOut, 1);
+    if (retCode)
+    {
+        free(imageBuf);
+        printf("ncGraphQueueInference failed, retCode=%d\n", retCode);
+        return false;
+    }
+    free(imageBuf);
+
+    // the inference has been started, now call ncFifoReadElem() for the
     // inference result 
     printf("Successfully loaded the tensor for image %s\n", imageFileName);
     
-    void* resultData16;
+    unsigned int outputDataLength;
+    length = sizeof(unsigned int);
+    retCode = ncFifoGetOption(bufferOut, NC_RO_FIFO_ELEMENT_DATA_SIZE, &outputDataLength, &length);
+    if (retCode || length != sizeof(unsigned int)){
+        printf("ncFifoGetOption failed, rc=%d\n", retCode);
+        exit(-1);
+    }
+    float* resultData = (float*) malloc(outputDataLength);
+
     void* userParam;
-    unsigned int lenResultData;
-    retCode = mvncGetResult(graphHandle, &resultData16, &lenResultData, &userParam);
-    if (retCode != MVNC_OK)
+    // Read output results
+    retCode = ncFifoReadElem(bufferOut, (void*) resultData, &outputDataLength, &userParam);
+    if (retCode != NC_OK)
     {
         printf("Error - Could not get result for image %s\n", imageFileName);
-        printf("    mvncStatus from mvncGetResult is: %d\n", retCode);
+        printf("    ncStatus_t from ncFifoReadElem is: %d\n", retCode);
         return false;
     }
 
     // Successfully got the result.  The inference result is in the buffer pointed to by resultData
     printf("Successfully got the inference result for image %s\n", imageFileName);
-    //printf("resultData is %d bytes which is %d 16-bit floats.\n", lenResultData, lenResultData/(int)sizeof(half));
 
-    // convert half precision floats to full floats
-    int numResults = lenResultData / sizeof(half);
-    float* resultData32;
-    resultData32 = (float*)malloc(numResults * sizeof(*resultData32));
-    fp16tofloat(resultData32, (unsigned char*)resultData16, numResults);
-
+    unsigned int numResults = outputDataLength/sizeof(float);
     float maxResult = 0.0;
     int maxIndex = -1;
     for (int index = 0; index < numResults; index++)
     {
-        // printf("Category %d is: %f\n", index, resultData32[index]);
-        if (resultData32[index] > maxResult)
+        // printf("Category %d is: %f\n", index, resultData[index]);
+        if (resultData[index] > maxResult)
         {
-            maxResult = resultData32[index];
+            maxResult = resultData[index];
             maxIndex = index;
         }
     }
     printf("Index of top result is: %d\n", maxIndex);
-    printf("Probability of top result is: %f\n", resultData32[maxIndex]);
+    printf("Probability of top result is: %f\n", resultData[maxIndex]);
+    free(resultData);
 }
 
 // Main entry point for the program
 int main(int argc, char** argv)
 {
-    mvncStatus retCode;
-    void* devHandle1;
-    void* devHandle2;
-    void* graphHandleGoogleNet; 
-    void* graphHandleSqueezeNet;
+    int rc = 0;
+    unsigned int length;
+    struct ncDeviceHandle_t *devHandle1;
+    struct ncDeviceHandle_t *devHandle2;
+    struct ncGraphHandle_t *graphHandleGoogleNet;
+    struct ncGraphHandle_t *graphHandleSqueezeNet;
+    int loglevel = 2;
+    ncStatus_t retCode = ncGlobalSetOption(NC_RW_LOG_LEVEL, &loglevel, sizeof(loglevel));
 
-    if (!OpenOneNCS(0, &devHandle1)) 
-    {	// couldn't open first NCS device
+    if (!OpenOneNCS(0, &devHandle1))
+    {   // couldn't open first NCS device
         exit(-1);
     }
-    if (!OpenOneNCS(1, &devHandle2)) 
+    if (!OpenOneNCS(1, &devHandle2))
     {   // couldn't open second NCS device
         exit(-1);
     }
 
-    void* deviceHandle = devHandle1;
-
     if (!LoadGraphToNCS(devHandle1, GOOGLENET_GRAPH_FILE_NAME, &graphHandleGoogleNet))
     {
-        mvncCloseDevice(devHandle1);
-        mvncCloseDevice(devHandle2);
+        ncDeviceClose(devHandle1);
+        ncDeviceClose(devHandle2);
         exit(-2);
     }
     if (!LoadGraphToNCS(devHandle2, SQUEEZENET_GRAPH_FILE_NAME, &graphHandleSqueezeNet))
     {
-        mvncDeallocateGraph(graphHandleGoogleNet);
+        ncGraphDestroy(&graphHandleGoogleNet);
         graphHandleGoogleNet = NULL;
-        mvncCloseDevice(devHandle1);
-        mvncCloseDevice(devHandle2);
+        ncDeviceClose(devHandle1);
+        ncDeviceClose(devHandle2);
         exit(-2);
     }
 
+    // Read tensor descriptors for Googlenet
+    struct ncTensorDescriptor_t inputTdGooglenet;
+    struct ncTensorDescriptor_t outputTdGooglenet;
+    length = sizeof(struct ncTensorDescriptor_t);
+    ncGraphGetOption(graphHandleGoogleNet, NC_RO_GRAPH_INPUT_TENSOR_DESCRIPTORS, &inputTdGooglenet,  &length);
+    ncGraphGetOption(graphHandleGoogleNet, NC_RO_GRAPH_OUTPUT_TENSOR_DESCRIPTORS, &outputTdGooglenet,  &length);
+
+    // Read tensor descriptors for SqueezeNet
+    struct ncTensorDescriptor_t inputTdSqueezeNet;
+    struct ncTensorDescriptor_t outputTdSqueezeNet;
+    length = sizeof(struct ncTensorDescriptor_t);
+    ncGraphGetOption(graphHandleSqueezeNet, NC_RO_GRAPH_INPUT_TENSOR_DESCRIPTORS, &inputTdSqueezeNet,  &length);
+    ncGraphGetOption(graphHandleSqueezeNet, NC_RO_GRAPH_OUTPUT_TENSOR_DESCRIPTORS, &outputTdSqueezeNet,  &length);
+
+    // Init & Create Fifos for Googlenet
+    struct ncFifoHandle_t * bufferInGooglenet;
+    struct ncFifoHandle_t * bufferOutGooglenet;
+    rc = ncFifoCreate("fifoIn0", NC_FIFO_HOST_WO, &bufferInGooglenet);
+    rc += ncFifoAllocate(bufferInGooglenet, devHandle1, &inputTdGooglenet, 2);
+    rc += ncFifoCreate("fifoOut0", NC_FIFO_HOST_RO, &bufferOutGooglenet);
+    rc += ncFifoAllocate(bufferOutGooglenet, devHandle1, &outputTdGooglenet, 2);
+    if(rc)
+        printf("Fifo allocation failed for Googlenet, rc=%d\n", rc);
+
+    // Init & Create Fifos for SqueezeNet
+    struct ncFifoHandle_t * bufferInSqueezeNet;
+    struct ncFifoHandle_t * bufferOutSqueezeNet;
+    rc = ncFifoCreate("fifoIn1", NC_FIFO_HOST_WO, &bufferInSqueezeNet);
+    rc += ncFifoAllocate(bufferInSqueezeNet, devHandle2, &inputTdSqueezeNet, 2);
+    rc += ncFifoCreate("fifoOut2", NC_FIFO_HOST_RO, &bufferOutSqueezeNet);
+    rc += ncFifoAllocate(bufferOutSqueezeNet, devHandle2, &outputTdSqueezeNet, 2);
+    if(rc)
+        printf("Fifo allocation failed for SqueezeNet, rc=%d\n", rc);
+
     printf("\n--- NCS 1 inference ---\n");
-    DoInferenceOnImageFile(graphHandleGoogleNet, GOOGLENET_IMAGE_FILE_NAME, networkDimGoogleNet, networkMeanGoogleNet);
+    DoInferenceOnImageFile(graphHandleGoogleNet, devHandle1, bufferInGooglenet, bufferOutGooglenet, GOOGLENET_IMAGE_FILE_NAME, networkDimGoogleNet, networkMeanGoogleNet);
     printf("-----------------------\n");
 
     printf("\n--- NCS 2 inference ---\n");
-    DoInferenceOnImageFile(graphHandleSqueezeNet, SQUEEZENET_IMAGE_FILE_NAME, networkDimSqueezeNet, networkMeanSqueezeNet);
+    DoInferenceOnImageFile(graphHandleSqueezeNet, devHandle2, bufferInSqueezeNet, bufferOutSqueezeNet, SQUEEZENET_IMAGE_FILE_NAME, networkDimSqueezeNet, networkMeanSqueezeNet);
     printf("-----------------------\n");
-
-    retCode = mvncDeallocateGraph(graphHandleSqueezeNet);
+    retCode = ncFifoDestroy(&bufferInGooglenet);
+    retCode = ncFifoDestroy(&bufferOutGooglenet);
+    retCode = ncFifoDestroy(&bufferInSqueezeNet);
+    retCode = ncFifoDestroy(&bufferOutSqueezeNet);
+    retCode = ncGraphDestroy(&graphHandleSqueezeNet);
     graphHandleSqueezeNet = NULL;
-    retCode = mvncDeallocateGraph(graphHandleGoogleNet);
+    retCode = ncGraphDestroy(&graphHandleGoogleNet);
     graphHandleGoogleNet = NULL;
   
-    retCode = mvncCloseDevice(devHandle1);
+    retCode = ncDeviceClose(devHandle1);
     devHandle1 = NULL;
 
-    retCode = mvncCloseDevice(devHandle2);
+    retCode = ncDeviceClose(devHandle2);
     devHandle2 = NULL;
 }

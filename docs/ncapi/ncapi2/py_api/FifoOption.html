@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="class-fifooptionenumenum">class FifoOption(enum.Enum)</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Fifo.html">Fifo</a>, <a href="Fifo.set_option.html">Fifo.set_option()</a>, <a href="Fifo.get_option.html">Fifo.get_option()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>FifoOption is an enumeration that defines <a href="Fifo.html">Fifo</a> options that can be read with <a href="Fifo.get_option.html">Fifo.get_option()</a> or set with <a href="Fifo.set_option.html">Fifo.set_option()</a>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Option Type</th>
+      <th>Possible Values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>RW_TYPE</td>
+      <td>int</td>
+      <td>Values in the <a href="FifoType.html">FifoType</a> enumeration</td>
+      <td>The type of <a href="Fifo.html">Fifo</a> (read-only or write-only).</td>
+    </tr>
+    <tr>
+      <td>RW_CONSUMER_COUNT</td>
+      <td>int</td>
+      <td>1</td>
+      <td>The number of times an element must be read by a graph or the API before the element is removed <em>(default 1)</em>. The API can always only read once even if this is greater than 1.<br /><br /><em>Only 1 currently supported.</em></td>
+    </tr>
+    <tr>
+      <td>RW_DATA_TYPE</td>
+      <td>int</td>
+      <td>Values in the <a href="FifoDataType.html">FifoDataType</a> enumeration</td>
+      <td>The type of data that will be placed in the <a href="Fifo.html">Fifo</a> (default: 32FP).<br /><br />Regardless of what data types the input and output <a href="Fifo.html">Fifos</a> are configured for, the API will convert tensors to 16FP while performing inferences.</td>
+    </tr>
+    <tr>
+      <td>RW_DONT_BLOCK</td>
+      <td>int</td>
+      <td>0</td>
+      <td>0: <a href="Fifo.write_elem.html">Fifo.write_elem()</a> will block if the input <a href="Fifo.html">Fifo</a> is full and <a href="Fifo.read_elem.html">Fifo.read_elem()</a> will block if the output <a href="Fifo.html">Fifo</a> is empty <em>(default)</em>. <br />1: <em>Not yet implemented.</em></td>
+    </tr>
+    <tr>
+      <td>RO_CAPACITY</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The maximum number of elements the <a href="Fifo.html">Fifo</a> can hold. This is set with <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a> or <a href="Fifo.allocate.html">Fifo.allocate()</a>.</td>
+    </tr>
+    <tr>
+      <td>RO_READ_FILL_LEVEL</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The number of tensors (Fifo elements) in the queue for a readable <a href="Fifo.html">Fifo</a>.</td>
+    </tr>
+    <tr>
+      <td>RO_WRITE_FILL_LEVEL</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The number of tensors (Fifo elements0 in the queue for a writable <a href="Fifo.html">Fifo</a>.</td>
+    </tr>
+    <tr>
+      <td>RO_TENSOR_DESCRIPTOR</td>
+      <td><a href="TensorDescriptor.html">TensorDescriptor</a></td>
+      <td>N/A</td>
+      <td>The Fifo’s <a href="TensorDescriptor.html">TensorDescriptor</a>, which describes the shape of tensors that this <a href="Fifo.html">Fifo</a> will hold. This is set with <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a> or <a href="Fifo.allocate.html">Fifo.allocate()</a>.</td>
+    </tr>
+    <tr>
+      <td>RO_STATE</td>
+      <td>int</td>
+      <td>Values in the <a href="FifoState.html">FifoState</a> enumeration</td>
+      <td>The current state of the <a href="Fifo.html">Fifo</a>.</td>
+    </tr>
+    <tr>
+      <td>RO_NAME</td>
+      <td>str</td>
+      <td>Fifo name string</td>
+      <td>The name of the <a href="Fifo.html">Fifo</a> that was set when the <a href="Fifo.html">Fifo</a> was created.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li><strong>Options prefixed with ‘RW’ have read/write permission and are both gettable and settable.</strong></li>
+  <li><strong>Options prefixed with ‘RO’ have read-only permission and are only gettable.</strong></li>
+  <li><strong>All settable <a href="Fifo.html">Fifo</a> options must be set before <a href="Fifo.allocate.html">Fifo.allocate()</a> is called for this <a href="Fifo.html">Fifo</a>.</strong></li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

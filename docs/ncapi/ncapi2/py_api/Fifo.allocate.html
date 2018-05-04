@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="fifoallocate">Fifo.allocate()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Fifo.html">Fifo</a>, <a href="Fifo.destroy.html">Fifo.destroy()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>This method allocates memory for the <a href="Fifo.html">Fifo</a> for the specified <a href="Device.html">Device</a> based on the number of elements the <a href="Fifo.html">Fifo</a> will hold and a <a href="TensorDescriptor.html">TensorDescriptor</a> struct, which describes the expected shape of the <a href="Fifo.html">Fifo’s</a> elements. Each <a href="Fifo.html">Fifo</a> can only be allocated to a single device.</p>
+
+<p>Upon successful return from this method, the <a href="Fifo.html">Fifo</a> will be ready for reading/writing.</p>
+
+<p>The allocated memory is freed with <a href="Fifo.destroy.html">Fifo.destroy()</a>.</p>
+
+<h2 id="syntax">Syntax</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fifo</span><span class="o">.</span><span class="n">allocate</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">tensor_desc</span><span class="p">,</span> <span class="n">n_elem</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>device</td>
+      <td><a href="Device.html">Device</a></td>
+      <td>A <a href="Device.html">Device</a> that this <a href="Fifo.html">Fifo</a> will be associated with. The <a href="DeviceState.html">DeviceState</a> must be OPENED.</td>
+    </tr>
+    <tr>
+      <td>tensor_desc</td>
+      <td><a href="TensorDescriptor.html">TensorDescriptor</a></td>
+      <td>A TensorDescriptor structure that describes the elements of the Fifo.<br /><br /><a href="Graph.get_option.html">Graph.get_option()</a> with <a href="GraphOption.html">GraphOption.RO_INPUT_TENSOR_DESCRIPTORS</a> or <a href="GraphOption.html">GraphOption.RO_OUTPUT_TENSOR_DESCRIPTORS</a> will return a list of <a href="TensorDescriptor.html">TensorDescriptors</a> for that <a href="Graph.html">Graph</a>.</td>
+    </tr>
+    <tr>
+      <td>n_elem</td>
+      <td>int</td>
+      <td>The maximum number of elements that the <a href="Fifo.html">Fifo</a> will be able to contain.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>None</p>
+
+<h2 id="raises">Raises</h2>
+<p>Exception with a status code from <a href="Status.html">Status</a> if underlying function calls return a status other than Status.OK.</p>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>The <a href="Fifo.html">Fifo</a> must be allocated with this method before being used for any other API other than <a href="Fifo.get_option.html">Fifo.get_option()</a> or <a href="Fifo.set_option.html">Fifo.set_option()</a>. When the Fifo is successfully allocated the <a href="FifoState.html">FifoState</a> will be ALLOCATED.</li>
+  <li>Any settable <a href="FifoOption.html">FifoOptions</a> must be set before calling this method.</li>
+  <li><a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a> can be used instead to easily create and allocate two <a href="Fifo.html">Fifos</a> for input and output in addition to allocating a <a href="Graph.html">Graph</a> to a <a href="Device.html">Device</a>; this internally calls <a href="Fifo.allocate.html">Fifo.allocate()</a> and <a href="Graph.allocate.html">Graph.allocate()</a>.</li>
+</ul>
+
+<h2 id="example">Example</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">mvnc</span> <span class="kn">import</span> <span class="n">mvncapi</span>
+
+<span class="c">#</span>
+<span class="c"># Open a Device and allocate a Graph...</span>
+<span class="c">#</span>
+
+<span class="c"># Create an input Fifo</span>
+<span class="n">input_fifo</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Fifo</span><span class="p">(</span><span class="s">'input1'</span><span class="p">,</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoType</span><span class="o">.</span><span class="n">HOST_WO</span><span class="p">)</span>
+
+<span class="c"># Get an input TensorDescriptor from a graph</span>
+<span class="n">input_descs</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">GraphOption</span><span class="o">.</span><span class="n">RO_INPUT_TENSOR_DESCRIPTORS</span><span class="p">)</span>
+
+<span class="c"># Allocate the Fifo buffer with the graph input TensorDescriptor to the device</span>
+<span class="n">NUM_ELEMENTS</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">allocate</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">input_descs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">NUM_ELEMENTS</span><span class="p">)</span>
+
+<span class="c">#</span>
+<span class="c"># Write elements to the Fifo with Fifo.write_elem() and initiate inferences with Graph.queue_inference()</span>
+<span class="c">#</span>
+
+<span class="c"># Destroy the Fifo</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+
+<span class="c">#</span>
+<span class="c"># Perform other clean up...</span>
+<span class="c">#</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

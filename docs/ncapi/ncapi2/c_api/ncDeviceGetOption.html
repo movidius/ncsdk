@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="ncdevicegetoption">ncDeviceGetOption()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Library</td>
+      <td>libmvnc.so</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncDeviceHandle_t.html">struct ncDeviceHandle_t</a>, <a href="ncDeviceOption_t.html">ncDeviceOption_t</a>, <a href="ncDeviceSetOption.html">ncDeviceSetOption()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>This function gets the value of an option for a neural compute device. The available options and possible values can be found in the <a href="ncDeviceOption_t.html">ncDeviceOption_t</a> enumeration.</p>
+
+<h2 id="prototype">Prototype</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ncStatus_t</span> <span class="n">ncDeviceGetOption</span><span class="p">(</span><span class="k">struct</span> <span class="n">ncDeviceHandle_t</span><span class="o">*</span> <span class="n">deviceHandle</span><span class="p">,</span>
+                             <span class="kt">int</span> <span class="n">option</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span>
+                             <span class="kt">unsigned</span> <span class="kt">int</span><span class="o">*</span> <span class="n">dataLength</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>deviceHandle</td>
+      <td><a href="ncDeviceHandle_t.html">struct ncDeviceHandle_t</a>*</td>
+      <td>A pointer to an ncDeviceHandle_t struct for the device for which the option value will be retrieved. The device state must be <a href="ncDeviceState_t.html">NC_DEVICE_CREATED</a> or <a href="ncDeviceState_t.html">NC_DEVICE_OPENED</a>.</td>
+    </tr>
+    <tr>
+      <td>option</td>
+      <td>int</td>
+      <td>A value from the <a href="ncDeviceOption_t.html">ncDeviceOption_t</a> enumeration that specifies which option’s value will be retrieved.</td>
+    </tr>
+    <tr>
+      <td>data</td>
+      <td>void*</td>
+      <td>A pointer to a buffer where the value of the option will be copied. The size and type of data this points to will depend on the option that is specified. See <a href="ncDeviceOption_t.html">ncDeviceOption_t</a> for option data types.</td>
+    </tr>
+    <tr>
+      <td>dataLength</td>
+      <td>unsigned int*</td>
+      <td>A pointer to an unsigned int which contains the size, in bytes, of the buffer allocated by the caller for the data parameter.<br /><br />Upon normal return (status code <a href="ncStatus_t.html">NC_OK</a>), dataLength will be set to the number of bytes copied to the data buffer. In the event that the data buffer was an insufficient size to hold the option value, the return status code will be <a href="ncStatus_t.html">NC_INVALID_DATA_LENGTH</a> and dataLength will be set to the size required to hold the option value.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>An appropriate value from the <a href="ncStatus_t.html">ncStatus_t</a> enumeration.</p>
+
+<p>If the data buffer was an insufficient size to hold the option value, the return status code will be <a href="ncStatus_t.html">NC_INVALID_DATA_LENGTH</a> and dataLength will be set to the size required to hold the option value.</p>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>If you don’t know what value to use for dataLength, you can call this function once with a dataLength of 0 to have dataLength be set to the correct value and then allocate a correctly sized buffer and call this function again. See the example below.</li>
+</ul>
+
+<h2 id="example">Example</h2>
+<p>Get an option value when you know the correct data length:</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;mvnc.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ncStatus_t</span> <span class="n">retCode</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">ncDeviceHandle_t</span><span class="o">*</span> <span class="n">deviceHandlePtr</span><span class="p">;</span>
+    
+    <span class="n">ncDeviceCreate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+    
+    <span class="cm">/* Get the device state option value */</span>  
+    <span class="kt">int</span> <span class="n">deviceState</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">dataLength</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncDeviceGetOption</span><span class="p">(</span><span class="n">deviceHandlePtr</span><span class="p">,</span> <span class="n">NC_RO_DEVICE_STATE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceState</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dataLength</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">retCode</span> <span class="o">!=</span> <span class="n">NC_OK</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Failed to get the option.</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"ncDeviceGetOption Failed [%d].</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">retCode</span><span class="p">);</span>
+        <span class="n">ncDeviceDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="cm">/* Use the device state as needed */</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"The device state is %d.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">deviceState</span><span class="p">);</span>
+
+    <span class="c1">// open, use and close the device here as needed    </span>
+
+    <span class="n">ncDeviceDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Get an option value when you don’t know the correct data length:</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;mvnc.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ncStatus_t</span> <span class="n">retCode</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">ncDeviceHandle_t</span><span class="o">*</span> <span class="n">deviceHandlePtr</span><span class="p">;</span>
+    
+    <span class="n">ncDeviceCreate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+    
+    <span class="cm">/* Get the size of the option so we know what to allocate */</span>  
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">dataLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncDeviceGetOption</span><span class="p">(</span><span class="n">deviceHandlePtr</span><span class="p">,</span> <span class="n">NC_RO_DEVICE_STATE</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dataLength</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">retCode</span> <span class="o">==</span> <span class="n">NC_INVALID_DATA_LENGTH</span><span class="p">)</span>
+    <span class="p">{</span>   <span class="c1">// we passed length too small (zero) and it should now be set to correct size</span>
+        <span class="kt">void</span> <span class="o">*</span><span class="n">optionPtr</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="n">optionPtr</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">dataLength</span><span class="p">);</span>
+        <span class="n">retCode</span> <span class="o">=</span> <span class="n">ncDeviceGetOption</span><span class="p">(</span><span class="n">deviceHandlePtr</span><span class="p">,</span> <span class="n">NC_RO_DEVICE_STATE</span><span class="p">,</span> <span class="n">optionPtr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dataLength</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">retCode</span> <span class="o">!=</span> <span class="n">NC_OK</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Failed to get the option.</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"ncDeviceGetOption Failed [%d].</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">retCode</span><span class="p">);</span>
+            <span class="n">ncDeviceDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+            <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="cm">/* Use the device state as needed */</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"The device state is %d.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="o">*</span><span class="p">((</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">optionPtr</span><span class="p">));</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">optionPtr</span><span class="p">);</span>
+        <span class="n">optionPtr</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="c1">// Failed to get the option size.</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"ncDeviceGetOption Failed to get the size[%d].</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">retCode</span><span class="p">);</span>
+        <span class="n">ncDeviceDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// open, use and close the device here as needed    </span>
+
+    <span class="c1">// done with device, destroy it.</span>
+    <span class="n">ncDeviceDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">deviceHandlePtr</span><span class="p">);</span>
+
+    
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

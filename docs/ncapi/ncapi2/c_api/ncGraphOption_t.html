@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="ncgraphoption_t-enumeration">ncGraphOption_t enumeration</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncGraphHandle_t.html">struct ncGraphHandle_t</a>, <a href="ncGraphGetOption.html">ncGraphGetOption()</a>, <a href="ncGraphSetOption.html">ncGraphSetOption()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>The ncGraphOption_t enumeration defines graph options that can be read with <a href="ncGraphGetOption.html">ncGraphGetOption()</a> or set with <a href="ncGraphSetOption.html">ncGraphSetOption()</a>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Constant</th>
+      <th>Option Type</th>
+      <th>Possible Values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NC_RO_GRAPH_STATE</td>
+      <td>int</td>
+      <td>Values in the <a href="ncGraphState_t.html">ncGraphState_t</a> enumeration</td>
+      <td>The current state of the graph and the associated <a href="ncGraphHandle_t.html">ncGraphHandle_t</a> struct.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_GRAPH_TIME_TAKEN</td>
+      <td>float[ ]</td>
+      <td>Positive floats</td>
+      <td>The times taken per graph layer for the last inference. The size of this array is the value of the NC_RO_GRAPH_TIME_TAKEN_ARRAY_SIZE option.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_GRAPH_INPUT_COUNT</td>
+      <td>int</td>
+      <td>1</td>
+      <td>The number of inputs expected by the graph. This is the number of elements in the NC_RO_GRAPH_INPUT_TENSOR_<br />DESCRIPTORS array.<br /><br /><em>Only 1 currently supported.</em></td>
+    </tr>
+    <tr>
+      <td>NC_RO_GRAPH_OUTPUT_COUNT</td>
+      <td>int</td>
+      <td>1</td>
+      <td>The number of outputs expected by the graph. This is the number of elements in the NC_RO_GRAPH_OUTPUT_TENSOR_<br />DESCRIPTORS array.<br /><br /><em>Only 1 currently supported.</em></td>
+    </tr>
+    <tr>
+      <td>NC_RO_GRAPH_INPUT_<br />TENSOR_DESCRIPTORS</td>
+      <td><a href="ncTensorDescriptor_t.html">struct ncTensorDescriptor_t</a>[ ]</td>
+      <td>N/A</td>
+      <td>An array of ncTensorDescriptor_t structs, which describe the graph inputs in order. The value of the NC_RO_GRAPH_INPUT_COUNT option is the length of the array.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_GRAPH_OUTPUT_<br />TENSOR_DESCRIPTORS</td>
+      <td><a href="ncTensorDescriptor_t.html">struct ncTensorDescriptor_t</a>[ ]</td>
+      <td>N/A</td>
+      <td>An array of ncTensorDescriptor_t structs, which describe the graph outputs in order. The value of the NC_RO_GRAPH_OUTPUT_COUNT option is the length of the array.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_GRAPH_DEBUG_INFO</td>
+      <td>char[ ]</td>
+      <td>Debug info</td>
+      <td>A null-terminated character array that provides more details when the result of a function call was <a href="ncStatus_t.html">NC_MYRIAD_ERROR</a>. The maximum size of this array is NC_DEBUG_BUFFER_SIZE.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_GRAPH_NAME</td>
+      <td>char[ ]</td>
+      <td>Graph name</td>
+      <td>A null-terminated character array containing the name of the graph that was set with <a href="ncGraphCreate.html">ncGraphCreate()</a>. The maximum size of this array is NC_MAX_NAME_SIZE.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_GRAPH_OPTION_<br />CLASS_LIMIT</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The highest option class supported.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_GRAPH_VERSION</td>
+      <td>unsigned int[2]</td>
+      <td>[<em>major, minor</em>]</td>
+      <td>The version of the compiled graph.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_GRAPH_TIME_<br />TAKEN_ARRAY_SIZE</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The size of the NC_RO_GRAPH_TIME_TAKEN option array.</td>
+    </tr>
+    <tr>
+      <td>NC_RW_GRAPH_<br />EXECUTORS_NUM</td>
+      <td>int</td>
+      <td>Positive int up to the device’s <a href="ncDeviceOption_t.html">NC_RO_DEVICE_MAX_<br />EXECUTORS_NUM</a></td>
+      <td><em>Reserved for future use.</em></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="notes">Notes</h2>
+
+<ul>
+  <li><strong>Options prefixed with ‘NC_RW’ have read/write permission and are both gettable and settable.</strong></li>
+  <li><strong>Options prefixed with ‘NC_RO’ have read-only permission and are only gettable.</strong></li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

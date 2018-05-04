@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <p><a name="Top"></a></p>
+<h1 id="migrating-python-applications-from-ncapi-v1-to-ncapi-v2">Migrating Python Applications from NCAPI v1 to NCAPI v2</h1>
+
+<h4 id="sections">Sections:</h4>
+
+<ul>
+  <li><a href="#Changes">Significant Changes</a></li>
+  <li><a href="#API">Equivalent API Calls</a></li>
+  <li><a href="#Example">Example Code Comparison</a></li>
+</ul>
+
+<p>Complete Python API documentation can be found here:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>NCAPI v2 Documentation</th>
+      <th>NCAPI v1 Documentation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="ncapi2/py_api/readme.html">Python API v2</a></td>
+      <td><a href="ncapi1/py_api/readme.html">Python API v1</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="significant-changes"><a name="Changes"></a>Significant Changes</h1>
+
+<h2 id="fifo-queues">FIFO queues</h2>
+
+<p>In the Intel® Movidius™ Neural Compute SDK (Intel® Movidius NCSDK) v1, the <a href="ncapi1/py_api/Graph.html">Graph</a> class was used to load an input tensor to a neural compute device and to read the output inference result.</p>
+
+<p>NCAPI v2 introduced the <a href="ncapi2/py_api/Fifo.html">Fifo</a> class for input/output FIFO queues. This allows multiple inputs to be queued for inference and allows multiple graphs to read from the same input queue. Fifo usage is required by the NCAPI v2.</p>
+
+<p>Typical Fifo usage through the NCAPI is as follows:</p>
+
+<ol>
+  <li>Allocate a graph and create and allocate input and output <a href="ncapi2/py_api/Fifo.html">Fifos</a> with <a href="ncapi2/py_api/Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a>.</li>
+  <li>Add input tensors to the input FIFO and queue an inference with <a href="ncapi2/py_api/Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_with_fifo_elem()</a>.</li>
+  <li>Read the inference result from the output Fifo with <a href="ncapi2/py_api/Fifo.read_elem.html">Fifo.read_elem()</a>.</li>
+  <li>After usage, free <a href="ncapi2/py_api/Fifo.html">Fifo</a> resources with <a href="ncapi2/py_api/Fifo.destroy.html">Fifo.destroy()</a>.</li>
+</ol>
+
+<p>See the <a href="#Example">Example Code Comparison</a> section below for example Fifo usage.</p>
+
+<h2 id="inputoutput-data-types">Input/output data types</h2>
+
+<p>In NCAPI v1, input data for inferences had to be 16 bit floating point data type.</p>
+
+<p>In NCAPI v2, input data for inferences can be 16 bit or 32 bit floating point data type. The default data type is FP32. The data type is set for each <a href="ncapi2/py_api/Fifo.html">Fifo</a> using <a href="ncapi2/py_api/Fifo.set_option.html">Fifo.set_option()</a> with <a href="ncapi2/py_api/FifoDataType.html">FifoDataType</a>.</p>
+
+<p>Note: If the input <a href="ncapi2/py_api/FifoDataType.html">FifoDataType</a> is configured to FP32, the API will convert the data to the FP16 data type automatically when performing inferences. If the output <a href="ncapi2/py_api/FifoDataType.html">FifoDataType</a> is configured to 32FP, the API will convert the output back to the FP32 data type.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fifo</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoOption</span><span class="o">.</span><span class="n">RW_DATA_TYPE</span><span class="p">,</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoDataType</span><span class="o">.</span><span class="n">FP32</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="other-changes">Other changes</h2>
+<p>Most class and function names and signatures were updated. Please reference the <a href="ncapi2/py_api/readme.html">NCAPI v2</a> documentation for correct usage.</p>
+
+<p><a href="#Top">Top</a></p>
+
+<h1 id="equivalent-api-calls"><a name="API"></a>Equivalent API Calls</h1>
+
+<h3 id="enumerations">Enumerations</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>NCAPI v1</th>
+      <th>NCAPI v2</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="ncapi1/py_api/Status.html">Status</a></td>
+      <td><a href="ncapi2/py_api/Status.html">Status</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/DeviceOption.html">DeviceOption</a></td>
+      <td><a href="ncapi2/py_api/DeviceOption.html">DeviceOption</a></td>
+      <td>There are new options in NCAPI v2.</td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/GlobalOption.html">GlobalOption</a></td>
+      <td><a href="ncapi2/py_api/GlobalOption.html">GlobalOption</a></td>
+      <td>There are new options in NCAPI v2.</td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/GraphOption.html">GraphOption</a></td>
+      <td><a href="ncapi2/py_api/GraphOption.html">GraphOption</a></td>
+      <td>There are new options in NCAPI v2.</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/FifoOption.html">FifoOption</a></td>
+      <td>This is a new enumeration in NCAPI v2 containing options for the new <a href="ncapi2/py_api/Fifo.html">Fifo</a> class.</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/DeviceState.html">DeviceState</a></td>
+      <td>This is a new enumeration in NCAPI v2 containing possible <a href="ncapi2/py_api/Device.html">Device</a> states.</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/GraphState.html">GraphState</a></td>
+      <td>This is a new enumeration in NCAPI v2 containing possible <a href="ncapi2/py_api/Graph.html">Graph</a> states.</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/FifoState.html">FifoState</a></td>
+      <td>This is a new enumeration in NCAPI v2 containing possible <a href="ncapi2/py_api/Fifo.html">Fifo</a> states.</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/FifoType.html">FifoType</a></td>
+      <td>This is a new enumeration in NCAPI v2 containing possible <a href="ncapi2/py_api/Fifo.html">Fifo</a> types (i.e. read-only, write-only, etc.).</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/FifoDataType.html">FifoDataType</a></td>
+      <td>This is a new enumeration in NCAPI v2 containing possible <a href="ncapi2/py_api/Fifo.html">Fifo</a> data types.</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/DeviceHwVersion.html">DeviceHwVersion</a></td>
+      <td>This is a new enumeration in NCAPI v2 containing neural compute device hardware versions.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="structures">Structures</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>NCAPI v1</th>
+      <th>NCAPI v2</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/TensorDescriptor.html">TensorDescriptor</a></td>
+      <td>This is a Structure class that describes graph inputs and outputs. Use <a href="ncapi2/py_api/Graph.get_option.html">Graph.get_option()</a> for <a href="ncapi2/py_api/GraphOption.html">GraphOption.INPUT_TENSOR_DESCRIPTORS</a> and <a href="ncapi2/py_api/GraphOption.html">GraphOption.OUTPUT_TENSOR_DESCRIPTORS</a> to get this data.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="global-functions">Global Functions</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>NCAPI v1</th>
+      <th>NCAPI v2</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="ncapi1/py_api/EnumerateDevices.html">EnumerateDevices()</a></td>
+      <td><a href="ncapi2/py_api/enumerate_devices.html">enumerate_devices()</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/SetGlobalOption.html">SetGlobalOption()</a></td>
+      <td><a href="ncapi2/py_api/global_set_option.html">global_set_option()</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/GetGlobalOption.html">GetGlobalOption()</a></td>
+      <td><a href="ncapi2/py_api/global_get_option.html">global_get_option()</a></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="classes">Classes</h3>
+
+<p><strong>Device</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>NCAPI v1</th>
+      <th>NCAPI v2</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="ncapi1/py_api/Device.__init__.html">Device</a></td>
+      <td><a href="ncapi2/py_api/Device.html">Device</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/Device.OpenDevice.html">Device.OpenDevice()</a></td>
+      <td><a href="ncapi2/py_api/Device.open.html">Device.open()</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/Device.AllocateGraph.html">Device.AllocateGraph()</a></td>
+      <td><a href="ncapi2/py_api/Graph.html">Graph()</a><br />+<br /><a href="ncapi2/py_api/Graph.allocate.html">Graph.allocate()</a><br /><br />or<br /><a href="ncapi2/py_api/Graph.html">Graph()</a><br />+<br /><a href="ncapi2/py_api/Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a></td>
+      <td>In NCAPI v2 two calls are required to first initialize a <a href="ncapi2/py_api/Graph.html">Graph</a> object and then allocate the graph to the device.<br /><br /><a href="ncapi2/py_api/Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a> is a convenience function that creates and returns input and output <a href="ncapi2/py_api/Fifo.html">Fifos</a> in addition to calling <a href="ncapi2/py_api/Graph.allocate.html">Graph.allocate()</a>.</td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/Device.CloseDevice.html">Device.CloseDevice()</a></td>
+      <td><a href="ncapi2/py_api/Device.close.html">Device.close()</a> + <a href="ncapi2/py_api/Device.destroy.html">Device.destroy()</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/Device.GetDeviceOption.html">Device.GetDeviceOption()</a></td>
+      <td><a href="ncapi2/py_api/Device.get_option.html">Device.get_option()</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/Device.SetDeviceOption.html">Device.SetDeviceOption()</a></td>
+      <td><a href="ncapi2/py_api/Device.set_option.html">Device.set_option()</a></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Graph</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>NCAPI v1</th>
+      <th>NCAPI v2</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="ncapi1/py_api/Graph.html">Graph</a></td>
+      <td><a href="ncapi2/py_api/Graph.html">Graph</a></td>
+      <td>In NCAPI v2 <a href="ncapi2/py_api/Graph.html">Graph</a> objects must be initialized before being passed to the <a href="ncapi2/py_api/Graph.allocate.html">Graph.allocate()</a> function.</td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/Graph.GetResult.html">Graph.GetResult()</a></td>
+      <td><a href="ncapi2/py_api/Fifo.read_elem.html">Fifo.read_elem()</a></td>
+      <td>In NCAPI v2 inference results are read from an output <a href="ncapi2/py_api/Fifo.html">Fifo</a> that was passed to the <a href="ncapi2/py_api/Graph.queue_inference.html">Graph.queue_inference()</a> method.</td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/Graph.LoadTensor.html">Graph.LoadTensor()</a></td>
+      <td><a href="ncapi2/py_api/Fifo.write_elem.html">Fifo.write_elem()</a><br />+<br /><a href="ncapi2/py_api/Graph.queue_inference.html">Graph.queue_inference()</a><br /><br />or<br /><a href="ncapi2/py_api/Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_with_fifo_elem()</a></td>
+      <td>In NCAPI v2 input must be written to a properly initialized and created <a href="ncapi2/py_api/Fifo.html">Fifo</a> that will be passed to the <a href="ncapi2/py_api/Graph.queue_inference.html">Graph.queue_inference()</a> method for inference.<br /><br /><a href="ncapi2/py_api/Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_with_fifo_elem()</a> is a convenience function that combines <a href="ncapi2/py_api/Fifo.write_elem.html">Fifo.write_elem()</a> and <a href="ncapi2/py_api/Graph.queue_inference.html">Graph.queue_inference()</a> into one call.</td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/Graph.DeallocateGraph.html">Graph.DeallocateGraph()</a></td>
+      <td><a href="ncapi2/py_api/Graph.destroy.html">Graph.destroy()</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/Graph.GetGraphOption.html">Graph.GetGraphOption()</a></td>
+      <td><a href="ncapi2/py_api/Graph.get_option.html">Graph.get_option()</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><a href="ncapi1/py_api/Graph.SetGraphOption.html">Graph.SetGraphOption()</a></td>
+      <td><a href="ncapi2/py_api/Graph.set_option.html">Graph.set_option()</a></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Fifo</strong> <em>(new to NCAPI2)</em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>NCAPI v1</th>
+      <th>NCAPI v2</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/Fifo.html">Fifo</a></td>
+      <td>See the <a href="ncapi2/py_api/Fifo.html">Fifo</a> documentation or the <a href="#Example">Example Code Comparison</a> section below for more complete examples of Fifo usage.</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/Fifo.allocate.html">Fifo.allocate()</a></td>
+      <td>This must be called before attempting to read/write to/from the Fifo.</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/Fifo.destroy.html">Fifo.destroy()</a></td>
+      <td>When done using the Fifo, this must be called to free associated resources.</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/Fifo.read_elem.html">Fifo.read_elem()</a></td>
+      <td>This replaces NCAPI v1’s <a href="ncapi1/py_api/Graph.GetResult.html">Graph.GetResult()</a>.</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/Fifo.write_elem.html">Fifo.write_elem()</a></td>
+      <td>This replaces NCAPI v1’s <a href="ncapi1/py_api/Graph.LoadTensor.html">Graph.LoadTensor()</a> when used in conjunction with <a href="ncapi2/py_api/Graph.queue_inference.html">Graph.queue_inference()</a>.<br /><br />The convenience function <a href="ncapi2/py_api/Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_with_fifo_elem()</a> can be used to combine both NCAPI v2 calls into one.</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/Fifo.get_option.html">Fifo.get_option()</a></td>
+      <td>See <a href="ncapi2/py_api/FifoOption.html">FifoOption</a> / <a href="ncapi2/py_api/FifoType.html">FifoType</a> / <a href="ncapi2/py_api/FifoDataType.html">FifoDataType</a>.</td>
+    </tr>
+    <tr>
+      <td><em>n/a</em></td>
+      <td><a href="ncapi2/py_api/Fifo.set_option.html">Fifo.set_option()</a></td>
+      <td>See <a href="ncapi2/py_api/FifoOption.html">FifoOption</a> / <a href="ncapi2/py_api/FifoType.html">FifoType</a> / <a href="ncapi2/py_api/FifoDataType.html">FifoDataType</a>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><a href="#Top">Top</a></p>
+
+<h1 id="example-code-comparison"><a name="Example"></a>Example Code Comparison</h1>
+
+<p>This section contains basic usage examples for NCAPI v1, NCAPI v2, and NCAPI v2 with convenience functions for comparison.</p>
+
+<p>NCAPI v1:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""NCAPI v1"""</span>
+<span class="kn">from</span> <span class="nn">mvnc</span> <span class="kn">import</span> <span class="n">mvncapi</span>
+
+<span class="c"># Open a device</span>
+<span class="n">device_list</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">EnumerateDevices</span><span class="p">()</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">device_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">device</span><span class="o">.</span><span class="n">OpenDevice</span><span class="p">()</span>
+
+<span class="c"># Load a graph from file at some GRAPH_FILEPATH</span>
+<span class="n">GRAPH_FILEPATH</span> <span class="o">=</span> <span class="s">'./graph'</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">GRAPH_FILEPATH</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+	<span class="n">graph_buffer</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="c"># Allocate the graph to the device</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">AllocateGraph</span><span class="p">(</span><span class="n">graph_buffer</span><span class="p">)</span>
+
+<span class="c"># Read and pre-process input (16 bit floating point data type required)</span>
+<span class="n">input_tensor</span> <span class="o">=</span> <span class="o">...</span>
+
+<span class="c"># Load the image to the device and trigger an inference</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">LoadTensor</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="s">'user object'</span><span class="p">)</span>
+
+<span class="c"># Get the results from the device</span>
+<span class="n">output</span><span class="p">,</span> <span class="n">userobj</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">GetResult</span><span class="p">()</span>
+
+<span class="c"># Do something with the results...</span>
+
+<span class="c"># Clean up</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">DeallocateGraph</span><span class="p">()</span>
+<span class="n">device</span><span class="o">.</span><span class="n">CloseDevice</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>NCAPI v2:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""NCAPI v2"""</span>
+<span class="kn">from</span> <span class="nn">mvnc</span> <span class="kn">import</span> <span class="n">mvncapi</span>
+
+<span class="c"># Initialize and open a device</span>
+<span class="n">device_list</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">enumerate_devices</span><span class="p">()</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">device_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">device</span><span class="o">.</span><span class="nb">open</span><span class="p">()</span>
+
+<span class="c"># Initialize a graph from file at some GRAPH_FILEPATH</span>
+<span class="n">GRAPH_FILEPATH</span> <span class="o">=</span> <span class="s">'./graph'</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">GRAPH_FILEPATH</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+	<span class="n">graph_buffer</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="s">'graph1'</span><span class="p">)</span>
+
+<span class="c"># Allocate the graph to the device</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">allocate</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">graph_buffer</span><span class="p">)</span>
+
+<span class="c"># Get the graphTensorDescriptor structs (they describe expected graph input/output)</span>
+<span class="n">input_descriptors</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">GraphOption</span><span class="o">.</span><span class="n">INPUT_TENSOR_DESCRIPTORS</span><span class="p">)</span>
+<span class="n">output_descriptors</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">GraphOption</span><span class="o">.</span><span class="n">OUTPUT_TENSOR_DESCRIPTORS</span><span class="p">)</span>
+
+<span class="c"># Create input/output Fifos</span>
+<span class="n">input_fifo</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Fifo</span><span class="p">(</span><span class="s">'input1'</span><span class="p">,</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoType</span><span class="o">.</span><span class="n">HOST_WO</span><span class="p">)</span>
+<span class="n">output_fifo</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Fifo</span><span class="p">(</span><span class="s">'output1'</span><span class="p">,</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoType</span><span class="o">.</span><span class="n">HOST_RO</span><span class="p">)</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">allocate</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">input_descriptors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">output_fifo</span><span class="o">.</span><span class="n">allocate</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">output_descriptors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c"># Read and pre-process input (data type must match input Fifo data type)</span>
+<span class="n">input_tensor</span> <span class="o">=</span> <span class="o">...</span>
+
+<span class="c"># Write the image to the input queue</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">write_elem</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+<span class="c"># Queue the inference</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">queue_inference</span><span class="p">(</span><span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span><span class="p">)</span>
+
+<span class="c"># Get the results from the output queue</span>
+<span class="n">output</span><span class="p">,</span> <span class="n">user_obj</span> <span class="o">=</span> <span class="n">output_fifo</span><span class="o">.</span><span class="n">read_elem</span><span class="p">()</span>
+
+<span class="c"># Do something with the results...</span>
+
+<span class="c"># Clean up</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">output_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">device</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>NCAPI v2 with convenience functions:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""NCAPI v2"""</span>
+<span class="kn">from</span> <span class="nn">mvnc</span> <span class="kn">import</span> <span class="n">mvncapi</span>
+
+<span class="c"># Initialize and open a device</span>
+<span class="n">device_list</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">enumerate_devices</span><span class="p">()</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">device_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">device</span><span class="o">.</span><span class="nb">open</span><span class="p">()</span>
+
+<span class="c"># Initialize a graph from file at some GRAPH_FILEPATH</span>
+<span class="n">GRAPH_FILEPATH</span> <span class="o">=</span> <span class="s">'./graph'</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">GRAPH_FILEPATH</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+	<span class="n">graph_buffer</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="s">'graph1'</span><span class="p">)</span>
+
+<span class="c"># CONVENIENCE FUNCTION: </span>
+<span class="c"># Allocate the graph to the device and create input/output Fifos with default options in one call</span>
+<span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">allocate_with_fifos</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">graph_buffer</span><span class="p">)</span>
+
+<span class="c"># Read and pre-process input (data type must match input Fifo data type)</span>
+<span class="n">input_tensor</span> <span class="o">=</span> <span class="o">...</span>
+
+<span class="c"># CONVENIENCE FUNCTION: </span>
+<span class="c"># Write the image to the input queue and queue the inference in one call</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">queue_inference_with_fifo_elem</span><span class="p">(</span><span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+<span class="c"># Get the results from the output queue</span>
+<span class="n">output</span><span class="p">,</span> <span class="n">user_obj</span> <span class="o">=</span> <span class="n">output_fifo</span><span class="o">.</span><span class="n">read_elem</span><span class="p">()</span>
+
+<span class="c"># Do something with the results...</span>
+
+<span class="c"># Clean up</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">output_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">device</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><a href="#Top">Top</a></p>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>
