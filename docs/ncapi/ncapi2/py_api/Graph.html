@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="class-graph">class Graph</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="GraphOption.html">GraphOption</a>, <a href="Device.html">Device</a>, <a href="Fifo.html">Fifo</a>, <a href="Graph.allocate.html">Graph.allocate()</a>, <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>The <a href="Graph.html">Graph</a> class represents a neural network graph and provides methods to perform inferences.</p>
+
+<p>Create and allocate a <a href="Graph.html">Graph</a> for each network graph file. A <a href="Device.html">Device</a> can have more than one <a href="Graph.html">Graph</a> allocated to it, but each <a href="Graph.html">Graph</a> can only be allocated to a single <a href="Device.html">Device</a>.</p>
+
+<h2 id="initialization">Initialization</h2>
+<p>Create a Graph instance:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">graph</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td>str</td>
+      <td>A name for the graph; this can be anything you like up to mvncapi.MAX_NAME_SIZE characters, or just an empty string.<br /><br />The name can be retrieved later with <a href="Graph.get_option.html">Graph.get_option()</a>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>When the Graph has been successfully created, the <a href="GraphState.html">GraphState</a> will be CREATED.</p>
+
+<h2 id="methods">Methods</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="Graph.allocate.html">allocate</a></td>
+      <td>Allocate a <a href="Graph.html">Graph</a> to a device.</td>
+    </tr>
+    <tr>
+      <td><a href="Graph.allocate_with_fifos.html">allocate_with_fifos</a></td>
+      <td>Allocate a graph to a device and create and allocate associated <a href="Fifo.html">Fifos</a>.</td>
+    </tr>
+    <tr>
+      <td><a href="Graph.destroy.html">destroy</a></td>
+      <td>Deallocate a graph that was allocated with <a href="Graph.allocate.html">Graph.allocate()</a>.</td>
+    </tr>
+    <tr>
+      <td><a href="Graph.get_option.html">get_option</a></td>
+      <td>Get the value of a graph option.<br /><br />See <a href="GraphOption.html">GraphOption</a>.</td>
+    </tr>
+    <tr>
+      <td><a href="Graph.queue_inference.html">queue_inference</a></td>
+      <td>Queue an inference to be processed by the graph.</td>
+    </tr>
+    <tr>
+      <td><a href="Graph.queue_inference_with_fifo_elem.html">queue_inference_with_fifo_elem</a></td>
+      <td>Write input tensor data to an input Fifo buffer and then trigger graph execution.</td>
+    </tr>
+    <tr>
+      <td><a href="Graph.set_option.html">set_option</a></td>
+      <td>Set the value of a graph option.<br /><br />See <a href="GraphOption.html">GraphOption</a>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="typical-usage">Typical Usage</h2>
+<ul>
+  <li>Create a <a href="Graph.html">Graph</a> instance.</li>
+  <li>Create input and output <a href="Fifo.html">Fifo</a> queues and allocate the graph for a neural compute device with <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a>.
+    <ul>
+      <li>Alternatively, just allocate the <a href="Graph.html">Graph</a> with <a href="Graph.allocate.html">Graph.allocate()</a> and handle <a href="Fifo.html">Fifo</a> creation and allocation separately.</li>
+    </ul>
+  </li>
+  <li>Write an image to the input <a href="Fifo.html">Fifo</a> and queue an inference with <a href="Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_with_fifo_elem()</a>.
+    <ul>
+      <li>You can also just queue an inference from an input <a href="Fifo.html">Fifo</a> that already contains elements with <a href="Graph.queue_inference.html">Graph.queue_inference()</a> instead.</li>
+    </ul>
+  </li>
+  <li>When finished, destroy the <a href="Graph.html">Graph</a> and free associated resources with <a href="Graph.destroy.html">Graph.destroy()</a>.</li>
+</ul>
+
+<p>See the <a href="readme.html">Python API Overview</a> for more information about typical API usage.</p>
+
+<h2 id="examples">Examples</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">mvnc</span> <span class="kn">import</span> <span class="n">mvncapi</span>
+
+<span class="c">#</span>
+<span class="c"># Create and open a Device...</span>
+<span class="c">#</span>
+
+<span class="c"># Create a Graph</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="s">'graph1'</span><span class="p">)</span>
+
+<span class="c"># Read a compiled network graph from file (set the graph_filepath correctly for your graph file)</span>
+<span class="n">graph_filepath</span> <span class="o">=</span> <span class="s">'./graph'</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">graph_filepath</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">graph_buffer</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="c"># Allocate the graph on the device and create input and output Fifos</span>
+<span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">allocate_with_fifos</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">graph_buffer</span><span class="p">)</span>
+
+<span class="c">#</span>
+<span class="c"># Pre-procces your input tensor...</span>
+<span class="c">#</span>
+
+<span class="c"># Write the tensor to the input Fifo and queue an inference</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">queue_inference_with_fifo_elem</span><span class="p">(</span><span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'object1'</span><span class="p">)</span>
+
+<span class="c">#</span>
+<span class="c"># Read the output from the output_fifo and use it as needed...</span>
+<span class="c">#</span>
+
+<span class="c"># Clean up</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">output_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">device</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="ncgraphdestroy">ncGraphDestroy()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Library</td>
+      <td>libmvnc.so</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncGraphHandle_t.html">struct ncGraphHandle_t</a>, <a href="ncGraphCreate.html">ncGraphCreate()</a>, <a href="ncGraphAllocate.html">ncGraphAllocate()</a>, <a href="ncGraphAllocateWithFifos.html">ncGraphAllocateWithFifos()</a>, <a href="ncGraphAllocateWithFifosEx.html">ncGraphAllocateWithFifosEx()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>This function destroys a handle for a graph and frees associated resources. This function must be called for every graph handle that was initialized with <a href="ncGraphCreate.html">ncGraphCreate()</a>.</p>
+
+<p>Upon successful return, the <a href="ncGraphHandle_t.html">ncGraphHandle_t</a> struct pointer will be set to NULL.</p>
+
+<h2 id="prototype">Prototype</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ncStatus_t</span> <span class="n">ncGraphDestroy</span><span class="p">(</span><span class="k">struct</span> <span class="n">ncGraphHandle_t</span><span class="o">**</span> <span class="n">graphHandle</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>graphHandle</td>
+      <td><a href="ncGraphHandle_t.html">struct ncGraphHandle_t</a>**</td>
+      <td>The address of a pointer to an <a href="ncGraphCreate.html">initialized</a> ncGraphHandle_t struct.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>An appropriate value from the <a href="ncStatus_t.html">ncStatus_t</a> enumeration.</p>
+
+<h2 id="notes">Notes</h2>
+<p>None.</p>
+
+<h2 id="example">Example</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;mvnc.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ncStatus_t</span> <span class="n">retCode</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">ncGraphHandle_t</span><span class="o">*</span> <span class="n">graphHandlePtr</span><span class="p">;</span>
+
+    <span class="c1">// Create a graph</span>
+    <span class="n">ncGraphCreate</span><span class="p">(</span><span class="s">"My Graph"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">graphHandlePtr</span><span class="p">);</span>
+
+    <span class="c1">// Allocate the graph on a device then queue inferences</span>
+    
+
+    <span class="c1">// When done with graph, destroy it.</span>
+    <span class="n">ncGraphDestroy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">graphHandlePtr</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">retCode</span> <span class="o">!=</span> <span class="n">NC_OK</span><span class="p">)</span>
+    <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"Error destroying graph[%d]</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">retCode</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="c1">// Graph is destroyed and handle pointer set to NULL</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Graph Destroyed OK!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

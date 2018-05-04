@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="mvncloadtensor">mvncLoadTensor()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Library</td>
+      <td>libmvnc.so</td>
+    </tr>
+    <tr>
+      <td>Return</td>
+      <td><a href="mvncStatus.html">mvncStatus</a></td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="mvncOpenDevice.html">mvncOpenDevice</a>, <a href="mvncAllocateGraph.html">mvncAllocateGraph</a>, <a href="mvncGetResult.html">mvncGetResult</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>This function initiates an inference on the specified graph via the associated Intel® Movidius™ Neural Compute Stick (Intel® Movidius™ NCS) device. After calling this function, use the mvncGetResult() function to retrieve the inference result.</p>
+
+<h2 id="prototype">Prototype</h2>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mvncStatus</span> <span class="n">mvncLoadTensor</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">graphHandle</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">inputTensor</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">inputTensorLength</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">userParam</span><span class="p">);</span>
+</code></pre></div></div>
+<h2 id="parameters">Parameters</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>graphHandle</td>
+      <td>void*</td>
+      <td>Pointer to opaque graph data type that was initialized with the mvncAllocateGraph() function that represents the neural network for which an inference will be initiated.</td>
+    </tr>
+    <tr>
+      <td>inputTensor</td>
+      <td>const void*</td>
+      <td>Pointer to tensor data buffer, which contains 16-bit half precision floats (per IEEE 754 half precision binary floating-point format: binary16). The values in the buffer are dependent on the neural network (graph), but are typically representations of each color channel of each pixel of an image.</td>
+    </tr>
+    <tr>
+      <td>inputTensorLength</td>
+      <td>unsigned int</td>
+      <td>The length, in bytes, of the buffer pointed to by the inputTensor parameter.</td>
+    </tr>
+    <tr>
+      <td>userParam</td>
+      <td>void*</td>
+      <td>Pointer to user data that will be returned along with the inference result from the GetResult() function.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="return">Return</h2>
+<p>This function returns an appropriate value from the <a href="mvncStatus.html">mvncStatus</a> enumeration.</p>
+
+<h2 id="known-issues">Known Issues</h2>
+
+<h2 id="example">Example</h2>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span>
+<span class="p">.</span>
+<span class="p">.</span>
+
+<span class="c1">// Use a 16-bit unsigned type to represent half precision floats, since C++ has no </span>
+<span class="c1">// built-in support for 16-bit floats.</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">short</span> <span class="n">half</span><span class="p">;</span>
+
+<span class="c1">// GoogleNet image dimensions and network mean values for each channel. This information is specific </span>
+<span class="c1">// for each network, and usually available from network creators.</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">networkDim</span> <span class="o">=</span> <span class="mi">224</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">networkMean</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">.</span><span class="mi">40787054</span><span class="o">*</span><span class="mi">255</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">45752458</span><span class="o">*</span><span class="mi">255</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">48109378</span><span class="o">*</span><span class="mi">255</span><span class="p">.</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="p">.</span>
+<span class="p">.</span>
+<span class="p">.</span>
+    <span class="c1">//</span>
+    <span class="c1">// Open NCS device and set deviceHandle to the valid handle.</span>
+    <span class="c1">//</span>
+    
+    <span class="c1">//</span>
+    <span class="c1">// Read graph from disk and call mvncAllocateGraph to set graphHandle appropriately.</span>
+    <span class="c1">//</span>
+
+    <span class="c1">//</span>
+    <span class="c1">// Load an image from disk.</span>
+    <span class="c1">// LoadImage will read image from disk, convert channels to floats.</span>
+    <span class="c1">// Subtract network mean for each value in each channel. Then convert</span>
+    <span class="c1">// floats to half precision floats.</span>
+    <span class="c1">// Return pointer to the buffer of half precision floats. </span>
+    <span class="n">half</span><span class="o">*</span> <span class="n">imageBufFp16</span> <span class="o">=</span> <span class="n">LoadImage</span><span class="p">(</span><span class="s">"image.png"</span><span class="p">,</span> <span class="n">networkDim</span><span class="p">,</span> <span class="n">networkMean</span><span class="p">);</span>
+        
+    <span class="c1">// Calculate the length of the buffer that contains the half precision floats.</span>
+    <span class="c1">// 3 channels * width * height * sizeof a 16-bit float </span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">lenBufFp16</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="n">networkDim</span><span class="o">*</span><span class="n">networkDim</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">imageBufFp16</span><span class="p">);</span>
+
+    <span class="c1">// Start the inference with mvncLoadTensor()</span>
+    <span class="n">retCode</span> <span class="o">=</span> <span class="n">mvncLoadTensor</span><span class="p">(</span><span class="n">graphHandle</span><span class="p">,</span> <span class="n">imageBufFp16</span><span class="p">,</span> <span class="n">lenBufFp16</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">retCode</span> <span class="o">==</span> <span class="n">MVNC_OK</span><span class="p">)</span>
+    <span class="p">{</span>   <span class="c1">// The inference has been started, now call mvncGetResult() for the</span>
+        <span class="c1">// inference result. </span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Successfully loaded the tensor for image %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="s">"image.png"</span><span class="p">);</span>
+     
+        <span class="c1">// Here mvncGetResult() can be called to get the result of the inference</span>
+        <span class="c1">// that was started with mvncLoadTensor() above.</span>
+    <span class="p">}</span>
+
+    <span class="c1">// </span>
+    <span class="c1">// Call mvncDeallocateGraph to free the resources tied to graphHandle.</span>
+    <span class="c1">// Close the device with mvncCloseDevice().</span>
+    <span class="c1">// </span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

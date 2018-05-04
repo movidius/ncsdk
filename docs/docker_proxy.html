@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="configuring-docker-for-use-with-a-proxy">Configuring Docker For Use With a Proxy</h1>
+
+<p><strong>NOTE: Docker support is only available with Intel® Movidius™ Neural Compute SDK 2.x.</strong></p>
+
+<p>See <a href="docker.html">Using the Intel® Movidius™ Neural Compute SDK with Docker</a> for general information about using Docker with the NCSDK.</p>
+
+<p>If you are using Docker behind a proxy, you will need to configure your Docker client and services to use proxy settings in order to complete the NCSDK installation or build examples.</p>
+
+<p>Official Docker proxy documentation:</p>
+<ul>
+  <li><a href="https://docs.docker.com/network/proxy/">Configure Docker to use a proxy server</a></li>
+  <li><a href="https://docs.docker.com/config/daemon/systemd/#httphttps-proxy">Control Docker with systemd - HTTP/HTTPS proxy</a></li>
+</ul>
+
+<h2 id="proxy-setup-on-ubuntu-1604">Proxy Setup on Ubuntu 16.04</h2>
+
+<p>The following steps show one example of a possible configuration for Docker proxy settings on Ubuntu 16.04 with docker-ce 18.03.1~ce-0-ubuntu.
+Refer to the official Docker documentation to configure your specific environment.</p>
+
+<h5 id="1-create-a-docker-config-file-at-dockerconfigjson">1. Create a docker config file at <code class="highlighter-rouge">~/.docker/config.json</code></h5>
+
+<p>Enter the following into the config file (replace the example proxy info with your proxy info):</p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+ </span><span class="s2">"proxies"</span><span class="p">:</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"default"</span><span class="p">:</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"httpProxy"</span><span class="p">:</span><span class="s2">"http://proxy.example.com:80"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h5 id="2-edit-etcdefaultdocker">2. Edit <code class="highlighter-rouge">/etc/default/docker</code></h5>
+
+<p>Change the line that says this:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#export http_proxy="http://127.0.0.1:3128/"
+</code></pre></div></div>
+<p>to this (with the info for your proxy):</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http_proxy="http://proxy.example.com:80"
+</code></pre></div></div>
+
+<h5 id="3-edit-libsystemdsystemdockerservice">3. Edit <code class="highlighter-rouge">/lib/systemd/system/docker.service</code></h5>
+
+<p>Add this line to the Services section:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>EnvironmentFile=/etc/default/docker
+</code></pre></div></div>
+
+<h4 id="4-reload-services">4. Reload services</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>systemctl daemon-reload
+<span class="nv">$ </span><span class="nb">sudo </span>systemctl restart docker
+</code></pre></div></div>
+
+<h4 id="5-edit-etcnetworkmanagernetworkmanagerconf">5. Edit <code class="highlighter-rouge">/etc/NetworkManager/NetworkManager.conf</code></h4>
+
+<p><em>Note: This may not be necessary for your configuration.</em></p>
+
+<p>Comment out the line that says <code class="highlighter-rouge">dns=dnsmasq</code> with a #:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#dns=dnsmasq
+</code></pre></div></div>
+
+<p>Restart the service.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>systemctl restart network-manager
+</code></pre></div></div>
+
+<h4 id="6-test">6. Test</h4>
+
+<p>Pull the Docker image for Ubuntu 16.04:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>docker pull ubuntu:16.04
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

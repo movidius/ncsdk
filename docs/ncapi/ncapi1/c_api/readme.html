@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="intel-movidius-neural-compute-sdk-c-api">Intel® Movidius™ Neural Compute SDK C API</h1>
+
+<p>The SDK comes with a C language API that enables developers to create applications in C or C++ that utilize hardware-accelerated Deep Neural Networks via the Intel® Movidius™ Neural Compute Stick (Intel® Movidius™ NCS). The C API is provided as a header file (mvnc.h) and an associated library file (libmvnc.so), both of which are placed on the development computer when the SDK is installed. Details of the C API are provided below and within the documentation avilable via the link in each line.</p>
+
+<h2 id="enumerations">Enumerations</h2>
+<ul>
+  <li><a href="mvncStatus.html">mvncStatus</a>: Contains possible return values for API functions.</li>
+  <li><a href="mvncDeviceOptions.html">mvncDeviceOptions</a>: Contains all possible options to get/set for an Intel® Movidius™ NCS device, and their data types.</li>
+  <li><a href="mvncGraphOptions.html">mvncGraphOptions</a>: Contains all possible options to get/set for a graph, and their data types.</li>
+  <li><a href="mvncGlobalOptions.html">mvncGlobalOptions</a>: Contains all possible global options to get/set, and their data types.</li>
+</ul>
+
+<h2 id="functions">Functions</h2>
+<ul>
+  <li><a href="mvncGetDeviceName.html">mvncGetDeviceName</a>: Retrieves the name of an Intel® Movidius™ NCS device that can be opened.</li>
+  <li><a href="mvncOpenDevice.html">mvncOpenDevice</a>: Opens an Intel® Movidius™ NCS device for use by the application.</li>
+  <li><a href="mvncAllocateGraph.html">mvncAllocateGraph</a>: Allocates a graph for a specific Intel® Movidius™ NCS device in preparation for computing inferences.</li>
+  <li><a href="mvncDeallocateGraph.html">mvncDeallocateGraph</a>: Deallocates and frees resouces associated with a graph.</li>
+  <li><a href="mvncLoadTensor.html">mvncLoadTensor</a>: Initiates an inference by providing input to the neural network.</li>
+  <li><a href="mvncGetResult.html">mvncGetResult</a>: Retrieves the result of an inference that was previously initiated.</li>
+  <li><a href="mvncSetGraphOption.html">mvncSetGraphOption</a>: Sets an option for a graph.</li>
+  <li><a href="mvncGetGraphOption.html">mvncGetGraphOption</a>: Retrieves the current value of an option for a graph.</li>
+  <li><a href="mvncSetDeviceOption.html">mvncSetDeviceOption</a>: Sets an option for an Intel® Movidius™ NCS device.</li>
+  <li><a href="mvncGetDeviceOption.html">mvncGetDeviceOption</a>: Retrieves the current value of an option for an Intel® Movidius™ NCS device.</li>
+  <li><a href="mvncSetGlobalOption.html">mvncSetGlobalOption</a>: Sets a global option for an application.</li>
+  <li><a href="mvncGetGlobalOption.html">mvncGetGlobalOption</a>: Retrieves the current value of a global option for an application.</li>
+  <li><a href="mvncCloseDevice.html">mvncCloseDevice</a>: Closes a previously opened Intel® Movidius™ NCS device.</li>
+</ul>
+
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

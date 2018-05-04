@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="using-the-intel-movidius-neural-compute-sdk-with-docker">Using the Intel® Movidius™ Neural Compute SDK with Docker</h1>
+
+<p><strong>NOTE: This feature is only available with Intel® Movidius™ Neural Compute SDK 2.x.</strong></p>
+
+<p><a href="https://www.docker.com">Docker</a> is an open-source platform for the creation of lightweight operating-system-level virtualizations called containers for building, distributing, and running applications. Docker images are packages that include everything needed to run the container and its applications, and Docker containers are runtime instances of these images. You can read more about basic Docker concepts <a href="https://docs.docker.com/get-started/">here</a>.</p>
+
+<p>The Intel® Movidius™ Neural Compute SDK (Intel® Movidius™ NCSDK) can be installed and run within a Docker container so that its required packages and libraries are isolated from the rest of your system.</p>
+
+<p>This document will tell you how to use the NCSDK with Docker. These instructions assume that you will be using a neural compute device that is connected to your host machine via USB.</p>
+
+<h1 id="install-docker-on-an-ubuntu-host">Install Docker on an Ubuntu host</h1>
+
+<p>Go to <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu">https://docs.docker.com/install/linux/docker-ce/ubuntu/</a> and follow the instructions to install docker-ce on Ubuntu.</p>
+
+<h3 id="proxy-configuration">Proxy Configuration</h3>
+
+<p>See <a href="docker_proxy.html">Configuring Docker For Use With a Proxy</a>.</p>
+
+<h3 id="sudo-configuration">sudo Configuration</h3>
+
+<p>To use Docker in Ubuntu without having to use sudo, execute the following commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>groupadd docker
+<span class="nb">sudo </span>usermod <span class="nt">-aG</span> docker <span class="nv">$USER</span>
+</code></pre></div></div>
+
+<p>Reboot your machine for this to take effect.</p>
+
+<h3 id="other-operating-systems">Other Operating Systems</h3>
+
+<p>These instructions have been validated in Docker Community Edition for Ubuntu. Other versions of Docker may not have the required USB support.</p>
+
+<p>These instructions can be done in an Ubuntu <a href="vm_config.html">virtual machine</a>.</p>
+
+<h1 id="create-a-docker-container-for-the-ncsdk">Create a Docker container for the NCSDK</h1>
+
+<p>We have provided a Dockerfile to build an Ubuntu-based Docker image that has the NCSDK installed.</p>
+
+<h4 id="1-build-the-docker-image">1. Build the Docker image</h4>
+
+<p>This command will create an image named ‘ncsdk’.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker build <span class="nt">-t</span> ncsdk <span class="nt">-f</span> ./extras/docker/Dockerfile https://github.com/movidius/ncsdk.git#ncsdk2
+</code></pre></div></div>
+
+<p>This may take some time as the NCSDK is installed and dependencies are built.</p>
+
+<p>If you have already cloned the ncsdk repo, you can instead execute this build command from within the ncsdk directory in the ncsdk2 branch:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker build <span class="nt">-t</span> ncsdk <span class="nt">-f</span> ./extras/docker/Dockerfile <span class="nb">.</span>
+</code></pre></div></div>
+
+<h4 id="2-create-and-run-a-docker-container-from-the-built-image">2. Create and run a Docker container from the built image</h4>
+
+<p>This command will create a container named ‘ncsdk’.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run <span class="nt">--net</span><span class="o">=</span>host <span class="nt">--privileged</span> <span class="nt">-v</span> /dev:/dev <span class="nt">--name</span> ncsdk <span class="nt">-i</span> <span class="nt">-t</span> ncsdk /bin/bash
+</code></pre></div></div>
+
+<p>The elevated permissions are necessary for the USB access required by the neural compute device. Additional <code class="highlighter-rouge">run</code> options can be seen <a href="https://docs.docker.com/engine/reference/run/">here</a>. See the instructions above if you need to configure your Docker container to run behind a proxy.</p>
+
+<h4 id="3-build-examples-optional">3. Build examples (optional)</h4>
+
+<p>You must have a neural compute device connected to a USB port in your host system when running this command. This command is executed inside of your Docker container.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>make examples
+</code></pre></div></div>
+
+<h4 id="4-exit-the-container">4. Exit the container</h4>
+
+<p>This command is executed inside of your Docker container.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">exit</span>
+</code></pre></div></div>
+
+<h1 id="use-your-ncsdk-container">Use your NCSDK container</h1>
+
+<h2 id="starting-the-container">Starting the container</h2>
+<p>The Docker <code class="highlighter-rouge">run</code> command creates a new container instance each time that is used. If you want to use your existing container, use the <code class="highlighter-rouge">start</code> command.
+<em>(Note: We named the container ‘ncsdk’ in the run command above.)</em></p>
+
+<ul>
+  <li>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker start <span class="nt">-a</span> <span class="nt">-i</span> ncsdk
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="other-useful-docker-commands">Other useful Docker commands</h2>
+
+<p>These commands are executed from your host terminal, not from inside the Docker container.</p>
+
+<ul>
+  <li>View a list of Docker images:</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker images
+</code></pre></div></div>
+
+<ul>
+  <li>Remove an image (REPOSITORY_NAME can be found with the <code class="highlighter-rouge">images</code> command):</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker rmi REPOSITORY_NAME
+</code></pre></div></div>
+
+<ul>
+  <li>View a list of all Docker containers:</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker container <span class="nb">ls</span> <span class="nt">-a</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Remove a Docker container (CONTAINER_NAME can be found with the <code class="highlighter-rouge">container ls</code> command):</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker <span class="nb">rm </span>CONTAINER_NAME
+</code></pre></div></div>
+
+<ul>
+  <li>View a list of active Docker processes:</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker ps
+</code></pre></div></div>
+
+<ul>
+  <li>Stop an active Docker process (CONTAINER_ID can be found with the <code class="highlighter-rouge">ps</code> command):</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker stop CONTAINER_ID
+</code></pre></div></div>
+
+<ul>
+  <li>Create a Docker image from a container:</li>
+</ul>
+
+<p>Commit the image (CONTAINER_NAME can be found with the <code class="highlighter-rouge">container ls</code> command; REPOSITORY_NAME can be any name for the image).</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker commit CONTAINER_ID <span class="o">[</span>REPOSITORY_NAME[:TAG]]
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

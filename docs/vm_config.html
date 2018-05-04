@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="virtual-machine-configuration">Virtual Machine Configuration</h1>
+
+<p>The Intel® Movidius™ Neural Compute SDK (Intel® Movidius™ NCSDK) can be installed on a virtual machine. This allows you to run the NCSDK on an unsupported host OS and/or to keep the NCSDK installation isolated from your host system.</p>
+
+<p>We have validated the installation with <a href="https://www.virtualbox.org/">VirtualBox</a> but other virtual machine products may also work with customization specific to that product.</p>
+
+<h2 id="general-requirements">General Requirements</h2>
+<ul>
+  <li><a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> (tested with 5.1.34 but other releases should work)
+    <ul>
+      <li>Extension Pack installed (this can be found on the VirtualBox downloads page for your version of VirtualBox)</li>
+    </ul>
+  </li>
+  <li>Host OS (these have been tested, others may work):
+    <ul>
+      <li>OS X Yosemite 10.10.5</li>
+      <li>Windows 10</li>
+      <li>Ubuntu 16.04 Desktop</li>
+    </ul>
+  </li>
+  <li>Guest OS:
+    <ul>
+      <li><a href="https://www.ubuntu.com/download/desktop">Ubuntu 16.04 Desktop</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="installation">Installation</h2>
+
+<h3 id="virtual-machine-creation">Virtual Machine Creation</h3>
+
+<p>Use an existing Ubuntu virtual machine that meets installation requirements, or set up a new virtual machine with the following settings:</p>
+
+<ul>
+  <li>Name and operating system
+    <ul>
+      <li>Name: NCSDK <em>(…or anything you like)</em></li>
+      <li>Type: Linux</li>
+      <li>Version: Ubuntu (64-bit)</li>
+    </ul>
+  </li>
+  <li>Memory Size
+    <ul>
+      <li>2048 MB or more (Caffe compilation will likely fail without at least 2GB of RAM)</li>
+    </ul>
+  </li>
+  <li>Hard disk
+    <ul>
+      <li>Check “Create a virtual hard disk now”</li>
+    </ul>
+  </li>
+  <li>Hard disk file type
+    <ul>
+      <li>Check “VDI (VirtualBox Disk Image)”</li>
+    </ul>
+  </li>
+  <li>Storage on physical hard disk
+    <ul>
+      <li>Check “Fixed size”</li>
+    </ul>
+  </li>
+  <li>File location and size
+    <ul>
+      <li><em>Use the default location or choose another.</em></li>
+      <li>10.00+ GB</li>
+    </ul>
+  </li>
+</ul>
+
+<p>If necessary, download an <a href="https://www.ubuntu.com/download/desktop">Ubuntu 16.04 Desktop</a> .iso image file on your host machine. Then, start the virtual machine and follow prompts to install Ubuntu 16.04.</p>
+
+<h3 id="usb-configuration">USB Configuration</h3>
+
+<p>You must enable a USB 3.0 controller and create USB whitelist filters for the virtual machine. The USB 3.0 feature requires the VirtualBox Extension Pack.</p>
+
+<ul>
+  <li>Shut down the virtual machine</li>
+  <li>With the virtual machine selected on the VirtualBox Manager:
+    <ul>
+      <li>Open Settings -&gt; USB
+        <ul>
+          <li>Check “Enable USB Controller”</li>
+          <li>Check “USB 3.0 (xHCI) Controller”</li>
+          <li><strong>Add a new USB filter with Vendor ID: 03e7</strong>
+            <ul>
+              <li>The other filter fields can be blank.</li>
+            </ul>
+          </li>
+          <li><strong>Add a new USB filter with Vendor ID: 040e</strong>
+            <ul>
+              <li>The other filter fields can be blank.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="install-the-ncsdk">Install the NCSDK</h3>
+
+<p>Start the virtual machine. In the virtual machine, follow <a href="install.html">Intel® Movidius™ Neural Compute SDK Installation and Configuration</a> directions to install the NCSDK.</p>
+
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="guidance-for-compiling-tensorflow-slim-networks">Guidance for Compiling TensorFlow-Slim Networks</h1>
+
+<p>If you are compiling a <a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/slim">TensorFlow-Slim</a> network for use with the Intel® Movidius™ Neural Compute SDK (Intel® Movidius™ NCSDK) and Neural Compute API, you can follow these steps.</p>
+
+<p>The code below shows how you can save a TensorFlow™ session with graph and checkpoint information.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+
+<span class="kn">from</span> <span class="nn">tensorflow.contrib.slim.nets</span> <span class="kn">import</span> <span class="n">inception</span>
+
+<span class="n">slim</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">slim</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">image_size</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span><span class="o">.</span><span class="n">as_default</span><span class="p">():</span>
+      <span class="n">image</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="s">"float"</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">image_size</span><span class="p">,</span> <span class="n">image_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s">"input"</span><span class="p">)</span>
+      <span class="k">with</span> <span class="n">slim</span><span class="o">.</span><span class="n">arg_scope</span><span class="p">(</span><span class="n">inception</span><span class="o">.</span><span class="n">inception_v1_arg_scope</span><span class="p">()):</span>
+          <span class="n">logits</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">inception</span><span class="o">.</span><span class="n">inception_v1</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">,</span> <span class="n">is_training</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">spatial_squeeze</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+      <span class="n">probabilities</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span>
+      <span class="n">init_fn</span> <span class="o">=</span> <span class="n">slim</span><span class="o">.</span><span class="n">assign_from_checkpoint_fn</span><span class="p">(</span><span class="s">'inception_v1.ckpt'</span><span class="p">,</span> <span class="n">slim</span><span class="o">.</span><span class="n">get_model_variables</span><span class="p">(</span><span class="s">'InceptionV1'</span><span class="p">))</span>
+
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+        <span class="n">init_fn</span><span class="p">(</span><span class="n">sess</span><span class="p">)</span>
+        <span class="n">saver</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">Saver</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">global_variables</span><span class="p">())</span>
+        <span class="n">saver</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="s">"output/"</span><span class="o">+</span><span class="n">name</span><span class="p">)</span>
+
+<span class="n">run</span><span class="p">(</span><span class="s">'inception-v1'</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">1001</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">is_training=False</code> parameter is important. This will leave out training-only layers (which aren’t supported by the NCSDK) from the network.</p>
+
+<p>Next, use the NCSDK <a href="tools/compile.html">mvNCCompile</a> tool to compile the saved session from the above code sample for use with the NCSDK and Neural Compute API:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvNCCompile output/inception-v1.meta <span class="nt">-in</span><span class="o">=</span>input <span class="nt">-on</span><span class="o">=</span>InceptionV1/Logits/Predictions/Reshape_1 <span class="nt">-s</span> 12
+</code></pre></div></div>
+
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

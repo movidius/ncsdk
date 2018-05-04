@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="status-enumeration-class">Status Enumeration Class</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>The Status class is an enumeration class that defines status codes returned from calls to the API functions. If the underlying API returns a non-zero status, an exception is usually raised with the corresponding status. The possible status codes are shown below.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Enumeration Values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MVNC_OK</td>
+      <td>The function call worked as expected.</td>
+    </tr>
+    <tr>
+      <td>MVNC_BUSY</td>
+      <td>The device is busy, retry later.</td>
+    </tr>
+    <tr>
+      <td>MVNC_ERROR</td>
+      <td>An unexpected error was encountered during the function call.</td>
+    </tr>
+    <tr>
+      <td>MVNC_OUT_OF_MEMORY</td>
+      <td>The host is out of memory.</td>
+    </tr>
+    <tr>
+      <td>MVNC_DEVICE_NOT_FOUND</td>
+      <td>There is no device at the given index or name.</td>
+    </tr>
+    <tr>
+      <td>MVNC_INVALID_PARAMETERS</td>
+      <td>At least one of the given parameters is invalid in the context of the function call.</td>
+    </tr>
+    <tr>
+      <td>MVNC_TIMEOUT</td>
+      <td>Timeout in the communication with the device</td>
+    </tr>
+    <tr>
+      <td>MVNC_MVCMD_NOT_FOUND</td>
+      <td>The file named MvNCAPI.mvcmd is installed in the mvnc directory. This message means that the file has been moved or installer failed.</td>
+    </tr>
+    <tr>
+      <td>MVNC_NO_DATA</td>
+      <td>No data to return.</td>
+    </tr>
+    <tr>
+      <td>MVNC_GONE</td>
+      <td>The graph or device has been closed during the operation.</td>
+    </tr>
+    <tr>
+      <td>MVNC_UNSUPPORTED_GRAPH_FILE</td>
+      <td>The graph file is corrupt or may have been created with an incompatible prior version of the NCS toolkit. Try to recompile the graph file with the version of the toolkit that corresponds to the API version.</td>
+    </tr>
+    <tr>
+      <td>MVNC_MYRIAD_ERROR</td>
+      <td>An error has been reported by the Intel® Movidius™ VPU. Use MVNC_DEBUGINFO.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>
