@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="class-deviceoptionenumenum">class DeviceOption(enum.Enum)</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Device.html">Device</a>, <a href="Device.set_option.html">Device.set_option()</a>, <a href="Device.get_option.html">Device.get_option()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>DeviceOption is an enumeration that defines <a href="Device.html">Device</a> options that can be read with <a href="Device.get_option.html">Device.get_option()</a> or set with <a href="Device.set_option.html">Device.set_option()</a>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>Option Type</th>
+      <th>Possible Values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>RO_THERMAL_STATS</td>
+      <td>numpy.ndarray of floats</td>
+      <td>Any</td>
+      <td>Device temperatures in degrees Celsius.</td>
+    </tr>
+    <tr>
+      <td>RO_THERMAL_THROTTLING_LEVEL</td>
+      <td>int</td>
+      <td>0, 1, 2</td>
+      <td>0: No limit reached<br />1: Lower guard temperature threshold of chip sensor reached; short throttling time is in action between inferences to protect the device.<br />2: Upper guard temperature of chip sensor reached; long throttling time is in action between inferences to protect the device.</td>
+    </tr>
+    <tr>
+      <td>RO_DEVICE_STATE</td>
+      <td>int</td>
+      <td>Values in the <a href="DeviceState.html">DeviceState</a> enumeration</td>
+      <td>The current state of the <a href="Device.html">Device</a>.</td>
+    </tr>
+    <tr>
+      <td>RO_CURRENT_MEMORY_USED</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The current memory in use on the device in bytes.  This value divided by <a href="DeviceOption.html">RO_MEMORY_SIZE</a> is the percent of memory in use.</td>
+    </tr>
+    <tr>
+      <td>RO_MEMORY_SIZE</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The total memory available on the device in bytes.</td>
+    </tr>
+    <tr>
+      <td>RO_MAX_FIFO_NUM</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The maximum number of <a href="Fifo.html">Fifos</a> that can be allocated for the device.</td>
+    </tr>
+    <tr>
+      <td>RO_ALLOCATED_FIFO_NUM</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The number of <a href="Fifo.html">Fifos</a> currently allocated for the device.</td>
+    </tr>
+    <tr>
+      <td>RO_MAX_GRAPH_NUM</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The maximum number of <a href="Graph.html">Graphs</a> that can be allocated for the device.</td>
+    </tr>
+    <tr>
+      <td>RO_ALLOCATED_GRAPH_NUM</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The number of <a href="Graph.html">Graphs</a> currently allocated for the device.</td>
+    </tr>
+    <tr>
+      <td>RO_CLASS_LIMIT</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The highest option class supported.</td>
+    </tr>
+    <tr>
+      <td>RO_FW_VERSION</td>
+      <td>numpy.ndarray of 4 unsigned ints</td>
+      <td>[<em>major, minor, hardware type, build number</em>]</td>
+      <td>The version of the firmware currently running on the device.</td>
+    </tr>
+    <tr>
+      <td>RO_DEBUG_INFO</td>
+      <td>str</td>
+      <td>Debug info string</td>
+      <td><em>Not yet implemented.</em><br /><br />More detailed debug info when the result of a function call was <a href="Status.html">Status.MYRIAD_ERROR</a>.</td>
+    </tr>
+    <tr>
+      <td>RO_MVTENSOR_VERSION</td>
+      <td>numpy.ndarray of 2 unsigned ints</td>
+      <td>[<em>major, minor</em>]</td>
+      <td>The version of the mvtensor library that was linked with the API.</td>
+    </tr>
+    <tr>
+      <td>RO_DEVICE_NAME</td>
+      <td>str</td>
+      <td>Device name string</td>
+      <td>The internal name of the device.</td>
+    </tr>
+    <tr>
+      <td>RO_MAX_EXECUTORS_NUM</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td><em>Reserved for future use.</em></td>
+    </tr>
+    <tr>
+      <td>RO_HW_VERSION</td>
+      <td>int</td>
+      <td>Values in the <a href="DeviceHwVersion.html">DeviceHwVersion</a> enumeration</td>
+      <td>The hardware version of the device.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li><strong>Options prefixed with ‘RW’ have read/write permission and are both gettable and settable.</strong></li>
+  <li><strong>Options prefixed with ‘RO’ have read-only permission and are only gettable.</strong></li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

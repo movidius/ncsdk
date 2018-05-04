@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="guidance-for-compiling-tensorflow-model-zoo-networks">Guidance for Compiling TensorFlow™ Model Zoo Networks</h1>
+
+<p>You can easily compile models from the <a href="https://github.com/tensorflow/models">TensorFlow™ Model Zoo</a> for use with the Intel® Movidius™ Neural Compute SDK (Intel® Movidius™ NCSDK) and Neural Compute API using scripts provided by TensorFlow™.</p>
+
+<p>This diagram shows an overview of the process of converting the TensorFlow™ model to a Movidius™ graph file:
+<img src="images/freezegraph_diagram.jpg" alt="" /></p>
+
+<h2 id="general-steps">General Steps</h2>
+
+<h4 id="clone-tensorflow-source-code-and-tensorflow-model-repositories">Clone TensorFlow™ source code and TensorFlow™ model repositories</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/tensorflow/tensorflow.git
+git clone https://github.com/tensorflow/models.git 
+</code></pre></div></div>
+
+<h4 id="download-and-extract-the-checkpoint-file">Download and extract the checkpoint file</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">-nc</span> http://download.tensorflow.org/models/&lt;name of model <span class="nb">tar </span>file&gt;.tar.gz
+<span class="nb">tar</span> <span class="nt">-xvf</span> &lt;name of model <span class="nb">tar </span>file&gt;.tar.gz
+</code></pre></div></div>
+
+<h4 id="export-graphdef-file">Export GraphDef file</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 &lt;path to TF models repo&gt;/research/slim/export_inference_graph.py <span class="se">\</span>
+		<span class="nt">--alsologtostderr</span> <span class="se">\</span>
+		<span class="nt">--model_name</span><span class="o">=</span>&lt;the name of the model&gt; <span class="se">\</span>
+		<span class="nt">--batch_size</span><span class="o">=</span>1 <span class="se">\</span>
+		<span class="nt">--dataset_name</span><span class="o">=</span>&lt;the name of the dataset&gt; <span class="se">\</span>
+		<span class="nt">--image_size</span><span class="o">=</span>&lt;one dimension of image size&gt; <span class="se">\</span>
+		<span class="nt">--output_file</span><span class="o">=</span>&lt;the name of the model&gt;.pb
+</code></pre></div></div>
+
+<h4 id="freeze-model-for-inference">Freeze model for inference</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 &lt;path to TF <span class="nb">source </span>repo&gt;/tensorflow/python/tools/freeze_graph.py <span class="se">\</span>
+		<span class="nt">--input_graph</span><span class="o">=</span>&lt;the name of the model&gt;.pb <span class="se">\</span>
+		<span class="nt">--input_binary</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+		<span class="nt">--input_checkpoint</span><span class="o">=</span>&lt;the name of the model&gt;.ckpt <span class="se">\</span>
+		<span class="nt">--output_graph</span><span class="o">=</span>&lt;the name of the model&gt;_frozen.pb <span class="se">\</span>
+		<span class="nt">--output_node_name</span><span class="o">=</span>&lt;name of the output node&gt;
+</code></pre></div></div>
+
+<h4 id="compile-the-movidius-graph-file">Compile the Movidius™ graph file</h4>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvNCCompile <span class="nt">-s</span> &lt;number of shaves&gt; &lt;name of the model&gt;_frozen.pb <span class="nt">-in</span><span class="o">=</span>input <span class="nt">-on</span><span class="o">=</span>&lt;name of the output node&gt;
+</code></pre></div></div>
+
+<h2 id="example-using-inception-v3-model">Example Using Inception v3 Model</h2>
+<p>This example shows the above steps for compiling the Inception v3 model for use with the NCSDK.</p>
+
+<p>Download and extract the checkpoint file:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/tensorflow/tensorflow.git
+git clone https://github.com/tensorflow/models.git
+</code></pre></div></div>
+
+<p>Make a directory for the model:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> inception_v3
+<span class="nb">cd </span>inception_v3
+</code></pre></div></div>
+
+<p>Download and extract the checkpoint file:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget <span class="nt">-nc</span> http://download.tensorflow.org/models/inception_v3_2016_08_28.tar.gz
+<span class="nb">tar</span> <span class="nt">-xvf</span> inception_v3_2016_08_28.tar.gz
+</code></pre></div></div>
+
+<p>Export the GraphDef file:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 ../models/research/slim/export_inference_graph.py <span class="se">\</span>
+		<span class="nt">--alsologtostderr</span> <span class="se">\</span>
+		<span class="nt">--model_name</span><span class="o">=</span>inception_v3 <span class="se">\</span>
+		<span class="nt">--batch_size</span><span class="o">=</span>1 <span class="se">\</span>
+		<span class="nt">--dataset_name</span><span class="o">=</span>imagenet <span class="se">\</span>
+		<span class="nt">--image_size</span><span class="o">=</span>299 <span class="se">\</span>
+		<span class="nt">--output_file</span><span class="o">=</span>inception_v3.pb
+</code></pre></div></div>
+
+<p>Freeze model for inference:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 ../tensorflow/tensorflow/python/tools/freeze_graph.py <span class="se">\</span>
+		<span class="nt">--input_graph</span><span class="o">=</span>inception_v3.pb <span class="se">\</span>
+		<span class="nt">--input_binary</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+		<span class="nt">--input_checkpoint</span><span class="o">=</span>inception_v3.ckpt <span class="se">\</span>
+		<span class="nt">--output_graph</span><span class="o">=</span>inception_v3_frozen.pb <span class="se">\</span>
+		<span class="nt">--output_node_name</span><span class="o">=</span>InceptionV3/Predictions/Reshape_1
+</code></pre></div></div>
+
+<p>Compile the Movidius™ graph file:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvNCCompile <span class="nt">-s</span> 12 inception_v3_frozen.pb <span class="nt">-in</span><span class="o">=</span>input <span class="nt">-on</span><span class="o">=</span>InceptionV3/Predictions/Reshape_1
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

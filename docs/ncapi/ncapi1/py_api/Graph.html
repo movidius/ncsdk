@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="graph-class">Graph Class</h1>
+
+<p>The Graph class is a container for a neural network graph file that is associated with a particular Intel® Movidius™ Neural Compute Stick (Intel® Movidius™ NCS) device.</p>
+
+<h2 id="usage">Usage</h2>
+<p>To use the Graph class, you must create a graph handle by calling AllocateGraph() from the Device class. The location of the graph file will be passed to AllocateGraph(), and it will return an instance of the Graph class. Once you have successfully created an instance of this class, the typical usage is to optionally get/set graph options, then call LoadTensor() and GetResult() to perform inferencing with the graph that was allocated. Finally, call DeallocateGraph() when the neural network is no longer needed.</p>
+
+<h2 id="graph-methods">Graph methods</h2>
+<ul>
+  <li><a href="Graph.DeallocateGraph.html">DeallocateGraph</a></li>
+  <li><a href="Graph.SetGraphOption.html">SetGraphOption</a></li>
+  <li><a href="Graph.GetGraphOption.html">GetGraphOption</a></li>
+  <li><a href="Graph.LoadTensor.html">LoadTensor</a></li>
+  <li><a href="Graph.GetResult.html">GetResult</a></li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

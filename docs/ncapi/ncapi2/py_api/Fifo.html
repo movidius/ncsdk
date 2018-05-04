@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="class-fifo">class Fifo</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="FifoOption.html">FifoOption</a>, <a href="Device.html">Device</a>, <a href="Graph.html">Graph</a>, <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a>, <a href="Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_with_fifo_elem()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>The <a href="Fifo.html">Fifo</a> class represents a first in, first out (FIFO) queue for network input and output.</p>
+
+<p>Typically two instances of this class are created for each <a href="Graph.html">Graph</a> - one for input and one for output.</p>
+
+<h2 id="initialization">Initialization</h2>
+<p>Create a Fifo instance:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fifo</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Fifo</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">fifo_type</span><span class="p">)</span>
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>name</td>
+      <td>str</td>
+      <td>A name for the <a href="Fifo.html">Fifo</a>; this can be can be anything you like up to mvncapi.MAX_NAME_SIZE characters, or just an empty string.<br /><br />The name can be retrieved later with <a href="Fifo.get_option.html">Fifo.get_option()</a>.</td>
+    </tr>
+    <tr>
+      <td>fifo_type</td>
+      <td>int</td>
+      <td>A member of the <a href="FifoType.html">FifoType</a> enumeration.<br /><br />The API must be able to write to input <a href="Fifo.html">Fifos</a> and read from output <a href="Fifo.html">Fifos</a>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>You can also create and allocate both an input <a href="Fifo.html">Fifo</a> and an output <a href="Fifo.html">Fifo</a> in one call with <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a>.</p>
+
+<p>When the Fifo has been successfully created the <a href="FifoState.html">FifoState</a> will be CREATED.</p>
+
+<h2 id="methods">Methods</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="Fifo.allocate.html">allocate</a></td>
+      <td>Allocate a <a href="Fifo.html">Fifo</a> queue for a particular device..</td>
+    </tr>
+    <tr>
+      <td><a href="Fifo.destroy.html">destroy</a></td>
+      <td>Destroy the <a href="Fifo.html">Fifo</a> and free associated resources. The <a href="Fifo.html">Fifo</a> queue must be empty.</td>
+    </tr>
+    <tr>
+      <td><a href="Fifo.get_option.html">get_option</a></td>
+      <td>Get the value of a <a href="FifoOption.html">FifoOption</a>.</td>
+    </tr>
+    <tr>
+      <td><a href="Fifo.read_elem.html">read_elem</a></td>
+      <td>Read an element from the <a href="Fifo.html">Fifo</a>. The <a href="Fifo.html">Fifo</a> must be <a href="FifoType.html">FifoType.HOST_RO</a>.</td>
+    </tr>
+    <tr>
+      <td><a href="Fifo.remove_elem.html">remove_elem</a></td>
+      <td><em>Not yet implemented.</em><br /><br />Remove an element from a <a href="Fifo.html">Fifo</a> without returning it.</td>
+    </tr>
+    <tr>
+      <td><a href="Fifo.set_option.html">set_option</a></td>
+      <td>Set the value of a <a href="FifoOption.html">FifoOption</a>.</td>
+    </tr>
+    <tr>
+      <td><a href="Fifo.write_elem.html">write_elem</a></td>
+      <td>Send an input tensor to the <a href="Fifo.html">Fifo</a> queue. The <a href="Fifo.html">Fifo</a> must be <a href="FifoType.html">FifoType.HOST_WO</a>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="typical-usage">Typical Usage</h1>
+
+<ul>
+  <li>Allocate a <a href="Graph.html">Graph</a> for a <a href="Device.html">Device</a> and create and allocate associated input and output <a href="Fifo.html">Fifos</a> with <a href="Graph.allocate_with_fifos.html">Graph.allocate_with_fifos()</a>.
+    <ul>
+      <li>Alternatively, you can create <a href="Fifo.html">Fifos</a> individually and then allocate them with <a href="Fifo.allocate.html">Fifo.allocate()</a>. In this case you would use <a href="Graph.allocate.html">Graph.allocate()</a> to allocate the <a href="Graph.html">Graph</a> for the <a href="Device.html">Device</a>.</li>
+    </ul>
+  </li>
+  <li>Write an input tensor to the input <a href="Fifo.html">Fifo</a> and queue an inference with <a href="Graph.queue_inference_with_fifo_elem.html">Graph.queue_inference_with_fifo_elem()</a>.
+    <ul>
+      <li>You can also use <a href="Fifo.write_elem.html">Fifo.write_elem()</a> to write input tensors to the <a href="Fifo.html">Fifo</a> and then call <a href="Graph.queue_inference.html">Graph.queue_inference()</a> for each to queue the inference.</li>
+    </ul>
+  </li>
+  <li>Read result tensor(s) from the output <a href="Fifo.html">Fifo</a> with <a href="Fifo.read_elem.html">Fifo.read_elem()</a>.</li>
+  <li>When finished, destroy each <a href="Fifo.html">Fifo</a> and free associated resources with <a href="Fifo.destroy.html">Fifo.destroy()</a>.</li>
+</ul>
+
+<p>See the <a href="readme.html">Python API Overview</a> for more information about typical API usage.</p>
+
+<h2 id="raises">Raises</h2>
+<p>Exception with a status code from <a href="Status.html">Status</a> if underlying function calls return a status other than Status.OK.</p>
+
+<h2 id="examples">Examples</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""Example Fifo usage with convenience functions."""</span>
+<span class="kn">from</span> <span class="nn">mvnc</span> <span class="kn">import</span> <span class="n">mvncapi</span>
+
+<span class="c">#</span>
+<span class="c"># Open a Device, create a Graph, and load graph data from file...</span>
+<span class="c">#</span>
+
+<span class="c"># Allocate the Graph and create and allocate two associate Fifos for input and output</span>
+<span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">allocate_with_fifos</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">graph_buffer</span><span class="p">)</span>
+
+<span class="c"># Write an input tensor to the input Fifo and queue an inference</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">queue_inference_with_fifo_elem</span><span class="p">(</span><span class="n">input_fifo</span><span class="p">,</span> <span class="n">output_fifo</span><span class="p">,</span> <span class="n">input_tensor</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'tensor1'</span><span class="p">)</span>
+
+<span class="c"># Read the inference result tensor from the output Fifo</span>
+<span class="n">result_tensor</span><span class="p">,</span> <span class="n">user_obj</span> <span class="o">=</span> <span class="n">output_fifo</span><span class="o">.</span><span class="n">read_elem</span><span class="p">()</span>
+
+<span class="c">#</span>
+<span class="c"># Do something with the result...</span>
+<span class="c">#</span>
+
+<span class="c"># Destroy the Fifos</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">output_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+
+<span class="c">#</span>
+<span class="c"># Perform other clean up...</span>
+<span class="c">#</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"""Example Fifo usage without convenience functions."""</span>
+<span class="kn">from</span> <span class="nn">mvnc</span> <span class="kn">import</span> <span class="n">mvncapi</span>
+
+<span class="c">#</span>
+<span class="c"># Open a Device and allocate a Graph...</span>
+<span class="c">#</span>
+
+<span class="c"># Initialize two Fifos for input and output</span>
+<span class="n">input_fifo</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Fifo</span><span class="p">(</span><span class="s">'input1'</span><span class="p">,</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoType</span><span class="o">.</span><span class="n">HOST_WO</span><span class="p">)</span>
+<span class="n">output_fifo</span> <span class="o">=</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">Fifo</span><span class="p">(</span><span class="s">'output1'</span><span class="p">,</span> <span class="n">mvncapi</span><span class="o">.</span><span class="n">FifoType</span><span class="o">.</span><span class="n">HOST_RO</span><span class="p">)</span>
+
+<span class="c"># Get input and output TensorDescriptors from the graph</span>
+<span class="n">input_descriptor</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">GraphOption</span><span class="o">.</span><span class="n">RO_INPUT_TENSOR_DESCRIPTORS</span><span class="p">)</span>
+<span class="n">output_descriptor</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="n">mvncapi</span><span class="o">.</span><span class="n">GraphOption</span><span class="o">.</span><span class="n">RO_OUTPUT_TENSOR_DESCRIPTORS</span><span class="p">)</span>
+
+<span class="c"># Allocate the Fifo buffers</span>
+<span class="n">NUM_ELEMENTS</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">allocate</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">input_descriptor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">NUM_ELEMENTS</span><span class="p">)</span>
+<span class="n">output_fifo</span><span class="o">.</span><span class="n">allocate</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">output_descriptor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">NUM_ELEMENTS</span><span class="p">)</span>
+
+<span class="c"># Write an input tensor to the input_fifo</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">write_elem</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="s">'tensor1'</span><span class="p">)</span>
+
+<span class="c">#</span>
+<span class="c"># Queue an inference with Graph.queue_inference()...</span>
+<span class="c">#</span>
+
+<span class="c"># Read the inference result tensor from the output Fifo</span>
+<span class="n">result_tensor</span><span class="p">,</span> <span class="n">user_obj</span> <span class="o">=</span> <span class="n">output_fifo</span><span class="o">.</span><span class="n">read_elem</span><span class="p">()</span>
+
+<span class="c">#</span>
+<span class="c"># Do something with the result...</span>
+<span class="c">#</span>
+
+<span class="c"># Destroy the Fifos</span>
+<span class="n">input_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+<span class="n">output_fifo</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+
+<span class="c">#</span>
+<span class="c"># Perform other clean up...</span>
+<span class="c">#</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

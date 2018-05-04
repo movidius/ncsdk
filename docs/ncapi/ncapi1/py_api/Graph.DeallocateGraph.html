@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="graphdeallocategraph">Graph.DeallocateGraph()</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Package</td>
+      <td>mvnc</td>
+    </tr>
+    <tr>
+      <td>Module</td>
+      <td>mvncapi</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="Device.AllocateGraph.html">Device.AllocateGraph()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>This function is used to deallocate a graph that was allocated for an Intel® Movidius™ NCS device with the Device.AllocateGraph() method.  This should be called for every graph that is created to free resources associated with the graph.</p>
+
+<h2 id="syntax">Syntax</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">graph</span><span class="o">.</span><span class="n">DeallocateGraph</span><span class="p">()</span>
+</code></pre></div></div>
+<h2 id="parameters">Parameters</h2>
+<p>None.</p>
+
+<h2 id="return">Return</h2>
+<p>None.</p>
+
+<h2 id="known-issues">Known Issues</h2>
+<p>The Graph class can only be created via the Device.AllocateGraph() function.</p>
+
+<h2 id="example">Example</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">import</span> <span class="nn">mvnc.mvncapi</span> <span class="k">as</span> <span class="n">ncs</span>
+<span class="n">deviceNames</span> <span class="o">=</span> <span class="n">ncs</span><span class="o">.</span><span class="n">EnumerateDevices</span><span class="p">()</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">deviceNames</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+	<span class="k">print</span><span class="p">(</span><span class="s">"Error - No devices detected."</span><span class="p">)</span>
+	<span class="n">quit</span><span class="p">()</span>
+
+<span class="c"># Open first NCS device found</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">mvnc</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">devices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c"># Allocate the graph </span>
+<span class="n">device</span><span class="o">.</span><span class="n">AllocateGraph</span><span class="p">(</span><span class="s">"my_graph"</span><span class="p">)</span>
+
+<span class="c"># Use device here</span>
+
+<span class="n">graph</span><span class="o">.</span><span class="n">DeallocateGraph</span><span class="p">()</span>
+
+<span class="n">device</span><span class="o">.</span><span class="n">CloseDevice</span><span class="p">()</span>
+</code></pre></div></div>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

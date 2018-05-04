@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #
-# Copyright 2017 Intel Corporation. 
+# Copyright 2018 Intel Corporation.
 # The source code, information and material ("Material") contained herein is  
 # owned by Intel Corporation or its suppliers or licensors, and title to such  
 # Material remains with Intel Corporation or its suppliers or licensors.  
@@ -24,22 +24,22 @@ import mvnc.mvncapi as fx
 if __name__=="__main__":
 
      # set the logging level for the NC API
-    fx.SetGlobalOption(fx.GlobalOption.LOG_LEVEL, 0)
+    fx.global_set_option(fx.GlobalOption.RW_LOG_LEVEL, 0)
 
     # get a list of names for all the devices plugged into the system
-    ncs_names = fx.EnumerateDevices()
-    if (len(ncs_names) < 1):
+    devices = fx.enumerate_devices()
+    if (len(devices) < 1):
         print("Error - no NCS devices detected, verify an NCS device is connected.")
         quit() 
 
 
     # get the first NCS device by its name.  For this program we will always open the first NCS device.
-    dev = fx.Device(ncs_names[0])
+    dev = fx.Device(devices[0])
 
     
     # try to open the device.  this will throw an exception if someone else has it open already
     try:
-        dev.OpenDevice()
+        dev.open()
     except:
         print("Error - Could not open NCS device.")
         quit()
@@ -49,7 +49,7 @@ if __name__=="__main__":
     
 
     try:
-        dev.CloseDevice()
+        dev.close()
     except:
         print("Error - could not close NCS device.")
         quit()

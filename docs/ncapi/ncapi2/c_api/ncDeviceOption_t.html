@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="enum-ncdeviceoption_t">enum ncDeviceOption_t</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncDeviceHandle_t.html">struct ncDeviceHandle_t</a>, <a href="ncDeviceGetOption.html">ncDeviceGetOption()</a>, <a href="ncDeviceSetOption.html">ncDeviceSetOption()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>The ncDeviceOption_t enumeration defines neural compute device options that can be read with <a href="ncDeviceGetOption.html">ncDeviceGetOption()</a> or set with <a href="ncDeviceSetOption.html">ncDeviceSetOption()</a>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Constant</th>
+      <th>Option Type</th>
+      <th>Possible Values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NC_RO_DEVICE_THERMAL_STATS</td>
+      <td>float[ ]</td>
+      <td>Any</td>
+      <td>Device temperatures in degrees Celsius. The size of this array is NC_THERMAL_BUFFER_SIZE.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_THERMAL_THROTTLING_LEVEL</td>
+      <td>int</td>
+      <td>0, 1, 2</td>
+      <td>0: No limit reached.<br />1: Lower guard temperature threshold of chip sensor reached; short throttling time is in action between inferences to protect the device.<br />2: Upper guard temperature of chip sensor reached; long throttling time is in action between inferences to protect the device.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_STATE</td>
+      <td>int</td>
+      <td>Values in the <a href="ncDeviceState_t.html">ncDeviceState_t</a> enumeration</td>
+      <td>The state of the device and the associated <a href="ncDeviceHandle_t.html">ncDeviceHandle_t</a> struct.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_CURRENT_MEMORY_USED</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The current memory in use on the device in bytes. This value divided by NC_RO_DEVICE_MEMORY_SIZE is the percent of memory in use.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_MEMORY_SIZE</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The total memory available on the device in bytes.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_MAX_FIFO_NUM</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The maximum number of FIFOs that can be allocated for the device.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_ALLOCATED_FIFO_NUM</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The number of FIFOs currently allocated for the device.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_MAX_GRAPH_NUM</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The maximum number of graphs that can be allocated for the device.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_ALLOCATED_GRAPH_NUM</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The number of graphs currently allocated for the device.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_OPTION_CLASS_LIMIT</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The highest option class supported.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_FW_VERSION</td>
+      <td>unsigned int[4]</td>
+      <td>[<em>major, minor, hardware type, build number</em>]</td>
+      <td>The version of the firmware currently running on the device.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_DEBUG_INFO</td>
+      <td>char[ ]</td>
+      <td>Debug info</td>
+      <td><em>Not yet implemented.</em><br /><br />A null-terminated character array containing more detailed debug info when the result of a function call was <a href="ncStatus_t.html">NC_MYRIAD_ERROR</a>. The maximum size of this array is NC_DEBUG_BUFFER_SIZE.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_MVTENSOR_VERSION</td>
+      <td>unsigned int[2]</td>
+      <td>[<em>major, minor</em>]</td>
+      <td>The version of the mvtensor library that was linked with the API.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_NAME</td>
+      <td>char[ ]</td>
+      <td>Device name</td>
+      <td>A null-terminated character array containing the internal name of the device. The maximum size of this array is NC_MAX_NAME_SIZE.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_MAX_EXECUTORS_NUM</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td><em>Reserved for future use.</em></td>
+    </tr>
+    <tr>
+      <td>NC_RO_DEVICE_HW_VERSION</td>
+      <td>int</td>
+      <td>Values in the <a href="ncDeviceHwVersion_t.html">ncDeviceHwVersion_t</a> enumeration</td>
+      <td>The hardware version of the device.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li><strong>Options prefixed with ‘NC_RW’ have read/write permission and are both gettable and settable.</strong></li>
+  <li><strong>Options prefixed with ‘NC_RO’ have read-only permission and are only gettable.</strong></li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

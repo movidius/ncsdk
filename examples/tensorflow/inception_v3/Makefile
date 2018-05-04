@@ -29,11 +29,11 @@ prereqs:
 
 .PHONY: profile
 profile: weights
-	${NCPROFILE} -s 12 ${MODEL_FILENAME} ${INPUT_NODE_FLAG} ${OUTPUT_NODE_FLAG}
+	${NCPROFILE} -s 4 ${MODEL_FILENAME} ${INPUT_NODE_FLAG} ${OUTPUT_NODE_FLAG}
 
 .PHONY: browse_profile
 browse_profile: weights
-	${NCPROFILE} -s 12 ${MODEL_FILENAME} ${INPUT_NODE_FLAG} ${OUTPUT_NODE_FLAG}
+	${NCPROFILE} -s 4 ${MODEL_FILENAME} ${INPUT_NODE_FLAG} ${OUTPUT_NODE_FLAG}
 	firefox output_report.html &
 
 .PHONY: weights
@@ -44,11 +44,11 @@ weights:
 
 .PHONY: compile
 compile: weights
-	test -f graph || ${NCCOMPILE} -s 12 ${MODEL_FILENAME} ${INPUT_NODE_FLAG} ${OUTPUT_NODE_FLAG}
+	test -f graph || ${NCCOMPILE} -s 4 ${MODEL_FILENAME} ${INPUT_NODE_FLAG} ${OUTPUT_NODE_FLAG}
 
 .PHONY: check
 check: weights
-	-${NCCHECK} -s 12 ${MODEL_FILENAME} ${INPUT_NODE_FLAG} ${OUTPUT_NODE_FLAG} -i ../../data/images/cat.jpg -id 917 -M 128 -S 2 -cs 0,1,2 -metric top1
+	-${NCCHECK} -s 4 ${MODEL_FILENAME} ${INPUT_NODE_FLAG} ${OUTPUT_NODE_FLAG} -i ../../data/images/cat.jpg -id 917 -M 128 -S 2 -cs 0,1,2 -metric top1
 
 .PHONY: run
 run: compile

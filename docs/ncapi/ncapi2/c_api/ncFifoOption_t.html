@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <script src="../../../assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header  class="without-description" >
+        <h1 style="color:#FFFFFF;text-shadow:none"><a href=../../../index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+        
+        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        <ul>
+        
+          <li>  <a href=../../../TOC.html><small>Table of Contents</small></a> </li>
+          <li>  <a href=../../../index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
+          <li> <a href=../../../ncapi/readme.html><small>NCAPI Documentation</small></a></li>
+          <li>  <a href="">View On <strong>GitHub</strong></a></li>
+          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+        </ul>
+      </header>
+
+      <section>
+
+      <h1 id="enum-ncfifooption_t">enum ncFifoOption_t</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncFifoHandle_t.html">struct ncFifoHandle_t</a>, <a href="ncFifoGetOption.html">ncFifoGetOption()</a>, <a href="ncFifoSetOption.html">ncFifoSetOption()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>The ncFifoOption_t enumeration defines FIFO options that can be read with <a href="ncFifoGetOption.html">ncFifoGetOption()</a> or set with <a href="ncFifoSetOption.html">ncFifoSetOption()</a>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Constant</th>
+      <th>Option Type</th>
+      <th>Possible Values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NC_RW_FIFO_TYPE</td>
+      <td>int</td>
+      <td>Values in the <a href="ncFifoType_t.html">ncFifoType_t</a> enumeration</td>
+      <td>The type of FIFO (read-only or write-only).</td>
+    </tr>
+    <tr>
+      <td>NC_RW_FIFO_CONSUMER_COUNT</td>
+      <td>int</td>
+      <td>1</td>
+      <td>The number of times an element must be read by a graph or the API before the element is removed <em>(default 1)</em>. The API can always only read once even if this is greater than 1.<br /><br /><em>Only 1 currently supported.</em></td>
+    </tr>
+    <tr>
+      <td>NC_RW_FIFO_DATA_TYPE</td>
+      <td>int</td>
+      <td>Values in the <a href="ncFifoDataType_t.html">ncFifoDataType_t</a> enumeration</td>
+      <td>The type of data that will be placed in the FIFO (default: 32FP).<br /><br />Regardless of the configured data types of the input and output FIFOs, the API will convert tensors to 16FP while performing inferences.</td>
+    </tr>
+    <tr>
+      <td>NC_RW_FIFO_DONT_BLOCK</td>
+      <td>int</td>
+      <td>0</td>
+      <td>0: <a href="ncFifoWriteElem.html">ncFifoWriteElem()</a> will block if the input FIFO queue is full and <a href="ncFifoReadElem.html">ncFifoReadElem()</a> will block if the output FIFO queue is empty <em>(default)</em>. <br />1: <em>Not yet implemented.</em></td>
+    </tr>
+    <tr>
+      <td>NC_RO_FIFO_CAPACITY</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The maximum number of elements the FIFO queue can hold. This is set with <a href="ncGraphAllocateWithFifos.html">ncGraphAllocateWithFifos()</a> or <a href="ncFifoAllocate.html">ncFifoAllocate()</a>.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_FIFO_READ_FILL_LEVEL</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The number of tensors (FIFO elements) in the queue for a readable FIFO.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_FIFO_WRITE_FILL_LEVEL</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The number of tensors (FIFO elements) in the queue for a writable FIFO.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_FIFO_TENSOR_DESCRIPTOR</td>
+      <td><a href="ncTensorDescriptor_t.html">struct ncTensorDescriptor_t</a>*</td>
+      <td>N/A</td>
+      <td>A pointer to the FIFO’s ncTensorDescriptor_t struct, which describes the shape of tensors that this FIFO will hold. This is set with <a href="ncGraphAllocateWithFifos.html">ncGraphAllocateWithFifos()</a> or <a href="ncFifoAllocate.html">ncFifoAllocate()</a>.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_FIFO_STATE</td>
+      <td>int</td>
+      <td>Values in the <a href="ncFifoState_t.html">ncFifoState_t</a> enumeration</td>
+      <td>The state of the FIFO and the associated <a href="ncFifoHandle_t.html">ncFifoHandle_t</a> struct.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_FIFO_NAME</td>
+      <td>char[ ]</td>
+      <td>FIFO name</td>
+      <td>A null-terminated character array containing the name of the FIFO that was set with <a href="ncFifoCreate.html">ncFifoCreate()</a>. The maximum size of this array is NC_MAX_NAME_SIZE.</td>
+    </tr>
+    <tr>
+      <td>NC_RO_FIFO_ELEMENT_DATA_SIZE</td>
+      <td>int</td>
+      <td>Unbounded positive int</td>
+      <td>The data size of one FIFO element in bytes.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li><strong>Options prefixed with ‘NC_RW’ have read/write permission and are both gettable and settable.</strong></li>
+  <li><strong>Options prefixed with ‘NC_RO’ have read-only permission and are only gettable.</strong></li>
+  <li><strong>All settable FIFO options must be set before <a href="ncFifoAllocate.html">ncFifoAllocate()</a> is called for the <a href="ncFifoHandle_t.html">ncFifoHandle_t</a> struct.</strong></li>
+</ul>
+
+
+      </section>
+    </div>
+    <footer>
+    
+      
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    
+  </body>
+</html>

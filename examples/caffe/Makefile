@@ -5,13 +5,13 @@ endif
 
 TOPTARGETS := all clean check compile profile run
 
-SUBDIRS := $(wildcard */.)
+EXAMPLES := AlexNet GoogLeNet SqueezeNet
 
-$(TOPTARGETS): $(SUBDIRS)
-$(SUBDIRS):
+$(TOPTARGETS): $(EXAMPLES)
+$(EXAMPLES):
 	$(MAKE) -C $@ $(MAKECMDGOALS)
 
-.PHONY: $(TOPTARGETS) $(SUBDIRS)
+.PHONY: $(TOPTARGETS) $(EXAMPLES)
 
 .PHONY: help
 help:

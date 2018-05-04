@@ -105,9 +105,9 @@ run_py: compile
 	./run.py
 
 .PHONY:	cpp
-cpp: cpp/run.cpp cpp/fp16.c
+cpp: cpp/run.cpp
 	@echo "\nmaking cpp"
-	g++ cpp/run.cpp cpp/fp16.c -o cpp/run_cpp -lmvnc
+	g++ cpp/run.cpp -o cpp/run_cpp -lmvnc
 
 .PHONY: run_cpp
 run_cpp: compile cpp
