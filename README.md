@@ -2,7 +2,7 @@
 This Intel® Movidius™ Neural Compute software developer kit (NCSDK) is provided for users of the [Intel® Movidius™ Neural Compute Stick](https://developer.movidius.com/) (Intel® Movidius™ NCS). It includes software tools, an API, and examples, so developers can create software that takes advantage of the accelerated neural network capability provided by the Intel Movidius NCS hardware.
 
 # Neural Compute SDK2
-The **[NCSDK v2.04](https://github.com/movidius/ncsdk/releases/tag/v2.04.00.06) release is now available.** With this release the existing NCAPI v1 has been rearchitected into NCAPI v2 which will pave the way for future enhancements and capabilities, as well add some now!  While users are transitioning to this new NCAPI v2 the legacy NCSDK v1.x release will stay on the master branch and NCSDK2 will be on the [ncsdk2](https://github.com/movidius/ncsdk/tree/ncsdk2) branch.  At some point in the not to distant future, NCSDK2 will move to the master.
+The **[NCSDK v2.04](https://github.com/movidius/ncsdk/releases/tag/v2.04.00.06) release is now available.** With this release the existing NCAPI v1 has been rearchitected into NCAPI v2 which will pave the way for future enhancements and capabilities, as well add some now!  While users are transitioning to this new NCAPI v2 the legacy NCSDK v1.x release will stay on the master branch and NCSDK2 will be on the [ncsdk2](https://github.com/movidius/ncsdk/tree/ncsdk2) branch.  At some point in the not too distant future, NCSDK2 will move to the master.
 
 To help you get ready for NCSDK2 you can take a look at some of the [changes in NCAPI v2](https://movidius.github.io/ncsdk/ncapi/readme.html) as well as the [NCSDK2 Release Notes](https://movidius.github.io/ncsdk/release_notes.html).
 
