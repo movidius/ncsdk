@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 # Install necessary packages for the installer
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
     build-essential \
     sed \
     sudo \
