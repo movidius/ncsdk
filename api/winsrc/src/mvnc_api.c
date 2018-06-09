@@ -497,16 +497,12 @@ mvncStatus mvncAllocateGraph(void *deviceHandle, void **graphHandle,
 		return MVNC_INVALID_PARAMETERS;
 
 	if (graphFileLength < HEADER_LENGTH + STAGE_LENGTH ||
-		graphFileLength > 512 * 1024 * 1024)
-	{
+	    graphFileLength > 512 * 1024 * 1024)
 		return MVNC_UNSUPPORTED_GRAPH_FILE;
-	}
 
 	unsigned char *graph = (unsigned char *) graphFile;
 	if (graph[VERSION_OFFSET] != GRAPH_VERSION)
-	{
 		return MVNC_UNSUPPORTED_GRAPH_FILE;
-	}
 
 	unsigned nstages = graph[N_STAGES_OFFSET] + (graph[N_STAGES_OFFSET + 1] << 8);
 	unsigned noutputs = read_32bits(graph + N_OUTPUTS_OFFSET +
@@ -518,9 +514,7 @@ mvncStatus mvncAllocateGraph(void *deviceHandle, void **graphHandle,
 
 	// A reasonable check on graph correctness
 	if (noutputs > 64 * 1024 * 1024)
-	{
 		return MVNC_UNSUPPORTED_GRAPH_FILE;
-	}
 
 	pthread_mutex_lock(&mm);
 	struct Device *d = devices;

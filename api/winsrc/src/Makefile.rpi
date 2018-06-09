@@ -1,0 +1,43 @@
+ARCH := armv7l
+
+PIROOT := $(shell echo $(HOME))/piroot
+CC := arm-linux-gnueabihf-gcc --sysroot=$(PIROOT)
+LIBS += -ludev -lpthread -lusb-1.0 -ldl
+
+OUT := libmvnc.so.0
+OBJDIR := obj-$(ARCH)
+INSTALLDIR := ${DESTDIR}/usr/local
+PYTHON3DIST := $(shell python3 -c "import site; print(site.getsitepackages()[0])")
+PYTHON2DIST := $(shell python -c "import site; print(site.getsitepackages()[0])")
+
+SRCS := \
+	usb_boot.c \
+	usb_link_vsc.c \
+	mvnc_api.c
+
+INCLUDES := \
+	-I. \
+	-I../include \
+	-I$(SYSROOT)/usr/include/libusb-1.0 \
+
+CFLAGS += -O2 -Wall -pthread -fPIC -MMD -MP
+LDFLAGS += -shared
+
+OBJS := $(SRCS:%.c=$(OBJDIR)/%.o)
+DEPS := $(OBJS:.o=.d)
+
+$(OBJDIR)/$(OUT): $(OBJS)
+	$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LIBS)
+
+$(OBJDIR)/%.o: %.c | $(OBJDIR)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+$(OBJDIR):
+	@mkdir $@
+
+-include $(DEPS)
+
+clean:
+	rm -f $(OUT)
+	rm -f $(OBJS)
+	rm -rf $(OBJDIR)
