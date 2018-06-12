@@ -187,7 +187,7 @@ function download_and_copy_files()
     download_filename="NCSDK-${NCSDK_VERSION}.tar.gz"
     if [ ! -f ${download_filename} ] ; then
         echo "Downloading ${download_filename}"
-        ncsdk_link="https://downloadmirror.intel.com/27738/eng/NCSDK-2.04.00.06.tar.gz"
+        ncsdk_link="https://downloadmirror.intel.com/27839/eng/NCSDK-2.05.00.02.tar.gz"
         exec_and_search_errors "wget --no-cache -O ${download_filename} $ncsdk_link"
     fi
     # ncsdk_pkg is the filename without the .tar.gz extension
@@ -350,12 +350,44 @@ function install_python_dependencies()
         exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --trusted-host files.pythonhosted.org Enum34>=1.1.6"
         exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --trusted-host files.pythonhosted.org --upgrade numpy>=1.13.0,<=1.13.3"
 
+        # verify python3 import scipy._lib.decorator working, a potential problem on Ubuntu only.  First check python3 import scipy.  
+        RC=0
+        python3 -c "import scipy" >& /dev/null || RC=$?
+        if [ ${RC} -ne 0 ] ; then
+            echo -e "${RED}Error, cannot import scipy into python3.  Error on line $LINENO.  Will exit${NC}"
+            exit 1
+        fi
+        RC=0
+        python3 -c "import scipy._lib.decorator" >& /dev/null || RC=$?
+        if [ ${RC} -ne 0 ] ; then
+            echo -e "${YELLOW}Problem importing scipy._lib.decorator into python3.  Attempting to fix${NC}"
+            # Get the location of scipy to get the location of decorator.py 
+            RC=0
+            SCIPY_FILE=$(python3 -c "import scipy; print(scipy.__file__)") || RC=$?
+            if [ ${RC} -eq 0 ] ; then
+                # Get directory decorator.py is in from SCIPY_FILE. If decorator.py isn't a readable file, i.e. from a broken softlink, reinstall via apt
+                [ ! -f $(dirname $SCIPY_FILE)/decorator.py ] && $SUDO_PREFIX apt install --reinstall python*-decorator
+                RC=0
+                python3 -c "import scipy._lib.decorator" >& /dev/null || RC=$?
+                if [ ${RC} -ne 0 ] ; then
+                    echo -e "${RED}Error, cannot import scipy._lib.decorator even after trying to fix this problem.  Error on line $LINENO.  Will exit${NC}"
+                    exit 1
+                else
+                    echo "Resolved problem importing scipy._lib.decorator into python3."
+                    echo ""
+                fi
+            else
+                echo -e "${RED}Error in python3 importing scipy / printing scipy.__file__.  Error on line $LINENO.  Will exit${NC}"
+                exit 1
+            fi  
+        fi
+        
     elif [ "${OS_DISTRO,,}" = "raspbian" ] ; then
         # for Raspian, use apt with python3-* if available
         exec_and_search_errors "$SUDO_PREFIX apt-get $APT_QUIET install -y $(cat "$DIR/requirements_apt_raspbian.txt")"
         exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org Cython graphviz scikit-image"
         exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org --upgrade numpy==1.13.1"
-        exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org pygraphviz Enum34>=1.1.6"
+        exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org pygraphviz Enum34>=1.1.6 networkx>=2.1,<=2.1"
         # Install packages for python 2.x, required for NCSDK python API
         exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --trusted-host files.pythonhosted.org Enum34>=1.1.6"
         exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --trusted-host files.pythonhosted.org --upgrade numpy==1.13.1"
@@ -370,7 +402,7 @@ function install_python_dependencies()
 #                   sets FIND_TENSORFLOW__FOUND_SUPPORTED_VERSION=2 when TensorFlow isn't installed
 function find_tensorflow()
 {
-    SUPPORTED_TENSORFLOW_VERSION=1.6.0
+    SUPPORTED_TENSORFLOW_VERSION=1.7.0
     RC=0
     $PIP_PREFIX pip3 show $1 1> /dev/null || RC=$?
     if [ $RC -eq 0 ]; then
@@ -416,8 +448,13 @@ function install_tensorflow()
         # install TensorFlow if needed
         if [ "${INSTALL_TF}" = "yes" ] ; then
             echo "Couldn't find a supported tensorflow version, downloading TensorFlow $SUPPORTED_TENSORFLOW_VERSION"
-            WHEEL=tensorflow-1.6.0-cp35-none-any.whl
-            $SUDO_PREFIX wget https://storage.googleapis.com/download.tensorflow.org/deps/pi/2018_03_22/${WHEEL}
+            # rename wheel for python 3.5
+            WHEEL_DOWNLOAD=tensorflow-1.7.0-cp34-none-any.whl
+            WHEEL=tensorflow-1.7.0-cp35-none-any.whl
+            [ -f "${WHEEL_DOWNLOAD}" ] && sudo mv -f ${WHEEL_DOWNLOAD} ${WHEEL_DOWNLOAD}.save
+            $SUDO_PREFIX wget https://storage.googleapis.com/download.tensorflow.org/deps/pi/2018_05_21/${WHEEL_DOWNLOAD}
+            [ -f "${WHEEL}" ] && $SUDO_PREFIX mv -f ${WHEEL} ${WHEEL}.save
+            $SUDO_PREFIX mv ${WHEEL_DOWNLOAD} ${WHEEL}
             echo "Installing TensorFlow"
             exec_and_search_errors "$PIP_PREFIX pip3 install --quiet ${WHEEL}"
             echo "Finished installing TensorFlow"
@@ -680,10 +717,15 @@ function install_api()
     # Copy C API to destination
     $SUDO_PREFIX cp $SDK_DIR/api/c/mvnc.h $SYS_INSTALL_DIR/include/mvnc2
     $SUDO_PREFIX cp $SDK_DIR/api/c/libmvnc.so.0 $SYS_INSTALL_DIR/lib/mvnc/
-    $SUDO_PREFIX cp $SDK_DIR/api/c/libmvnc_highclass.so.0 $SYS_INSTALL_DIR/lib/mvnc/
+
+    if [ -f $SDK_DIR/api/c/libmvnc_highclass.so.0 ] ; then
+        $SUDO_PREFIX cp $SDK_DIR/api/c/ncHighClass.h $SYS_INSTALL_DIR/include/mvnc2
+        $SUDO_PREFIX cp $SDK_DIR/api/c/libmvnc_highclass.so.0 $SYS_INSTALL_DIR/lib/mvnc/
+    fi
     echo "NCS Include files have been installed in $SYS_INSTALL_DIR/include"
 
     check_and_remove_file $SYS_INSTALL_DIR/include/mvnc.h
+    check_and_remove_file $SYS_INSTALL_DIR/include/ncHighClass.h
     $SUDO_PREFIX ln -s $SYS_INSTALL_DIR/include/mvnc2/mvnc.h $SYS_INSTALL_DIR/include/mvnc.h
     
     check_and_remove_file $SYS_INSTALL_DIR/lib/libmvnc.so.0
@@ -691,7 +733,10 @@ function install_api()
     check_and_remove_file $SYS_INSTALL_DIR/lib/libmvnc_highclass.so 
     $SUDO_PREFIX ln -s $SYS_INSTALL_DIR/lib/mvnc/libmvnc.so.0 $SYS_INSTALL_DIR/lib/libmvnc.so.0
     $SUDO_PREFIX ln -s $SYS_INSTALL_DIR/lib/mvnc/libmvnc.so.0 $SYS_INSTALL_DIR/lib/libmvnc.so
-    $SUDO_PREFIX ln -s $SYS_INSTALL_DIR/lib/mvnc/libmvnc_highclass.so.0 $SYS_INSTALL_DIR/lib/libmvnc_highclass.so
+    if [ -f $SYS_INSTALL_DIR/lib/mvnc/libmvnc_highclass.so.0 ] ; then
+        $SUDO_PREFIX ln -s $SYS_INSTALL_DIR/include/mvnc2/ncHighClass.h $SYS_INSTALL_DIR/include/ncHighClass.h
+        $SUDO_PREFIX ln -s $SYS_INSTALL_DIR/lib/mvnc/libmvnc_highclass.so.0 $SYS_INSTALL_DIR/lib/libmvnc_highclass.so
+    fi
 
     $SUDO_PREFIX ldconfig
 

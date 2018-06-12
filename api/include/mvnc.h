@@ -56,11 +56,15 @@ typedef enum {
 } ncStatus_t;
 
 typedef enum {
-    NC_RW_LOG_LEVEL = 0,    // Log level, int, MVLOG_DEBUG = 0, debug and above (full verbosity)
-                            // MVLOG_INFO = 1, info and above
-                            // MVLOG_WARN = 2, warnings and above
-                            // MVLOG_ERROR = 3, errors and above
-                            // MVLOG_FATAL = 4, fatal only
+    NC_LOG_DEBUG = 0,   // debug and above (full verbosity)
+    NC_LOG_INFO,        // info and above
+    NC_LOG_WARN,        // warning and above
+    NC_LOG_ERROR,       // errors and above
+    NC_LOG_FATAL,       // fatal only
+} ncLogLevel_t;
+
+typedef enum {
+    NC_RW_LOG_LEVEL = 0,    // Log level, int, default NC_LOG_WARN
     NC_RO_API_VERSION = 1,  // retruns API Version. array of unsigned int of size 4
                             //major.minor.hotfix.rc
 } ncGlobalOption_t;
@@ -169,12 +173,17 @@ typedef enum {
     NC_FIFO_FP32 = 1,
 } ncFifoDataType_t;
 
+
 struct ncTensorDescriptor_t {
-    unsigned int n;
-    unsigned int c;
-    unsigned int w;
-    unsigned int h;
-    unsigned int totalSize;
+    unsigned int n;         // batch size, currently only 1 is supported
+    unsigned int c;         // number of channels
+    unsigned int w;         // width
+    unsigned int h;         // height
+    unsigned int totalSize; // Total size of the data in tensor = largest stride* dim size
+    unsigned int cStride;   // Stride in the channels' dimension
+    unsigned int wStride;   // Stride in the horizontal dimension
+    unsigned int hStride;   // Stride in the vertical dimension
+    ncFifoDataType_t dataType;  // data type of the tensor, FP32 or FP16
 };
 
 typedef enum {
@@ -191,12 +200,13 @@ typedef enum {
     NC_RO_FIFO_CAPACITY = 4,        // return number of maximum elements in the buffer
     NC_RO_FIFO_READ_FILL_LEVEL = 5,     // return number of tensors in the read buffer
     NC_RO_FIFO_WRITE_FILL_LEVEL = 6,    // return number of tensors in a write buffer
-    NC_RO_FIFO_TENSOR_DESCRIPTOR = 7,   // return the tensor descriptor of the FIFO
+    NC_RO_FIFO_GRAPH_TENSOR_DESCRIPTOR = 7,   // return the tensor descriptor of the FIFO
+    NC_RO_FIFO_TENSOR_DESCRIPTOR = NC_RO_FIFO_GRAPH_TENSOR_DESCRIPTOR,   // deprecated
     NC_RO_FIFO_STATE = 8,               // return the fifo state, returns CREATED, ALLOCATED,DESTROYED
     NC_RO_FIFO_NAME = 9,                // return fifo name
     NC_RO_FIFO_ELEMENT_DATA_SIZE = 10,  //element data size in bytes, int
+    NC_RW_FIFO_HOST_TENSOR_DESCRIPTOR = 11,  // App's tensor descriptor, defaults to none strided channel minor
 } ncFifoOption_t;
-
 
 // Global
 dllexport ncStatus_t ncGlobalSetOption(int option, const void *data,

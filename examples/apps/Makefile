@@ -6,6 +6,7 @@ endif
 TOPTARGETS := all clean
 
 SUBDIRS := $(wildcard */.)
+SUBDIRS := $(filter-out win/., $(SUBDIRS))
 
 $(TOPTARGETS): $(SUBDIRS)
 $(SUBDIRS):

@@ -7,8 +7,6 @@ NCCOMPILE = mvNCCompile
 NCPROFILE = mvNCProfile
 NCCHECK   = mvNCCheck
 
-.IGNORE: profile check compile
-
 WEIGHTS_FILENAME = inception_v3_2016_08_28.tar.gz
 GET_WEIGHTS = (wget http://download.tensorflow.org/models/${WEIGHTS_FILENAME} && tar zxf ${WEIGHTS_FILENAME} && rm ${WEIGHTS_FILENAME})
 
@@ -48,7 +46,7 @@ compile: weights
 
 .PHONY: check
 check: weights
-	-${NCCHECK} -s 4 ${MODEL_FILENAME} ${INPUT_NODE_FLAG} ${OUTPUT_NODE_FLAG} -i ../../data/images/cat.jpg -id 917 -M 128 -S 2 -cs 0,1,2 -metric top1
+	-${NCCHECK} -s 4 ${MODEL_FILENAME} ${INPUT_NODE_FLAG} ${OUTPUT_NODE_FLAG} -i ../../data/images/cat.jpg -metric top1 -cs 0,1,2
 
 .PHONY: run
 run: compile

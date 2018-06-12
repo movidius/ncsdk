@@ -37,6 +37,7 @@
 #if (defined(_WIN32) || defined(_WIN64) )
 #include "usb_winusb.h"
 #include "gettime.h"
+#include "win_pthread.h"
 extern void initialize_usb_boot();
 #else
 #include <unistd.h>
@@ -45,6 +46,7 @@ extern void initialize_usb_boot();
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <libusb.h>
+#include <pthread.h>
 #endif
 #include "usb_boot.h"
 
@@ -79,7 +81,6 @@ int usbFdRead = -1;
 
 static int statuswaittimeout = 5;
 
-#include <pthread.h>
 #include <assert.h>
 
 pthread_t readerThreadId;

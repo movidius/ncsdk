@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+
+
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Device.AllocateGraph.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Device.CloseDevice.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Device.GetDeviceOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Device.OpenDevice.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Device.SetDeviceOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Device.__init__.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Device.close.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Device.destroy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Device.get_option.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Device.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Device.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Device.open.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Device.set_option.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/DeviceHwVersion.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/DeviceOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/DeviceOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/DeviceState.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/EnumerateDevices.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Fifo.allocate.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Fifo.destroy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Fifo.get_option.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Fifo.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Fifo.read_elem.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Fifo.remove_elem.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Fifo.set_option.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Fifo.write_elem.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/FifoDataType.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/FifoOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/FifoState.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/FifoType.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/GetGlobalOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/GlobalOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/GlobalOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Graph.DeallocateGraph.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Graph.GetGraphOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Graph.GetResult.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Graph.LoadTensor.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Graph.SetGraphOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Graph.allocate.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Graph.allocate_with_fifos.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Graph.destroy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Graph.get_option.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Graph.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Graph.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Graph.queue_inference.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Graph.queue_inference_with_fifo_elem.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Graph.set_option.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/GraphOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/GraphOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/GraphState.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/LogLevel.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/SetGlobalOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/Status.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/Status.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/TOC.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/TensorDescriptor.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/c_api_migration.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/caffe.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/tools/check.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/tools/compile.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/compiler_error.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/configure_network.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/docker.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/docker_proxy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/enumerate_devices.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/examples.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/global_get_option.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/global_set_option.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/install.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncAllocateGraph.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncCloseDevice.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncDeallocateGraph.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncDeviceOptions.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncGetDeviceName.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncGetDeviceOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncGetGlobalOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncGetGraphOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncGetResult.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncGlobalOptions.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncGraphOptions.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncLoadTensor.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncOpenDevice.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncSetDeviceOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncSetGlobalOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncSetGraphOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/mvncStatus.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncDeviceClose.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncDeviceCreate.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncDeviceDestroy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncDeviceGetOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncDeviceHandle_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncDeviceHwVersion_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncDeviceOpen.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncDeviceOption_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncDeviceSetOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncDeviceState_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoAllocate.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoCreate.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoDataType_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoDestroy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoGetOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoHandle_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoOption_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoReadElem.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoRemoveElem.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoSetOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoState_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoType_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncFifoWriteElem.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGlobalGetOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGlobalOption_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGlobalSetOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGraphAllocate.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGraphAllocateWithFifos.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGraphAllocateWithFifosEx.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGraphCreate.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGraphDestroy.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGraphGetOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGraphHandle_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGraphOption_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGraphQueueInference.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGraphQueueInferenceWithFifoElem.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGraphSetOption.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncGraphState_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncLogLevel_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncStatus_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncTensorDescriptor_t.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncs.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/tools/profile.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/python_api_migration.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/readme.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/readme.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/readme.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/c_api/readme.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/readme.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/readme.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/readme.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/release_notes.html</loc>
+  </url>
+  
+  
+  
+  
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/support.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/tensorflow.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/tf_compile_guidance.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/tf_modelzoo.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/tf_slim.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/tools/tools_overview.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/virtualenv.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/vm_config.html</loc>
+  </url>
+  
+  
+</urlset>
