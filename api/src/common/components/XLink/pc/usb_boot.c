@@ -18,7 +18,6 @@
 
 // USB utility for use with Myriad2v2 ROM
 // Very heavily modified from Sabre version of usb_boot
-// Author: David Steinberg <david.steinberg@movidius.com>
 // Copyright(C) 2015 Movidius Ltd.
 
 

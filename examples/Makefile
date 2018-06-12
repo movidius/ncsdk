@@ -6,7 +6,6 @@ endif
 TOPTARGETS := all clean check profile compile run
 
 SUBDIRS := $(wildcard */.)
-SUBDIRS := $(filter-out win/., $(SUBDIRS))
 
 $(TOPTARGETS): $(SUBDIRS)
 $(SUBDIRS):

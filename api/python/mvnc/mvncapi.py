@@ -18,6 +18,7 @@ import sys
 import numpy
 import warnings
 import platform
+import numbers
 from enum import Enum
 from ctypes import *
 
@@ -88,13 +89,15 @@ class Status(Enum):
     INVALID_DATA_LENGTH = -14               # invalid data length has been passed when reading an array/buffer option
     INVALID_HANDLE = -15                    # handle to object that is invalid
 
+class LogLevel(Enum):
+    DEBUG = 0        # debug and above (full verbosity)
+    INFO = 1         # info and above
+    WARN = 2         # warnings and above
+    ERROR = 3        # errors and above
+    FATAL = 4        # fatal only
 
 class GlobalOption(Enum):
-    RW_LOG_LEVEL = 0       # Log level, int, MVLOG_DEBUG = 0, debug and above (full verbosity)
-                           # MVLOG_INFO = 1, info and above
-                           # MVLOG_WARN = 2, warnings and above
-                           # MVLOG_ERROR = 3, errors and above
-                           # MVLOG_FATAL = 4, fatal only
+    RW_LOG_LEVEL = 0       # Log level, int, default is WARN
     RO_API_VERSION = 1     # returns api version. array of unsigned int of size 4
                            # major.minor.hotfix.rc
 
@@ -168,13 +171,16 @@ class FifoDataType(Enum):
     FP16 = 0
     FP32 = 1
 
-
 class TensorDescriptor(Structure):
-    _fields_ = [('n', c_uint),
-                ('c', c_uint),
-                ('w', c_uint),
-                ('h', c_uint),
-                ('totalSize', c_uint)]
+    _fields_ = [('n', c_uint),  # batch size, currently only 1 is supported
+                ('c', c_uint),  # number of channels
+                ('w', c_uint),  # width
+                ('h', c_uint),  # height
+                ('totalSize', c_uint),  # total size of the data in tensor = largest stride* dim size
+                ('cStride', c_uint),    # stride in the channels' dimension
+                ('wStride', c_uint),    # stride in the horizontal dimension
+                ('hStride', c_uint),    # stride in the vertical dimension
+                ('dataType', c_uint)]   # data type of the tensor, FP32 or FP16
 
 
 class FifoOption(Enum):
@@ -185,9 +191,12 @@ class FifoOption(Enum):
     RO_CAPACITY = 4            # return number of maximum elements in the fifo
     RO_READ_FILL_LEVEL = 5     # return number of tensors in the buffer
     RO_WRITE_FILL_LEVEL = 6    # return number of tensors in the buffer
-    RO_TENSOR_DESCRIPTOR = 7   # return the tensor descriptor of the FIFO
+    RO_GRAPH_TENSOR_DESCRIPTOR = 7   # return the tensor descriptor of the FIFO
+    RO_TENSOR_DESCRIPTOR = RO_GRAPH_TENSOR_DESCRIPTOR # deprecated
     RO_STATE = 8               # return the fifo state; CREATED, ALLOCATED, DESTROYED
     RO_NAME = 9                # returns fifo name
+    RO_ELEMENT_DATA_SIZE = 10  # element data size in bytes, int
+    RW_HOST_TENSOR_DESCRIPTOR = 11  # App's tensor descriptor, defaults to none strided channel minor
 
 
 def enumerate_devices():
@@ -210,7 +219,10 @@ def global_set_option(option, value):
     :param option: a GlobalOption enumeration
     :param value: value for the option
     """
-    data = c_int(value)
+    if option == GlobalOption.RW_LOG_LEVEL and (isinstance(value, int) == False):
+        data = c_int(value.value)
+    else:
+        data = c_int(value)
     status = f.ncGlobalSetOption(option.value, pointer(data), sizeof(data))
     if status != Status.OK.value:
         raise Exception(Status(status))
@@ -257,7 +269,7 @@ class Fifo:
         self.handle = c_void_p()
         self.device = None
         pName = name.encode('ascii')
-        
+
         if skip_init == False:
             status = f.ncFifoCreate(pName, fifo_type.value, byref(self.handle))
             if status != Status.OK.value:
@@ -293,10 +305,16 @@ class Fifo:
         """
         if (option == FifoOption.RW_DATA_TYPE or option == FifoOption.RW_TYPE):
             data = c_int(value.value)
-        else:
+        elif (option != FifoOption.RW_HOST_TENSOR_DESCRIPTOR):
             data = c_int(value)
-        status = f.ncFifoSetOption(
-            self.handle, option.value, pointer(data), sizeof(data))
+
+        if (option != FifoOption.RW_HOST_TENSOR_DESCRIPTOR):
+            status = f.ncFifoSetOption(
+                self.handle, option.value, pointer(data), sizeof(data))
+        else:
+            status = f.ncFifoSetOption(
+                self.handle, option.value, byref(value), sizeof(value))
+
         if status != Status.OK.value:
             raise Exception(Status(status))
 
@@ -310,6 +328,7 @@ class Fifo:
                 option == FifoOption.RW_DATA_TYPE or
                 option == FifoOption.RW_DONT_BLOCK or
                 option == FifoOption.RO_CAPACITY or
+                option == FifoOption.RO_ELEMENT_DATA_SIZE or
                 option == FifoOption.RO_READ_FILL_LEVEL or
                 option == FifoOption.RO_WRITE_FILL_LEVEL or
                 option == FifoOption.RO_STATE):
@@ -317,7 +336,9 @@ class Fifo:
             optdata = c_int()
 
             def get_optval(raw_optdata): return raw_optdata.value
-        elif (option == FifoOption.RO_TENSOR_DESCRIPTOR):
+        elif (option == FifoOption.RO_GRAPH_TENSOR_DESCRIPTOR or
+            option == FifoOption.RO_TENSOR_DESCRIPTOR or
+            option == FifoOption.RW_HOST_TENSOR_DESCRIPTOR):
             # TensorDescriptor struct
             optdata = TensorDescriptor()
 
@@ -367,11 +388,11 @@ class Fifo:
         Even if the count is bigger than one, the API can read only once.
         """
 
-        # first read tensor descriptor to allocate buffer for output
-        tensor_desc = TensorDescriptor()
-        optsize = c_uint(sizeof(tensor_desc))
+        # first read element size to allocate buffer for output
+        elementsize = c_int()
+        optsize = c_uint(sizeof(elementsize))
         status = f.ncFifoGetOption(
-            self.handle, FifoOption.RO_TENSOR_DESCRIPTOR.value, byref(tensor_desc), byref(optsize))
+            self.handle, FifoOption.RO_ELEMENT_DATA_SIZE.value, byref(elementsize), byref(optsize))
         if status != Status.OK.value:
             raise Exception(Status(status))
 
@@ -383,19 +404,10 @@ class Fifo:
         if status != Status.OK.value:
             raise Exception(Status(status))
         datatype = optdata.value
-
-        if (datatype == FifoDataType.FP32.value):
-            sizeof_td_dt = tensor_desc.totalSize / \
-                (tensor_desc.n * tensor_desc.c * tensor_desc.w * tensor_desc.h)
-            tensorlen = c_uint(
-                int(tensor_desc.totalSize / sizeof_td_dt * numpy.dtype(numpy.float32).itemsize))
-        else:
-            tensorlen = c_uint(tensor_desc.totalSize)
-
-        tensor = create_string_buffer(tensorlen.value)
+        tensor = create_string_buffer(elementsize.value)
         user_obj = c_long()
         status = f.ncFifoReadElem(self.handle, byref(
-            tensor), byref(tensorlen), byref(user_obj))
+            tensor), byref(elementsize), byref(user_obj))
         # if status == Status.NO_DATA.value:
         #    return None, None
         if status != Status.OK.value:
@@ -554,7 +566,7 @@ class Graph:
         self.handle = c_void_p()
         self.device = None
         pName = name.encode('ascii')
-            
+
         """
         Initalize a new graph.
         This function will not send anything to the device,

@@ -1,0 +1,1771 @@
+[
+
+
+{
+"title": "device.allocategraph() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Device.AllocateGraph.html",
+"summary": "",
+"display": "Device.AllocateGraph() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "device.closedevice() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Device.CloseDevice.html",
+"summary": "",
+"display": "Device.CloseDevice() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "device.getdeviceoption() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Device.GetDeviceOption.html",
+"summary": "",
+"display": "Device.GetDeviceOption() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "device.opendevice() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Device.OpenDevice.html",
+"summary": "",
+"display": "Device.OpenDevice() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "device.setdeviceoption() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Device.SetDeviceOption.html",
+"summary": "",
+"display": "Device.SetDeviceOption() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "device.__init__() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Device.__init__.html",
+"summary": "",
+"display": "Device.__init__() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "device.close() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Device.close.html",
+"summary": "",
+"display": "Device.close() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "device.destroy() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Device.destroy.html",
+"summary": "",
+"display": "Device.destroy() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "device.get_option() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Device.get_option.html",
+"summary": "",
+"display": "Device.get_option() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "device class [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Device.html",
+"summary": "",
+"display": "Device class [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "device class [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Device.html",
+"summary": "",
+"display": "Device class [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "device.open() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Device.open.html",
+"summary": "",
+"display": "Device.open() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "device.set_option() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Device.set_option.html",
+"summary": "",
+"display": "Device.set_option() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "enum devicehwversion [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/DeviceHwVersion.html",
+"summary": "",
+"display": "enum DeviceHwVersion [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "deviceoption enum [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/DeviceOption.html",
+"summary": "",
+"display": "DeviceOption enum [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "enum deviceoption [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/DeviceOption.html",
+"summary": "",
+"display": "enum DeviceOption [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "enum devicestate [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/DeviceState.html",
+"summary": "",
+"display": "enum DeviceState [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "enumeratedevices() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/EnumerateDevices.html",
+"summary": "",
+"display": "EnumerateDevices() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "fifo.allocate() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Fifo.allocate.html",
+"summary": "",
+"display": "Fifo.allocate() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "fifo.destroy() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Fifo.destroy.html",
+"summary": "",
+"display": "Fifo.destroy() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "fifo.get_option() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Fifo.get_option.html",
+"summary": "",
+"display": "Fifo.get_option() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "fifo class [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Fifo.html",
+"summary": "",
+"display": "Fifo class [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "fifo.read_elem() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Fifo.read_elem.html",
+"summary": "",
+"display": "Fifo.read_elem() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "fifo.remove_elem() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Fifo.remove_elem.html",
+"summary": "",
+"display": "Fifo.remove_elem() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "fifo.set_option() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Fifo.set_option.html",
+"summary": "",
+"display": "Fifo.set_option() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "fifo.write_elem() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Fifo.write_elem.html",
+"summary": "",
+"display": "Fifo.write_elem() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "fifodatatype enum [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/FifoDataType.html",
+"summary": "",
+"display": "FifoDataType enum [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "fifooption enum [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/FifoOption.html",
+"summary": "",
+"display": "FifoOption enum [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "fifostate enum [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/FifoState.html",
+"summary": "",
+"display": "FifoState enum [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "fifotype enum [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/FifoType.html",
+"summary": "",
+"display": "FifoType enum [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "getglobaloption() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/GetGlobalOption.html",
+"summary": "",
+"display": "GetGlobalOption() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "globaloption enum [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/GlobalOption.html",
+"summary": "",
+"display": "GlobalOption enum [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "globaloption enum [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/GlobalOption.html",
+"summary": "",
+"display": "GlobalOption enum [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "graph.deallocategraph() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Graph.DeallocateGraph.html",
+"summary": "",
+"display": "Graph.DeallocateGraph() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "graph.getgraphoption() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Graph.GetGraphOption.html",
+"summary": "",
+"display": "Graph.GetGraphOption() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "graph.getresult() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Graph.GetResult.html",
+"summary": "",
+"display": "Graph.GetResult() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "graph.loadtensor() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Graph.LoadTensor.html",
+"summary": "",
+"display": "Graph.LoadTensor() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "graph.setgraphoption() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Graph.SetGraphOption.html",
+"summary": "",
+"display": "Graph.SetGraphOption() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "graph.allocate() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Graph.allocate.html",
+"summary": "",
+"display": "Graph.allocate() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "graph.allocate_with_fifos() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Graph.allocate_with_fifos.html",
+"summary": "",
+"display": "Graph.allocate_with_fifos() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "graph.destroy() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Graph.destroy.html",
+"summary": "",
+"display": "Graph.destroy() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "graph.get_option() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Graph.get_option.html",
+"summary": "",
+"display": "Graph.get_option() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "graph class [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Graph.html",
+"summary": "",
+"display": "Graph class [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "graph class [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Graph.html",
+"summary": "",
+"display": "Graph class [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "graph.queue_inference() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Graph.queue_inference.html",
+"summary": "",
+"display": "Graph.queue_inference() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "graph.queue_inference_with_fifo_elem() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Graph.queue_inference_with_fifo_elem.html",
+"summary": "",
+"display": "Graph.queue_inference_with_fifo_elem() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "graph.set_option() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Graph.set_option.html",
+"summary": "",
+"display": "Graph.set_option() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "graphoption enum [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/GraphOption.html",
+"summary": "",
+"display": "GraphOption enum [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "graphoption enum [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/GraphOption.html",
+"summary": "",
+"display": "GraphOption enum [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "graphstate enum [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/GraphState.html",
+"summary": "",
+"display": "GraphState enum [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/LogLevel.html",
+"summary": "",
+"display": ""
+}
+,
+
+
+
+{
+"title": "setglobaloption() [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/SetGlobalOption.html",
+"summary": "",
+"display": "SetGlobalOption() [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "status enum [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/Status.html",
+"summary": "",
+"display": "Status enum [Python NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "status enum [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/Status.html",
+"summary": "",
+"display": "Status enum [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "",
+"tags": "",
+"keywords": "",
+"url": "/TOC.html",
+"summary": "",
+"display": ""
+}
+,
+
+
+
+{
+"title": "tensordescriptor struct [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/TensorDescriptor.html",
+"summary": "",
+"display": "TensorDescriptor struct [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "migrating c/ applications from  v1 to  v2",
+"tags": "",
+"keywords": "c++, ncapi",
+"url": "/ncapi/c_api_migration.html",
+"summary": "",
+"display": "Migrating C/C++ Applications from NCAPI v1 to NCAPI v2"
+}
+,
+
+
+
+{
+"title": "caffe support",
+"tags": "",
+"keywords": "network, framework, model",
+"url": "/caffe.html",
+"summary": "",
+"display": "Caffe Support"
+}
+,
+
+
+
+{
+"title": "mvnccheck",
+"tags": "",
+"keywords": "tool, toolkit",
+"url": "/tools/check.html",
+"summary": "",
+"display": "mvNCCheck"
+}
+,
+
+
+
+{
+"title": "mvnccompile",
+"tags": "",
+"keywords": "tool, toolkit",
+"url": "/tools/compile.html",
+"summary": "",
+"display": "mvNCCompile"
+}
+,
+
+
+
+{
+"title": "mvnccompile error codes",
+"tags": "",
+"keywords": "",
+"url": "/compiler_error.html",
+"summary": "",
+"display": "mvNCCompile Error Codes"
+}
+,
+
+
+
+{
+"title": "configuring your network for the intel® movidius™ neural compute sdk",
+"tags": "",
+"keywords": "framework, model, tensorflow, caffe",
+"url": "/configure_network.html",
+"summary": "",
+"display": "Configuring Your Network for the Intel® Movidius™ Neural Compute SDK"
+}
+,
+
+
+
+{
+"title": "installation and configuration with docker",
+"tags": "",
+"keywords": "",
+"url": "/docker.html",
+"summary": "",
+"display": "Installation and Configuration with Docker"
+}
+,
+
+
+
+{
+"title": "configuring docker for use with a proxy",
+"tags": "",
+"keywords": "",
+"url": "/docker_proxy.html",
+"summary": "",
+"display": "Configuring Docker For Use With a Proxy"
+}
+,
+
+
+
+{
+"title": "enumerate_devices() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/enumerate_devices.html",
+"summary": "",
+"display": "enumerate_devices() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "examples",
+"tags": "",
+"keywords": "apps, applications, ncappzoo, zoo",
+"url": "/examples.html",
+"summary": "",
+"display": "Examples"
+}
+,
+
+
+
+{
+"title": "global_get_option() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/global_get_option.html",
+"summary": "",
+"display": "global_get_option() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "global_set_option() [  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/py_api/global_set_option.html",
+"summary": "",
+"display": "global_set_option() [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "introduction",
+"tags": "",
+"keywords": "",
+"url": "/",
+"summary": "",
+"display": "Introduction"
+}
+,
+
+
+
+{
+"title": "basic installation and configuration",
+"tags": "",
+"keywords": "raspberry, pi",
+"url": "/install.html",
+"summary": "",
+"display": "Basic Installation and Configuration"
+}
+,
+
+
+
+{
+"title": "mvncallocategraph() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncAllocateGraph.html",
+"summary": "",
+"display": "mvncAllocateGraph() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncclosedevice() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncCloseDevice.html",
+"summary": "",
+"display": "mvncCloseDevice() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncdeallocategraph() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncDeallocateGraph.html",
+"summary": "",
+"display": "mvncDeallocateGraph() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncdeviceoptions enum [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncDeviceOptions.html",
+"summary": "",
+"display": "mvncDeviceOptions enum [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncgetdevicename() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncGetDeviceName.html",
+"summary": "",
+"display": "mvncGetDeviceName() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncgetdeviceoption() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncGetDeviceOption.html",
+"summary": "",
+"display": "mvncGetDeviceOption() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncgetglobaloption() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncGetGlobalOption.html",
+"summary": "",
+"display": "mvncGetGlobalOption() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncgetgraphoption() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncGetGraphOption.html",
+"summary": "",
+"display": "mvncGetGraphOption() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncgetresult() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncGetResult.html",
+"summary": "",
+"display": "mvncGetResult() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncglobaloptions enum [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncGlobalOptions.html",
+"summary": "",
+"display": "mvncGlobalOptions enum [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncgraphoptions enum [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncGraphOptions.html",
+"summary": "",
+"display": "mvncGraphOptions enum [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncloadtensor() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncLoadTensor.html",
+"summary": "",
+"display": "mvncLoadTensor() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncopendevice() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncOpenDevice.html",
+"summary": "",
+"display": "mvncOpenDevice() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncsetdeviceoption() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncSetDeviceOption.html",
+"summary": "",
+"display": "mvncSetDeviceOption() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncsetglobaloption() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncSetGlobalOption.html",
+"summary": "",
+"display": "mvncSetGlobalOption() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncsetgraphoption() [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncSetGraphOption.html",
+"summary": "",
+"display": "mvncSetGraphOption() [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "mvncstatus enum [c  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/c_api/mvncStatus.html",
+"summary": "",
+"display": "mvncStatus enum [C NCAPI v1]"
+}
+,
+
+
+
+{
+"title": "ncdeviceclose() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncDeviceClose.html",
+"summary": "",
+"display": "ncDeviceClose() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncdevicecreate() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncDeviceCreate.html",
+"summary": "",
+"display": "ncDeviceCreate() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncdevicedestroy() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncDeviceDestroy.html",
+"summary": "",
+"display": "ncDeviceDestroy() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncdevicegetoption() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncDeviceGetOption.html",
+"summary": "",
+"display": "ncDeviceGetOption() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncdevicehandle_t struct [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncDeviceHandle_t.html",
+"summary": "",
+"display": "ncDeviceHandle_t struct [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncdevicehwversion_t enum [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncDeviceHwVersion_t.html",
+"summary": "",
+"display": "ncDeviceHwVersion_t enum [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncdeviceopen() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncDeviceOpen.html",
+"summary": "",
+"display": "ncDeviceOpen() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncdeviceoption_t enum [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncDeviceOption_t.html",
+"summary": "",
+"display": "ncDeviceOption_t enum [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncdevicesetoption() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncDeviceSetOption.html",
+"summary": "",
+"display": "ncDeviceSetOption() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncdevicestate_t enum [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncDeviceState_t.html",
+"summary": "",
+"display": "ncDeviceState_t enum [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfifoallocate() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoAllocate.html",
+"summary": "",
+"display": "ncFifoAllocate() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfifocreate() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoCreate.html",
+"summary": "",
+"display": "ncFifoCreate() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfifodatatype_t enum [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoDataType_t.html",
+"summary": "",
+"display": "ncFifoDataType_t enum [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfifodestroy() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoDestroy.html",
+"summary": "",
+"display": "ncFifoDestroy() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfifogetoption() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoGetOption.html",
+"summary": "",
+"display": "ncFifoGetOption() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfifohandle_t struct [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoHandle_t.html",
+"summary": "",
+"display": "ncFifoHandle_t struct [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfifooption_t enum [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoOption_t.html",
+"summary": "",
+"display": "ncFifoOption_t enum [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfiforeadelem() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoReadElem.html",
+"summary": "",
+"display": "ncFifoReadElem() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfiforemoveelem() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoRemoveElem.html",
+"summary": "",
+"display": "ncFifoRemoveElem() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfifosetoption() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoSetOption.html",
+"summary": "",
+"display": "ncFifoSetOption() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfifostate_t enum [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoState_t.html",
+"summary": "",
+"display": "ncFifoState_t enum [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfifotype_t enum [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoType_t.html",
+"summary": "",
+"display": "ncFifoType_t enum [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncfifowriteelem() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncFifoWriteElem.html",
+"summary": "",
+"display": "ncFifoWriteElem() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncglobalgetoption() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGlobalGetOption.html",
+"summary": "",
+"display": "ncGlobalGetOption() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncglobaloption_t enum [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGlobalOption_t.html",
+"summary": "",
+"display": "ncGlobalOption_t enum [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncglobalsetoption() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGlobalSetOption.html",
+"summary": "",
+"display": "ncGlobalSetOption() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncgraphallocate() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGraphAllocate.html",
+"summary": "",
+"display": "ncGraphAllocate() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncgraphallocatewithfifos() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGraphAllocateWithFifos.html",
+"summary": "",
+"display": "ncGraphAllocateWithFifos() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncgraphallocatewithfifosex() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGraphAllocateWithFifosEx.html",
+"summary": "",
+"display": "ncGraphAllocateWithFifosEx() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncgraphcreate() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGraphCreate.html",
+"summary": "",
+"display": "ncGraphCreate() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncgraphdestroy() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGraphDestroy.html",
+"summary": "",
+"display": "ncGraphDestroy() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncgraphgetoption() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGraphGetOption.html",
+"summary": "",
+"display": "ncGraphGetOption() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncgraphhandle_t struct [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGraphHandle_t.html",
+"summary": "",
+"display": "ncGraphHandle_t struct [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncgraphoption_t enum [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGraphOption_t.html",
+"summary": "",
+"display": "ncGraphOption_t enum [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncgraphqueueinference() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGraphQueueInference.html",
+"summary": "",
+"display": "ncGraphQueueInference() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncgraphqueueinferencewithfifoelem() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGraphQueueInferenceWithFifoElem.html",
+"summary": "",
+"display": "ncGraphQueueInferenceWithFifoElem() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncgraphsetoption() [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGraphSetOption.html",
+"summary": "",
+"display": "ncGraphSetOption() [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "ncgraphstate_t enum [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncGraphState_t.html",
+"summary": "",
+"display": "ncGraphState_t enum [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncLogLevel_t.html",
+"summary": "",
+"display": ""
+}
+,
+
+
+
+{
+"title": "ncstatus_t enum [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncStatus_t.html",
+"summary": "",
+"display": "ncStatus_t enum [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "nctensordescriptor_t struct [c  v2]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/c_api/ncTensorDescriptor_t.html",
+"summary": "",
+"display": "ncTensorDescriptor_t struct [C NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "intel® movidius™ neural compute stick",
+"tags": "",
+"keywords": "NCS",
+"url": "/ncs.html",
+"summary": "",
+"display": "Intel® Movidius™ Neural Compute Stick"
+}
+,
+
+
+
+{
+"title": "mvncprofile",
+"tags": "",
+"keywords": "tool, toolkit",
+"url": "/tools/profile.html",
+"summary": "",
+"display": "mvNCProfile"
+}
+,
+
+
+
+{
+"title": "migrating  applications from  v1 to  v2",
+"tags": "",
+"keywords": "python, ncapi",
+"url": "/ncapi/python_api_migration.html",
+"summary": "",
+"display": "Migrating Python Applications from NCAPI v1 to NCAPI v2"
+}
+,
+
+
+
+{
+"title": "intel® movidius™ neural compute sdk  api v2",
+"tags": "",
+"keywords": "python, ncapi",
+"url": "/ncapi/ncapi2/py_api/readme.html",
+"summary": "",
+"display": "Intel® Movidius™ Neural Compute SDK Python API v2"
+}
+,
+
+
+
+{
+"title": "neural compute api overview",
+"tags": "",
+"keywords": "ncapi, python, c++",
+"url": "/ncapi/readme.html",
+"summary": "",
+"display": "Neural Compute API Overview"
+}
+,
+
+
+
+{
+"title": "intel® movidius™ neural compute sdk c api v2",
+"tags": "",
+"keywords": "ncapi, c++",
+"url": "/ncapi/ncapi2/c_api/readme.html",
+"summary": "",
+"display": "Intel® Movidius™ Neural Compute SDK C API v2"
+}
+,
+
+
+
+{
+"title": "intel® movidius™ neural compute sdk c api v1",
+"tags": "",
+"keywords": "ncapi, c++",
+"url": "/ncapi/ncapi1/c_api/readme.html",
+"summary": "",
+"display": "Intel® Movidius™ Neural Compute SDK C API v1"
+}
+,
+
+
+
+{
+"title": "",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/readme.html",
+"summary": "",
+"display": ""
+}
+,
+
+
+
+{
+"title": "intel® movidius™ neural compute sdk  api v1",
+"tags": "",
+"keywords": "ncapi, python",
+"url": "/ncapi/ncapi1/py_api/readme.html",
+"summary": "",
+"display": "Intel® Movidius™ Neural Compute SDK Python API v1"
+}
+,
+
+
+
+{
+"title": "",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi2/readme.html",
+"summary": "",
+"display": ""
+}
+,
+
+
+
+{
+"title": "release notes",
+"tags": "",
+"keywords": "",
+"url": "/release_notes.html",
+"summary": "",
+"display": "Release Notes"
+}
+,
+
+
+
+
+
+
+
+{
+"title": "support",
+"tags": "",
+"keywords": "issues, bugs, forum, feedback, troubleshooting",
+"url": "/support.html",
+"summary": "",
+"display": "Support"
+}
+,
+
+
+
+{
+"title": "tensorflow support",
+"tags": "",
+"keywords": "network, framework, model",
+"url": "/tensorflow.html",
+"summary": "",
+"display": "TensorFlow Support"
+}
+,
+
+
+
+{
+"title": "guidance for compiling tensorflow networks",
+"tags": "",
+"keywords": "",
+"url": "/tf_compile_guidance.html",
+"summary": "",
+"display": "Guidance for Compiling TensorFlow Networks"
+}
+,
+
+
+
+{
+"title": "guidance for compiling tensorflow™ model zoo networks",
+"tags": "",
+"keywords": "",
+"url": "/tf_modelzoo.html",
+"summary": "",
+"display": "Guidance for Compiling TensorFlow™ Model Zoo Networks"
+}
+,
+
+
+
+{
+"title": "guidance for compiling tensorflow-slim networks",
+"tags": "",
+"keywords": "",
+"url": "/tf_slim.html",
+"summary": "",
+"display": "Guidance for Compiling TensorFlow-Slim Networks"
+}
+,
+
+
+
+{
+"title": "intel® movidius™ neural compute sdk toolkit",
+"tags": "",
+"keywords": "tool, toolkit",
+"url": "/tools/tools_overview.html",
+"summary": "",
+"display": "Intel® Movidius™ Neural Compute SDK Toolkit"
+}
+,
+
+
+
+{
+"title": "installation and configuration with virtualenv",
+"tags": "",
+"keywords": "python, environment, virtual",
+"url": "/virtualenv.html",
+"summary": "",
+"display": "Installation and Configuration with virtualenv"
+}
+,
+
+
+
+{
+"title": "installation and configuration with a virtual machine",
+"tags": "",
+"keywords": "vm",
+"url": "/vm_config.html",
+"summary": "",
+"display": "Installation and Configuration with a Virtual Machine"
+}
+
+
+
+]
