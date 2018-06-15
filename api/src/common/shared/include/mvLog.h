@@ -95,6 +95,9 @@ typedef enum mvLog_t{
     MVLOG_LAST,
 } mvLog_t;
 
+#ifdef __shave__
+__attribute__((section(".laststage")))
+#endif
 static const char mvLogHeader[MVLOG_LAST][30] =
 {
     MVLOG_DEBUG_COLOR "D:",
@@ -104,10 +107,19 @@ static const char mvLogHeader[MVLOG_LAST][30] =
     MVLOG_FATAL_COLOR "F:"
 };
 
+// #ifdef __shave__
+// __attribute__((section(".laststage")))
+// #endif
 unsigned int __attribute__ ((weak)) MVLOGLEVEL(MVLOG_UNIT_NAME) = MVLOG_INFO;
 
+// #ifdef __shave__
+// __attribute__((section(".laststage")))
+// #endif
 static unsigned int MVLOGLEVEL(default) = MVLOG_INFO;
 
+#ifdef __shave__
+__attribute__((section(".laststage")))
+#endif
 static int __attribute__ ((unused))
 logprintf(enum mvLog_t lvl, const char * func, const int line,
                      const char * format, ...)
@@ -129,9 +141,16 @@ logprintf(enum mvLog_t lvl, const char * func, const int line,
     if(!rtems_interrupt_is_in_progress())
     {
 #endif
+#if defined __sparc__ || defined __PC__
         fprintf(stdout, headerFormat, mvLogHeader[lvl], timestamp, func, line);
         vfprintf(stdout, format, args);
         fprintf(stdout, "%s\n", ANSI_COLOR_RESET);
+#elif defined __shave__
+        printf(headerFormat, mvLogHeader[lvl], timestamp, func, line);
+        printf(format, args);
+        printf("%s\n", ANSI_COLOR_RESET);
+
+#endif
 #ifdef __RTEMS__
     }
     else

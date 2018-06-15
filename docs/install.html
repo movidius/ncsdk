@@ -1,39 +1,502 @@
-<!doctype html>
-<html lang="en-US">
-  <head>
+<!DOCTYPE html>
+<html>
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" raspberry, pi">
+<title>Basic Installation and Configuration | Intel® Movidius™ Neural Compute SDK Documentation</title>
+<link rel="stylesheet" href="css/syntax.css">
 
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <script src="assets/js/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="css/modern-business.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="css/customstyles.css">
+<link rel="stylesheet" href="css/boxshadowproperties.css">
+<!-- most color styles are extracted out to here -->
+<link rel="stylesheet" href="css/theme-blue.css">
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header  class="without-description" >
-        <h1 style="color:#FFFFFF;text-shadow:none"><a href=index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="js/jquery.navgoco.min.js"></script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Anchor.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/2.0.0/anchor.min.js"></script>
+<script src="js/toc.js"></script>
+<script src="js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="images/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Basic Installation and Configuration</title>
+<meta name="generator" content="Jekyll v3.8.1" />
+<meta property="og:title" content="Basic Installation and Configuration" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API." />
+<meta property="og:description" content="Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API." />
+<link rel="canonical" href="https://movidius.github.io/ncsdk/install.html" />
+<meta property="og:url" content="https://movidius.github.io/ncsdk/install.html" />
+<script type="application/ld+json">
+{"description":"Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API.","@type":"WebPage","url":"https://movidius.github.io/ncsdk/install.html","headline":"Basic Installation and Configuration","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#tg-sb-link").click(function() {
+                $("#tg-sb-sidebar").toggle();
+                $("#tg-sb-content").toggleClass('col-md-9');
+                $("#tg-sb-content").toggleClass('col-md-12');
+                $("#tg-sb-icon").toggleClass('fa-toggle-on');
+                $("#tg-sb-icon").toggleClass('fa-toggle-off');
+            });
+        });
+    </script>
+    
+
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="fa fa-home fa-lg navbar-brand" href="index.html">&nbsp;<span class="projectTitle"> Intel® Movidius™ Neural Compute SDK</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- toggle sidebar button 
+                <li><a id="tg-sb-link" href="#"><i id="tg-sb-icon" class="fa fa-toggle-on"></i> Nav</a></li>
+		-->
+                <!-- entries without drop-downs appear here -->
+
+
+
+
+                
+                
+                
+                <li><a href="https://developer.movidius.com/repo" target="_blank">GitHub</a></li>
+                
+                
+                
+                <li><a href="https://developer.movidius.com/blog" target="_blank">Blog</a></li>
+                
+                
+                
+                <li><a href="https://developer.movidius.com/forums" target="_blank">User Forum</a></li>
+                
+                
+                
+                <li><a href="https://developer.movidius.com/examples" target="_blank">NC App Zoo</a></li>
+                
+                
+                
+                <!-- entries with drop-downs appear here -->
+                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
+                
+                
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: 'search.json',
+                                searchResultTemplate: '<li><a href="https://movidius.github.io/ncsdk{url}" title="">{display}</a></li>',
+                    noResultsText: '',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <div id="main">
+    <!-- Content Row -->
+    <div class="row">
         
-        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        
+            <!-- Sidebar Column -->
+            <div class="col-md-3" id="tg-sb-sidebar">
+                
+
+<ul id="mysidebar" class="nav">
+    <li class="sidebarTitle">NCSDK Documentation </li>
+    
+    
+    
+    
+    <li>
+        <a href="#">Overview</a>
         <ul>
-        
-          <li>  <a href=TOC.html><small>Table of Contents</small></a> </li>
-          <li>  <a href=index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
-          <li> <a href=ncapi/readme.html><small>NCAPI Documentation</small></a></li>
-          <li>  <a href="">View On <strong>GitHub</strong></a></li>
-          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+            
+            
+            
+            <li><a href="index.html">Introduction</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="ncs.html">Intel® Movidius™ Neural Compute Stick</a></li>
+            
+            
+            
+            
         </ul>
-      </header>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">Installation</a>
+        <ul>
+            
+            
+            
+            <li class="active"><a href="install.html">Basic Installation</a></li>
+            
+            
+            
+            <li class="subfolders">
+                <a href="#">Other Installation Options</a>
+                <ul>
+                    
+                    
+                    
+                    <li><a href="docker.html">Docker</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="virtualenv.html">virtualenv</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="vm_config.html">Virtual Machine</a></li>
+                    
+                    
+                    
+                </ul>
+            </li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">Frameworks</a>
+        <ul>
+            
+            
+            
+            <li><a href="configure_network.html">Network Configuration</a></li>
+            
+            
+            
+            <li class="subfolders">
+                <a href="#">Caffe</a>
+                <ul>
+                    
+                    
+                    
+                    <li><a href="caffe.html">Overview</a></li>
+                    
+                    
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li class="subfolders">
+                <a href="#">TensorFlow™</a>
+                <ul>
+                    
+                    
+                    
+                    <li><a href="tensorflow.html">Overview</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="tf_compile_guidance.html">Compilation Guidance</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="tf_slim.html">Compiling TensorFlow-Slim Networks</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="tf_modelzoo.html">Compiling Model Zoo Networks</a></li>
+                    
+                    
+                    
+                </ul>
+            </li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">Toolkit</a>
+        <ul>
+            
+            
+            
+            <li><a href="tools/tools_overview.html">Toolkit Overview</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tools/compile.html">mvNCCompile</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tools/check.html">mvNCCheck</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tools/profile.html">mvNCProfile</a></li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">API</a>
+        <ul>
+            
+            
+            
+            <li><a href="ncapi/readme.html">Overview</a></li>
+            
+            
+            
+            <li class="subfolders">
+                <a href="#">NCAPI v2</a>
+                <ul>
+                    
+                    
+                    
+                    <li><a href="ncapi/ncapi2/py_api/readme.html">Python</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="ncapi/ncapi2/c_api/readme.html">C/C++</a></li>
+                    
+                    
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li class="subfolders">
+                <a href="#">NCAPI v1</a>
+                <ul>
+                    
+                    
+                    
+                    <li><a href="ncapi/ncapi1/py_api/readme.html">Python</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="ncapi/ncapi1/c_api/readme.html">C/C++</a></li>
+                    
+                    
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li class="subfolders">
+                <a href="#">NCAPI v1 to NCAPI v2 Conversion</a>
+                <ul>
+                    
+                    
+                    
+                    <li><a href="ncapi/python_api_migration.html">Python</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="ncapi/c_api_migration.html">C/C++</a></li>
+                    
+                    
+                    
+                </ul>
+            </li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    
+    <li class="singlenav">
+    
+    <a href="examples.html">Examples</a>
+    </li>
+    
+    
+    
+    
+    
+    
+    <li class="singlenav">
+    
+    <a href="release_notes.html">Release Notes</a>
+    </li>
+    
+    
+    
+    
+    
+    
+    <li class="singlenav">
+    
+    <a href="support.html">Support</a>
+    </li>
+    
+    
+    
+    
+    <!-- if you aren't using the accordion, uncomment this block:
+       <p class="external">
+           <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+       </p>
+       -->
+</ul>
 
-      <section>
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>
 
-      <h1 id="intel-movidius-neural-compute-sdk-installation-and-configuration">Intel® Movidius™ Neural Compute SDK Installation and Configuration</h1>
+            </div>
+            
+        
 
-<p>This guide will tell you how to install the Intel® Movidius™ Neural Compute SDK (Intel® Movidius™ NCSDK) and build the included examples.</p>
+        <!-- Content Column -->
+        <div class="col-md-9" id="tg-sb-content">
+            <h1 id="basic-installation-and-configuration">Basic Installation and Configuration</h1>
+
+<p>This page provides guidance for installing the Intel® Movidius™ Neural Compute SDK (Intel® Movidius™ NCSDK).</p>
 
 <h2 id="prerequisites">Prerequisites</h2>
 
@@ -61,12 +524,6 @@
   </li>
 </ul>
 
-<h2 id="upgrading-from-ncsdk-1x-to-ncsdk-2x">Upgrading from NCSDK 1.x to NCSDK 2.x</h2>
-
-<p>If you currently have NCSDK 1.x installed and you are installing NCSDK 2.x, the Neural Compute API (NCAPI) will be upgraded from v1 to v2. NCAPI v2 is not backwards-compatible with NCAPI v1 (i.e. programs written with NCAPI v1 will not compile or run with NCAPI v2). However, all of your NCAPI v1 files will be moved to /opt/movidius/ncsdk1.</p>
-
-<p>For more information about NCAPI changes, see the <a href="ncapi/readme.html">Neural Compute API overview</a>.</p>
-
 <h2 id="installation">Installation</h2>
 
 <p>To perform the typical installation of the NCSDK, use the following command on your host machine:</p>
@@ -76,11 +533,12 @@
 
 <p>The <code class="highlighter-rouge">-b ncsdk2</code> option checks out the latest version of NCSDK 2 from the ncsdk2 branch. If you omit this option you will install the NCSDK version on the master branch, which is currently NCSDK 1.x.</p>
 
-<p><strong>Caffe Users:</strong> If you are installing on a host machine that already has Caffe installed and its directory is already in the PYTHONPATH environment variable, you must remove the existing Caffe directory from the PYTHONPATH environment variable prior to installing the NCSDK.  You will need to manually modify the PYTHONPATH to match your development needs such that it points to the Caffe version installed with the NCSDK when using the NCSDK and it points to other Caffe versions when you wish to use those.</p>
+<p><br /></p>
+<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> <b>Warning:</b> <strong>Upgrading from NCSDK 1.x to NCSDK 2.x</strong> If you currently have NCSDK 1.x installed and you are installing NCSDK 2.x, the Neural Compute API (NCAPI) will be upgraded from v1 to v2. NCAPI v2 is not backwards-compatible with NCAPI v1 (i.e. programs written with NCAPI v1 will not compile or run with NCAPI v2). However, all of your NCAPI v1 files will be moved to /opt/movidius/ncsdk1.<br /><br />For more information about NCAPI changes, see the <a href="ncapi/readme.html">Neural Compute API overview</a>.</div>
+<div class="alert alert-warning" role="alert"><i class="fa fa-warning"></i> <b>Important:</b> Caffe Users: If you are installing on a host machine that already has Caffe installed and its directory is already in the PYTHONPATH environment variable, you must remove the existing Caffe directory from the PYTHONPATH environment variable prior to installing the NCSDK.  You will need to manually modify the PYTHONPATH to match your development needs such that it points to the Caffe version installed with the NCSDK when using the NCSDK and it points to other Caffe versions when you wish to use those.</div>
+<div class="alert alert-warning" role="alert"><i class="fa fa-warning"></i> <b>Important:</b> The installation will only set the PYTHONPATH environment variable for the current user.  It will do so by modifying the .bashrc file for that user.  To use the NCSDK as another user on the host machine you will need to manually set the PYTHONPATH for that user.</div>
 
-<p><strong>Note:</strong> The installation will only set the PYTHONPATH environment variable for the current user.  It will do so by modifying the .bashrc file for that user.  To use the NCSDK as another user on the host machine you will need to manually set the PYTHONPATH for that user.</p>
-
-<h3 id="raspberry-pi-installation-notes">Raspberry Pi Installation Notes</h3>
+<h4 id="raspberry-pi-installation">Raspberry Pi Installation</h4>
 
 <p>We recommend a 16GB SD card for a full NCSDK installation.</p>
 
@@ -94,44 +552,32 @@
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo</span> /etc/init.d/dphys-swapfile restart
 </code></pre></div></div>
 
-<p>After you have installed the NCSDK (and optionally OpenCV), you should change the swapfile size back to 100 MB.</p>
+<p>Proceed with installation as shown above. After you have installed the NCSDK (and optionally OpenCV), you should change the swapfile size back to 100 MB.</p>
 
-<h2 id="examples">Examples</h2>
-
-<p>Use the following command in your ncsdk directory to download necessary prerequisites and models and build all examples:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make examples
-</code></pre></div></div>
-
-<p>You must have a neural compute device attached to your system to build the examples.</p>
-
-<h4 id="building-individual-examples">Building Individual Examples</h4>
-<p>Each example comes with its own Makefile that will install only that specific example and any prerequisites that it requires. To build and run an example, run the following command within that example’s directory:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make run
-</code></pre></div></div>
-
-<p>The Makefile for each example also has a ‘help’ target that will display all possible make targets:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make <span class="nb">help</span>
-</code></pre></div></div>
-
-<h1 id="uninstallation">Uninstallation</h1>
+<h2 id="uninstallation">Uninstallation</h2>
 
 <p>To uninstall the NCSDK, type the following command:</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make uninstall
 
 </code></pre></div></div>
 
-
-      </section>
+        </div>
+    <!-- /.row -->
+</div>
+<!-- /.container -->
+</div>
+<!-- /#main -->
     </div>
-    <footer>
-    
-      
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
 
-    
-  </body>
+</body>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2018 Intel Corporation <br />
+                    * Other names and brands may be claimed as the property of others.
+                </div>
+            </div>
+</footer>
+
 </html>

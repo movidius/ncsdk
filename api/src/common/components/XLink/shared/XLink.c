@@ -30,11 +30,13 @@
 
 #include <assert.h>
 #include <stdlib.h>
-
+#if (defined(_WIN32) || defined(_WIN64))
+#include "win_pthread.h"
+#include "win_semaphore.h"
+#include "gettime.h"
+#else
 #include <pthread.h>
 #include <semaphore.h>
-#if (defined(_WIN32) || defined(_WIN64))
-#include "gettime.h"
 #endif
 #include "mvMacros.h"
 #include "UsbLinkPlatform.h"
@@ -476,7 +478,7 @@ int dispatcherLocalEventGetResponse(xLinkEvent_t* event, xLinkEvent_t* response)
         event->header.flags.bitField.nack = 0;
         event->header.flags.bitField.localServe = 0;
 
-        if(!isStreamSpaceEnoughFor(stream, ALIGN_UP(event->header.size, __CACHE_LINE_SIZE))){
+        if(!isStreamSpaceEnoughFor(stream, event->header.size)){
             mvLog(MVLOG_DEBUG,"local NACK RTS. stream is full\n");
             event->header.flags.bitField.block = 1;
             event->header.flags.bitField.localServe = 1;

@@ -6,6 +6,7 @@ OBJDIR := obj-$(ARCH)
 INSTALLDIR := ${DESTDIR}/usr/local
 PYTHON3DIST := $(shell python3 -c "import site; print(site.getsitepackages()[0])")
 PYTHON2DIST := $(shell python -c "import site; print(site.getsitepackages()[0])")
+LINK_HIGHCLASS ?= no
 VERSION_NUMBER=`cat ./version.txt`
 SRCS := \
 	mvnc_api.c \
@@ -32,7 +33,14 @@ CFLAGS+=$(XLINK_CFLAGS) -D__PC__ -DUSE_USB_VSC -DVERSION_NAME="\"$(VERSION_NUMBE
 #CFLAGS+=-DXLINK_NO_BOOT
 CFLAGS+=-DDEVICE_SHELL_ENABLED
 
-LIBS += -lpthread -lusb-1.0 -ldl -lmvnc_highclass -L$(INSTALLDIR)/lib/
+LIBS += -lpthread -lusb-1.0 -ldl
+
+#Allow compiling without highclass
+ifeq ($(LINK_HIGHCLASS),no)
+CFLAGS+= -DEXCLUDE_HIGHCLASS
+else
+LIBS+= -lmvnc_highclass -L$(INSTALLDIR)/lib/
+endif
 INCLUDES := \
 	-I. \
 	-I../include \
@@ -89,7 +97,7 @@ uninstall:
 	rm -f $(INSTALLDIR)/lib/libmvnc.so
 	rm -f $(INSTALLDIR)/include/mvnc.h
 	rm -f $(INSTALLDIR)/include/mvnc2/mvnc.h
-	rm -f $(INSTALLDIR)/lib/mvnc/MvNCAPI.mvcmd
+	rm -f $(INSTALLDIR)/lib/mvnc/MvNCAPI-*.mvcmd
 #	rm -rf $(INSTALLDIR)/lib/mvnc
 	rm -rf ${DESTDIR}$(PYTHON3DIST)/mvnc
 	rm -rf ${DESTDIR}$(PYTHON2DIST)/mvnc

@@ -41,6 +41,7 @@
 
 #define MVLOG_UNIT_NAME ncAPI
 #include "mvLog.h"
+#include "mvMacros.h"
 
 #define BLOB_STREAM_SIZE 4096
 #define NC_MAX_OPTIMISATIONS       40
@@ -59,6 +60,8 @@
 #define DEVICE_CLASS0_BASE  2000
 #define OPTION_CLASS_SIZE   100
 
+#define FP16_DATA_SIZE 2
+
 static int initialized = 0;
 static int loglevel_initialized = 0;
 static unsigned int api_version[4] = { 0 };
@@ -66,7 +69,7 @@ static unsigned int api_version[4] = { 0 };
 static pthread_mutex_t globalMutex = PTHREAD_MUTEX_INITIALIZER;
 static XLinkGlobalHandler_t ghandler;
 
-
+#ifndef EXCLUDE_HIGHCLASS
 extern ncStatus_t setDeviceOptionClass2(struct _devicePrivate_t *d,
                                         int option, const void *data,
                                         unsigned int dataLength);
@@ -98,7 +101,7 @@ extern ncStatus_t setGraphOptionClass2(struct _graphPrivate_t *g,
 extern ncStatus_t setGraphOptionClass3(struct _graphPrivate_t *g,
                                        int option, const void *data,
                                        unsigned int dataLength);
-
+#endif
 
 static double timeInSeconds()
 {
@@ -122,6 +125,87 @@ static char *getProductName(const char *name)
 static ncOptionClass_t getOptionClass(int option, int base)
 {
     return (int) ((option - base) / OPTION_CLASS_SIZE);
+}
+
+#if (defined(_WIN32) || defined(_WIN64) )
+#define MAX_2(a,b)		((a) > (b) ? (a) : (b))
+#define MAX_3(a,b,c)	((a) > (b) ? MAX_2((a), (c)) : MAX_2((b), (c)))
+#ifdef MAX
+#undef MAX
+#define MAX MAX_2
+#endif
+#else
+#define MAX_3(a,b,c)                            \
+    ({ __typeof__ (a) _a = (a);                 \
+        __typeof__ (b) _b = (b);                \
+        __typeof__ (c) _c = (c);                \
+        (_a > _b && _a > _c) ? _a : ((_b > _c && _b > _a) ? _b : _c); })
+#endif
+
+static ncFifoLayout_t getLayout(struct ncTensorDescriptor_t* td) {
+    unsigned int max = MAX_3(td->hStride, td->wStride, td->cStride);
+    if (max == td->hStride) {
+        if (MAX(td->wStride, td->cStride) == td->wStride)
+            return NC_FIFO_HWC;
+        else
+            return NC_FIFO_HCW;
+    } else if (max == td->cStride) {
+        if (MAX(td->wStride, td->hStride) == td->hStride)
+            return NC_FIFO_CHW;
+        else
+            return NC_FIFO_CWH;
+    } else { //W is major
+        if (MAX(td->hStride, td->cStride) == td->hStride)
+            return NC_FIFO_WHC;
+        else
+            return NC_FIFO_WCH;
+    }
+}
+
+static void convertDataTypeAndLayout(const unsigned char* src, unsigned char* dst,
+                          const struct ncTensorDescriptor_t* srcTd,
+                          const struct ncTensorDescriptor_t* dstTd,
+                          ncFifoDataType_t srcType,
+                          ncFifoDataType_t dstType) {
+    mvLog(MVLOG_DEBUG, "src data type %d dst data type %d\n", srcType, dstType);
+    mvLog(MVLOG_DEBUG, "SRC: w %d h %d c %d w_s %d h_s %d c_s %d\n", srcTd->w,
+        srcTd->h, srcTd->c, srcTd->wStride, srcTd->hStride, srcTd->cStride);
+    mvLog(MVLOG_DEBUG, "DST: w %d h %d c %d w_s %d h_s %d c_s %d\n", dstTd->w,
+        dstTd->h, dstTd->c, dstTd->wStride, dstTd->hStride, dstTd->cStride);
+    int dataTypeSize =  dstType == NC_FIFO_FP16 ? FP16_DATA_SIZE : sizeof(float);
+    for (int row = 0; row < srcTd->h; row++) { //row
+        for (int col = 0; col < srcTd->w; col++) {
+            for (int c = 0; c < srcTd->c; c++) {
+                if (srcType == dstType) {
+                    memcpy(&dst[dstTd->wStride*col + row * dstTd->hStride + c * dstTd->cStride],
+                        &src[srcTd->wStride*col + row * srcTd->hStride + c * srcTd->cStride], dataTypeSize);
+                } else if (srcType == NC_FIFO_FP16) {
+                    //converting to FP32
+                    unsigned short input = *((unsigned short*) &src[srcTd->wStride*col + row * srcTd->hStride + c * srcTd->cStride]);
+                    unsigned *_dst = (unsigned *) &dst[dstTd->wStride*col + row * dstTd->hStride + c * dstTd->cStride];
+                    *_dst = half2float(input);
+                } else {
+                    //converting to FP16
+                    unsigned int input = * ((unsigned *)&src[srcTd->wStride*col + row * srcTd->hStride + c * srcTd->cStride]);
+                    unsigned short *_dst = (unsigned short*) &dst[dstTd->wStride*col + row * dstTd->hStride + c * dstTd->cStride];
+                    *_dst = float2half(input);
+                }
+            }
+        }
+    }
+}
+
+void printImg(unsigned char* inputTensor, struct ncTensorDescriptor_t* inputDesc) {
+    for (int c = 0; c < inputDesc->c; c++) {
+        for (int row = 0; row < inputDesc->h; row++) { //row
+            for (int col = 0; col < inputDesc->w; col++) {
+                printf("%x ", inputTensor[col + row * inputDesc->hStride +
+                        c * inputDesc->cStride]);
+            }
+            printf(" ===== ROW %d (channel %d) Done === \n", row, c);
+        }
+        printf("\n");
+    }
 }
 
 static void resetAll()
@@ -152,7 +236,9 @@ static void resetAll()
             if (XLinkConnect(handler) != X_LINK_SUCCESS) {
                 mvLog(MVLOG_ERROR, "Failed to connect to stalled device\n");
             }
-            stalled_count++;
+            else {
+                stalled_count++;
+            }
             free(handler);
 
         } else {
@@ -813,6 +899,21 @@ ncStatus_t checkGraphMonitorResponse(streamId_t graphMonStream)
     return NC_OK;
 }
 
+static void copyTensorDescriptorDetails(const struct tensorDescriptor_t* src,
+    struct ncTensorDescriptor_t* dest) {
+    if (!dest || !src)
+        return;
+    dest->n = src->n;
+    dest->w = src->w;
+    dest->h = src->h;
+    dest->c = src->c;
+    dest->totalSize = src->totalSize;
+    dest->cStride = src->channelsStride;
+    dest->wStride = src->widthStride;
+    dest->hStride = src->heightStride;
+    dest->dataType = NC_FIFO_FP16; //graph data type is FP16
+}
+
 ncStatus_t ncGraphAllocate(struct ncDeviceHandle_t * deviceHandle,
                            struct ncGraphHandle_t * graphHandle,
                            const void *graphBuffer,
@@ -947,12 +1048,29 @@ ncStatus_t ncGraphAllocate(struct ncDeviceHandle_t * deviceHandle,
         if (rc == NC_OK) {
             g->input_count =
                 tensorDescIn->length / sizeof(struct tensorDescriptor_t);
-            memcpy(&g->input_tensor_desc, tensorDescIn->data,
-                   sizeof(struct tensorDescriptor_t));
+            struct tensorDescriptor_t* inDesc = (struct tensorDescriptor_t* )tensorDescIn->data;
+            copyTensorDescriptorDetails(inDesc, &g->input_tensor_desc);
+            mvLog(MVLOG_DEBUG,
+                  "Input tensor w %d h %d c %d n %d totalSize %d wstide %d hstride %d cstride %d layout %d\n",
+                   g->input_tensor_desc.w, g->input_tensor_desc.h,
+                   g->input_tensor_desc.c,
+                   g->input_tensor_desc.n, g->input_tensor_desc.totalSize,
+                   inDesc->widthStride, inDesc->heightStride,
+                   inDesc->channelsStride, getLayout(&g->input_tensor_desc));
             g->output_count =
                 tensorDescOut->length / sizeof(struct tensorDescriptor_t);
-            memcpy(&g->output_tensor_desc, tensorDescOut->data,
-                   sizeof(struct tensorDescriptor_t));
+
+            struct tensorDescriptor_t* outDesc = (struct tensorDescriptor_t* )tensorDescOut->data;
+            copyTensorDescriptorDetails(outDesc, &g->output_tensor_desc);
+
+            mvLog(MVLOG_DEBUG,
+                  "output tensor w %d h %d c %d n %d totalSize %d wstide %d hstride %d cstride %d layout %d\n",
+                  g->output_tensor_desc.w, g->output_tensor_desc.h,
+                  g->output_tensor_desc.c, g->output_tensor_desc.n,
+                  g->output_tensor_desc.totalSize,
+                  outDesc->widthStride, outDesc->heightStride,
+                  outDesc->channelsStride, getLayout(&g->output_tensor_desc));
+
             g->nstages = *(uint32_t *) nstages->data;
             memcpy(&g->blob_version, blob_version->data,
                    sizeof(g->blob_version));
@@ -1165,12 +1283,14 @@ ncStatus_t ncGraphSetOption(struct ncGraphHandle_t * graphHandle,
     case NC_OPTION_CLASS1:
         rc = setGraphOptionClass1(g, option, data, dataLength);
         break;
+#ifndef EXCLUDE_HIGHCLASS
     case NC_OPTION_CLASS2:
         rc = setGraphOptionClass2(g, option, data, dataLength);
         break;
     case NC_OPTION_CLASS3:
         rc = setGraphOptionClass3(g, option, data, dataLength);
         break;
+#endif
     default:
         mvLog(MVLOG_ERROR, "There is no such option class");
         rc = NC_INVALID_PARAMETERS;
@@ -1460,12 +1580,14 @@ ncStatus_t ncGraphGetOption(struct ncGraphHandle_t * graphHandle,
     case NC_OPTION_CLASS1:
         rc = getGraphOptionClass1(g, option, data, dataLength);
         break;
+#ifndef EXCLUDE_HIGHCLASS
     case NC_OPTION_CLASS2:
         rc = getGraphOptionClass2(g, option, data, dataLength);
         break;
     case NC_OPTION_CLASS3:
         rc = getGraphOptionClass3(g, option, data, dataLength);
         break;
+#endif
     default:
         mvLog(MVLOG_ERROR, "There is no such option class");
         rc = NC_INVALID_PARAMETERS;
@@ -1886,12 +2008,14 @@ ncStatus_t ncDeviceSetOption(struct ncDeviceHandle_t * deviceHandle,
         rc = NC_UNAUTHORIZED;   // option class 0 consists of read-only value
         break;
         //no class1 - no write options for device
+#ifndef EXCLUDE_HIGHCLASS
     case NC_OPTION_CLASS2:
         rc = setDeviceOptionClass2(d, option, data, dataLength);
         break;
     case NC_OPTION_CLASS3:
         rc = setDeviceOptionClass3(d, option, data, dataLength);
         break;
+#endif
     default:
         rc = NC_INVALID_PARAMETERS;
         break;
@@ -1965,12 +2089,14 @@ ncStatus_t ncDeviceGetOption(struct ncDeviceHandle_t * deviceHandle,
         rc = getDeviceOptionClass0(d, option, data, dataLength);
         break;
         //no class1 - no write options for device
+#ifndef EXCLUDE_HIGHCLASS
     case NC_OPTION_CLASS2:
         rc = getDeviceOptionClass2(d, option, data, dataLength);
         break;
     case NC_OPTION_CLASS3:
         rc = getDeviceOptionClass3(d, option, data, dataLength);
         break;
+#endif
     default:
         rc = NC_INVALID_PARAMETERS;
         break;
@@ -2031,6 +2157,7 @@ ncStatus_t ncFifoCreate(const char *name, ncFifoType_t type,
 
     handle->type = type;
     handle->consumer_cnt = 1;   //default consumers
+
     handle->state = NC_FIFO_CREATED;
     pthread_mutex_init(&handle->fifo_mutex, NULL);
     handle->consumed_by_graph = 0;
@@ -2038,10 +2165,11 @@ ncStatus_t ncFifoCreate(const char *name, ncFifoType_t type,
     handle->user_param_in = NULL;
     handle->user_param_out = NULL;
     handle->api_read_element = 0;
-    handle->api_read_adjust = 0;
     handle->id = fifoIdCounter++;
-    handle->datatype = NC_FIFO_FP32;
     handle->num_elements = 0;
+    handle->host_tensor_desc_set = 0;
+    memset(&handle->host_tensor_desc, 0, sizeof(struct ncTensorDescriptor_t));
+    handle->host_tensor_desc.dataType = NC_FIFO_FP32; //default app data type is FP32
     strncpy(handle->name, name, NC_MAX_NAME_SIZE);
 
     return NC_OK;
@@ -2107,6 +2235,84 @@ int popUserParam(struct _fifoPrivate_t *fH, void **user_param, int isIn)
     return NC_OK;
 }
 
+void getStrides(ncFifoLayout_t layout, struct ncTensorDescriptor_t* desc,
+    ncFifoDataType_t dataType) {
+    int baseStride = dataType == NC_FIFO_FP16 ? FP16_DATA_SIZE : sizeof(float);
+    switch (layout) {
+        case NC_FIFO_HWC:
+            desc->cStride = baseStride;
+            desc->wStride = desc->cStride * desc->c;
+            desc->hStride = desc->wStride * desc->w;
+            break;
+        case NC_FIFO_CHW:
+            desc->wStride = baseStride;
+            desc->hStride = desc->wStride * desc->w;
+            desc->cStride = desc->hStride * desc->h;
+            break;
+        case NC_FIFO_HCW:
+            desc->wStride = baseStride;
+            desc->cStride = desc->wStride * desc->w;
+            desc->hStride = desc->cStride * desc->c;
+            break;
+        case NC_FIFO_CWH:
+            desc->hStride = baseStride;
+            desc->wStride = desc->hStride * desc->h;
+            desc->cStride = desc->wStride * desc->w;
+            break;
+        case NC_FIFO_WCH:
+            desc->hStride = baseStride;
+            desc->cStride = desc->hStride * desc->h;
+            desc->wStride = desc->cStride * desc->c;
+            break;
+        case NC_FIFO_WHC:
+            desc->cStride = baseStride;
+            desc->hStride = desc->cStride * desc->c;
+            desc->wStride = desc->hStride * desc->h;
+            break;
+        default:
+            break;
+    }
+}
+
+static unsigned int getTotalSize(struct ncTensorDescriptor_t* desc) {
+    unsigned int maxStride;
+    unsigned int maxDim;
+
+    if (desc->wStride == desc->hStride &&
+        desc->wStride == desc->cStride) {
+        maxDim = MAX(desc->w, desc->h);
+        maxDim = MAX(maxDim, desc->c);
+        maxStride = desc->wStride;
+    } else if (desc->wStride >= desc->hStride &&
+               desc->wStride >= desc->cStride) {
+        maxStride = desc->wStride;
+        maxDim = desc->w;
+        if (desc->wStride == desc->hStride)
+            maxDim = MAX(desc->w, desc->h);
+        else if (desc->wStride == desc->cStride)
+            maxDim = MAX(desc->w, desc->c);
+    } else if (desc->hStride >= desc->wStride &&
+               desc->hStride >= desc->cStride) {
+        maxStride = desc->hStride;
+        maxDim = desc->h;
+        if (desc->hStride == desc->wStride)
+            maxDim = MAX(desc->h, desc->w);
+        else if (desc->hStride == desc->cStride)
+            maxDim = MAX(desc->h, desc->c);
+    } else {
+        maxStride = desc->cStride;
+        maxDim = desc->c;
+        if (desc->cStride == desc->wStride)
+            maxDim = MAX(desc->c, desc->w);
+        else if (desc->cStride == desc->hStride)
+            maxDim = MAX(desc->c, desc->h);
+    }
+    return desc->n * maxStride * maxDim;
+}
+static unsigned int getElementSize(struct _fifoPrivate_t * handle) {
+    return handle->host_tensor_desc.totalSize;
+}
+
 ncStatus_t ncFifoAllocate(struct ncFifoHandle_t * fifoHandle,
                           struct ncDeviceHandle_t * device,
                           struct ncTensorDescriptor_t * tensor_desc,
@@ -2150,26 +2356,35 @@ ncStatus_t ncFifoAllocate(struct ncFifoHandle_t * fifoHandle,
     }
     pthread_mutex_unlock(&globalMutex);
 
-    handle->tensor_desc = *tensor_desc;
-    int sizeof_td_dt =
-        tensor_desc->totalSize / (tensor_desc->n * tensor_desc->c *
-                                  tensor_desc->w * tensor_desc->h);
-    if (sizeof_td_dt == 0) {
-        pthread_mutex_unlock(&globalMutex);
-        mvLog(MVLOG_ERROR,
-              "fifo descriptor has invalid shape, data type size seem to be zero (totalSize/shape produces zero)!\n");
-        return NC_INVALID_PARAMETERS;
+    handle->graph_tensor_desc = *tensor_desc;
+    if (!handle->host_tensor_desc_set) {
+        ncFifoDataType_t saved_data_type = handle->host_tensor_desc.dataType;
+        handle->host_tensor_desc = handle->graph_tensor_desc;
+        handle->host_tensor_desc.dataType = saved_data_type;
+        getStrides(NC_FIFO_HWC, &handle->host_tensor_desc, handle->host_tensor_desc.dataType);
+        handle->host_tensor_desc.totalSize = getTotalSize(&handle->host_tensor_desc);
+        handle->host_tensor_desc_set = 1;
+    } else {
+        // it has been set, let's check that shape is good
+        // when we add scaling of input, this constraint can be removed
+        if (handle->host_tensor_desc.w != handle->graph_tensor_desc.w ||
+            handle->host_tensor_desc.h != handle->graph_tensor_desc.h ||
+            handle->host_tensor_desc.c != handle->graph_tensor_desc.c ||
+            handle->host_tensor_desc.n != handle->graph_tensor_desc.n)
+        {
+            mvLog(MVLOG_ERROR, "Host tensor descriptor shape doesn't match graph tensor descriptor shape!\n");
+            return NC_INVALID_PARAMETERS;
+        }
     }
+    handle->graphLayout = getLayout(tensor_desc);
     handle->user_param_in = NULL;
     handle->user_param_out = NULL;
     handle->num_elements = numElem;
     handle->consumers_remaining = handle->consumer_cnt; //default consumers
     handle->dev = d;
     handle->next = NULL;
-    if (handle->datatype == NC_FIFO_FP32)
-        handle->datasize = (tensor_desc->totalSize / sizeof_td_dt) * sizeof(float);
-    else
-        handle->datasize = tensor_desc->totalSize;
+
+    handle->datasize = getElementSize(handle);
 
     if (d->fifos)
         handle->next = d->fifos;
@@ -2309,6 +2524,7 @@ ncStatus_t ncFifoDestroy(struct ncFifoHandle_t ** fifoHandle)
 
 }
 
+
 ncStatus_t ncFifoWriteElem(struct ncFifoHandle_t * fifoHandle,
                            const void *inputTensor,
                            unsigned int * inputTensorLength,
@@ -2348,44 +2564,41 @@ ncStatus_t ncFifoWriteElem(struct ncFifoHandle_t * fifoHandle,
         mvLog(MVLOG_ERROR, "No write access to fifo");
         return NC_UNAUTHORIZED;
     }
-    struct ncTensorDescriptor_t * inputDesc = &handle->tensor_desc;
-
-    int rc;
-    // Convert fp32 to fp16
-    if (handle->datatype == NC_FIFO_FP32) {
-        int sizeof_td_dt =
-            inputDesc->totalSize / (inputDesc->n * inputDesc->c * inputDesc->w *
-                                    inputDesc->h);
-        if (sizeof_td_dt != 2) {
-            mvLog(MVLOG_WARN,
-                  "Converting to FP16 while data type size based on descriptor is not FP16!");
-            mvLog(MVLOG_WARN,
-                  "Ignoring desc shape and using data type size of FP16\n");
-            sizeof_td_dt = 2;
-        }
-        int expectedTensorLength = (inputDesc->totalSize / sizeof_td_dt) * sizeof(float);
-        if (*inputTensorLength != expectedTensorLength) {
+    if (*inputTensorLength != handle->datasize) {
             mvLog(MVLOG_ERROR,
                   "input tensor length (%d) doesnt match expected value (%d)",
-                  *inputTensorLength, expectedTensorLength);
-            *inputTensorLength = expectedTensorLength;
+                  *inputTensorLength, handle->datasize);
+            *inputTensorLength = handle->datasize;
             return NC_INVALID_DATA_LENGTH;
+    }
+    struct ncTensorDescriptor_t * inputDesc = &handle->graph_tensor_desc;
+
+    int rc;
+    // Convert fp32 to fp16 and/or input layout
+    ncFifoLayout_t layout = getLayout(inputDesc);
+    ncFifoLayout_t host_layout = getLayout(&handle->host_tensor_desc);
+    if (handle->host_tensor_desc.dataType == NC_FIFO_FP32 || layout != host_layout) {
+        unsigned char *inputTensorConverted = malloc(inputDesc->totalSize);
+        struct ncTensorDescriptor_t hostDesc = handle->host_tensor_desc;
+        //getStrides(handle->hostLayout, &srcDesc, handle->datatype);
+
+        if (layout != host_layout) {
+            mvLog(MVLOG_DEBUG,
+                  "Conversion from host layout %d to graph layout %d, is needed\n",
+                  host_layout, layout);
+        } else {
+            mvLog(MVLOG_DEBUG,
+                  "No layout conversion  is needed %d\n",
+                  layout);
         }
 
-        unsigned char *inputTensorFP16 = malloc(inputDesc->totalSize);
-
-        unsigned int cnt = inputDesc->totalSize / sizeof_td_dt;
-        floattofp16(inputTensorFP16, (float *) inputTensor, cnt);
-        rc = XLinkWriteData(handle->streamId, inputTensorFP16,
+        convertDataTypeAndLayout((unsigned char*) inputTensor, inputTensorConverted,
+                          &hostDesc,
+                          inputDesc, handle->host_tensor_desc.dataType, NC_FIFO_FP16);
+        rc = XLinkWriteData(handle->streamId, inputTensorConverted,
                             inputDesc->totalSize);
-        free(inputTensorFP16);
+        free(inputTensorConverted);
     } else {
-        if (*inputTensorLength != inputDesc->totalSize) {
-            mvLog(MVLOG_ERROR,
-                  "input tensor length doesnt match expected value");
-            *inputTensorLength = inputDesc->totalSize;
-            return NC_INVALID_DATA_LENGTH;
-        }
         rc = XLinkWriteData(handle->streamId, inputTensor, *inputTensorLength);
     }
     if (rc != 0)
@@ -2452,27 +2665,41 @@ ncStatus_t ncFifoReadElem(struct ncFifoHandle_t * fifoHandle, void *outputData,
         mvLog(MVLOG_ERROR, "API already read this element");
         return NC_UNAUTHORIZED;
     }
-
     streamPacketDesc_t *packet;
     if (!XLinkReadData(handle->streamId, &packet)) {
-        // Convert fp16 to fp32
-        if (handle->datatype == NC_FIFO_FP32) {
-            int sizeof_td_dt = handle->tensor_desc.totalSize /
-                (handle->tensor_desc.n * handle->tensor_desc.c *
-                 handle->tensor_desc.w * handle->tensor_desc.h);
-            int cnt = packet->length / sizeof_td_dt;
-            fp16tofloat(outputData, (unsigned char *) packet->data, cnt);
+        // Convert fp16 to fp32 and/or layout
+        struct ncTensorDescriptor_t * fifoDesc = &handle->graph_tensor_desc;
+        ncFifoLayout_t layout = getLayout(fifoDesc);
+        ncFifoLayout_t host_layout = getLayout(&handle->host_tensor_desc);
+        //printf("packet->length %d handle->datasize %d \n" , packet->length, handle->datasize);
+
+        if (handle->host_tensor_desc.dataType == NC_FIFO_FP32 ||
+            layout != host_layout) {
+            struct ncTensorDescriptor_t hostDesc = handle->host_tensor_desc;
+            //getStrides(handle->hostLayout, &dstDesc, handle->host_tensor_desc.dataType);
+            if (layout != host_layout) {
+                mvLog(MVLOG_DEBUG,
+                      "Conversion from graph layout %d to host layout %d, is needed\n",
+                       layout, host_layout);
+            } else {
+                mvLog(MVLOG_DEBUG,
+                      "No layout conversion  is needed %d\n", layout);
+            }
+
+            convertDataTypeAndLayout((unsigned char*) packet->data, outputData,
+                           fifoDesc, &hostDesc, NC_FIFO_FP16,
+                           handle->host_tensor_desc.dataType );
         } else {
             memcpy(outputData, packet->data, packet->length);
         }
         XLinkReleaseData(handle->streamId);
     }
+
     //As user should see an API read to be the same as Graph read, we need to wirte the element in 2 queues.
     //if we read it here, we will need to remove the element on the device side
     //to avoid sending a message just for this purpose, we can send it at the next trigger which touches this FIFO.
     pthread_mutex_lock(&handle->fifo_mutex);
     handle->api_read_element = 1;
-    handle->api_read_adjust++;
 
     handle->consumers_remaining--;
     if (handle->consumers_remaining == 0) {
@@ -2509,7 +2736,7 @@ ncStatus_t ncFifoSetOption(struct ncFifoHandle_t * fifoHandle, int option,
         return NC_INVALID_HANDLE;
     }
     struct _fifoPrivate_t *f = (struct _fifoPrivate_t *) fifoHandle->private_data;
-    if (f->state != NC_FIFO_CREATED) {
+    if (f->state != NC_FIFO_CREATED && option != NC_RW_FIFO_HOST_TENSOR_DESCRIPTOR) {
         mvLog(MVLOG_ERROR, "cannot set Fifo options after allocation");
         return NC_UNAUTHORIZED;
     }
@@ -2523,7 +2750,14 @@ ncStatus_t ncFifoSetOption(struct ncFifoHandle_t * fifoHandle, int option,
                       dataLength, size);
                 return NC_INVALID_DATA_LENGTH;
             }
-            f->type = *(ncFifoType_t *) data;
+            int tempType = *(ncFifoType_t *) data;
+            if (tempType != NC_FIFO_HOST_WO && tempType != NC_FIFO_HOST_RO) {
+                 mvLog(MVLOG_ERROR,
+                      "Type value set (%d) is invalid!\n",
+                      tempType);
+                return NC_INVALID_PARAMETERS;
+            }
+            f->type = tempType;
             break;
         }
     case NC_RW_FIFO_CONSUMER_COUNT:{
@@ -2545,7 +2779,48 @@ ncStatus_t ncFifoSetOption(struct ncFifoHandle_t * fifoHandle, int option,
                       dataLength, size);
                 return NC_INVALID_DATA_LENGTH;
             }
-            f->datatype = *(int *) data;
+            int tempDType = *(int *) data;
+            if (tempDType != NC_FIFO_FP16 && tempDType != NC_FIFO_FP32) {
+                mvLog(MVLOG_ERROR,
+                      "dataType value set (%d) is invalid!\n",
+                      tempDType);
+                return NC_INVALID_PARAMETERS;
+            }
+            f->host_tensor_desc.dataType = tempDType;
+            break;
+        }
+    case NC_RW_FIFO_HOST_TENSOR_DESCRIPTOR:{
+            unsigned int size = sizeof(struct ncTensorDescriptor_t);
+            if (dataLength < size) {
+                mvLog(MVLOG_ERROR,
+                      "data length of output buffer (%d) is smaller that required (%d)!\n",
+                      dataLength, size);
+                return NC_INVALID_DATA_LENGTH;
+            }
+
+            int expected_total_size = getTotalSize((struct ncTensorDescriptor_t *) data);
+            if (expected_total_size != ((struct ncTensorDescriptor_t *) data)->totalSize) {
+                mvLog(MVLOG_ERROR,
+                      "totalSize in host tensor descriptor (%d) doesn't match expeected totalSize (%d)!\n",
+                      ((struct ncTensorDescriptor_t *) data)->totalSize, expected_total_size);
+                return NC_INVALID_PARAMETERS;
+            }
+            if (f->state == NC_FIFO_ALLOCATED) {
+                struct ncTensorDescriptor_t* temp = (struct ncTensorDescriptor_t*) data;
+                if (temp->w != f->graph_tensor_desc.w ||
+                    temp->h != f->graph_tensor_desc.h ||
+                    temp->c != f->graph_tensor_desc.c ||
+                    temp->n != f->graph_tensor_desc.n)
+                {
+                    mvLog(MVLOG_ERROR, "trying to set host tensor decriptor to a shape that doesn't match graph tensor descriptor shape!\n");
+                    return NC_INVALID_PARAMETERS;
+                }
+            }
+
+            f->host_tensor_desc = *(struct ncTensorDescriptor_t *) data;
+            f->host_tensor_desc_set = 1;
+            f->datasize = getElementSize(f);
+
             break;
         }
     case NC_RW_FIFO_DONT_BLOCK:
@@ -2554,7 +2829,7 @@ ncStatus_t ncFifoSetOption(struct ncFifoHandle_t * fifoHandle, int option,
     case NC_RO_FIFO_CAPACITY:
     case NC_RO_FIFO_READ_FILL_LEVEL:
     case NC_RO_FIFO_WRITE_FILL_LEVEL:
-    case NC_RO_FIFO_TENSOR_DESCRIPTOR:
+    case NC_RO_FIFO_GRAPH_TENSOR_DESCRIPTOR:
     case NC_RO_FIFO_STATE:
     case NC_RO_FIFO_ELEMENT_DATA_SIZE:
         return NC_UNAUTHORIZED;
@@ -2584,7 +2859,7 @@ ncStatus_t ncFifoGetOption(struct ncFifoHandle_t * fifoHandle, int option,
     if (fifoHandle->private_data->state == NC_FIFO_CREATED &&
         option != NC_RO_FIFO_STATE && option != NC_RW_FIFO_DATA_TYPE &&
         option != NC_RW_FIFO_DONT_BLOCK && option != NC_RW_FIFO_CONSUMER_COUNT
-        && option != NC_RO_FIFO_NAME) {
+        && option != NC_RO_FIFO_NAME && option != NC_RW_FIFO_HOST_TENSOR_DESCRIPTOR) {
         mvLog(MVLOG_ERROR,
               "Fifo hasn't been allocated, cannot read those options");
         return NC_NOT_ALLOCATED;
@@ -2630,7 +2905,7 @@ ncStatus_t ncFifoGetOption(struct ncFifoHandle_t * fifoHandle, int option,
         *dataLength = sizeof(fifoHandle->private_data->consumer_cnt);
         break;
     case NC_RO_FIFO_ELEMENT_DATA_SIZE:
-        *(int *) data = fifoHandle->private_data->datasize;
+        *(int *) data = getElementSize(fifoHandle->private_data);
         *dataLength = sizeof(fifoHandle->private_data->datasize);
         break;
     case NC_RW_FIFO_DATA_TYPE:
@@ -2643,15 +2918,15 @@ ncStatus_t ncFifoGetOption(struct ncFifoHandle_t * fifoHandle, int option,
                 *dataLength = size;
                 return NC_INVALID_DATA_LENGTH;
             }
-            *(int *) data = fifoHandle->private_data->datatype;
-            *dataLength = sizeof(fifoHandle->private_data->datatype);
+            *(int *) data = fifoHandle->private_data->host_tensor_desc.dataType;
+            *dataLength = sizeof(fifoHandle->private_data->host_tensor_desc.dataType);
             break;
         }
     case NC_RO_FIFO_CAPACITY:
         *(int *) data = fifoHandle->private_data->num_elements;
         *dataLength = sizeof(fifoHandle->private_data->num_elements);
         break;
-    case NC_RO_FIFO_TENSOR_DESCRIPTOR:
+    case NC_RO_FIFO_GRAPH_TENSOR_DESCRIPTOR:
         {
             unsigned int size = sizeof(struct ncTensorDescriptor_t);
             if (*dataLength < size) {
@@ -2664,8 +2939,29 @@ ncStatus_t ncFifoGetOption(struct ncFifoHandle_t * fifoHandle, int option,
             if (fifoHandle->private_data->state != NC_FIFO_ALLOCATED)
                 return NC_UNAUTHORIZED; // before allocation, tensor_desc is NULL
             *(struct ncTensorDescriptor_t *) data =
-                fifoHandle->private_data->tensor_desc;
-            *dataLength = sizeof(fifoHandle->private_data->tensor_desc);
+                fifoHandle->private_data->graph_tensor_desc;
+            *dataLength = sizeof(fifoHandle->private_data->graph_tensor_desc);
+            break;
+        }
+    case NC_RW_FIFO_HOST_TENSOR_DESCRIPTOR:
+        {
+            unsigned int size = sizeof(struct ncTensorDescriptor_t);
+            if (*dataLength < size) {
+                mvLog(MVLOG_ERROR,
+                      "data length of output buffer (%d) is smaller that required (%d)!\n",
+                      *dataLength, size);
+                *dataLength = size;
+                return NC_INVALID_DATA_LENGTH;
+            }
+            if (fifoHandle->private_data->state != NC_FIFO_ALLOCATED &&
+                fifoHandle->private_data->host_tensor_desc_set == 0) {
+                mvLog(MVLOG_ERROR,
+                      "option NC_RW_FIFO_HOST_TENSOR_DESCRIPTOR cannot be read before it has been set or before Fifo has been allocated");
+                return NC_UNAUTHORIZED;
+            }
+            *(struct ncTensorDescriptor_t *) data =
+                fifoHandle->private_data->host_tensor_desc;
+            *dataLength = sizeof(fifoHandle->private_data->host_tensor_desc);
             break;
         }
     case NC_RO_FIFO_READ_FILL_LEVEL:
@@ -2681,7 +2977,7 @@ ncStatus_t ncFifoGetOption(struct ncFifoHandle_t * fifoHandle, int option,
             }
             int fillLevel;
             if (XLinkGetFillLevel(fi->streamId, 0, &fillLevel) == X_LINK_SUCCESS) {
-                *(int *) data = (fillLevel / fi->tensor_desc.totalSize);
+                *(int *) data = (fillLevel / fi->graph_tensor_desc.totalSize);
             } else {
                 return NC_UNAUTHORIZED;
             }
@@ -2701,7 +2997,7 @@ ncStatus_t ncFifoGetOption(struct ncFifoHandle_t * fifoHandle, int option,
             }
             int fillLevel;
             if (XLinkGetFillLevel(fi->streamId, 1, &fillLevel) == X_LINK_SUCCESS) {
-                *(int *) data = (fillLevel / fi->tensor_desc.totalSize);
+                *(int *) data = (fillLevel / fi->graph_tensor_desc.totalSize);
             } else {
                 return NC_ERROR;
             }
@@ -2786,8 +3082,8 @@ ncStatus_t ncGraphQueueInference(struct ncGraphHandle_t * graphHandle,
         //graphs have no access to one of the fifos
         return NC_INVALID_PARAMETERS;
     }
-    if (tensorCompatibility(&fi->tensor_desc, &g->input_tensor_desc) != NC_OK ||
-        tensorCompatibility(&fo->tensor_desc,
+    if (tensorCompatibility(&fi->graph_tensor_desc, &g->input_tensor_desc) != NC_OK ||
+        tensorCompatibility(&fo->graph_tensor_desc,
                             &g->output_tensor_desc) != NC_OK) {
         mvLog(MVLOG_WARN,
               "Input/Output tensor shape is not compatible with graph");
@@ -2804,8 +3100,7 @@ ncStatus_t ncGraphQueueInference(struct ncGraphHandle_t * graphHandle,
     void *user_param;
     pthread_mutex_lock(&fi->fifo_mutex);
     fi->consumers_remaining--;
-    cmd.cmd.graphCmd.releaseElemBuff1 = fi->api_read_adjust;
-    fi->api_read_adjust = 0;
+
     if (fi->consumers_remaining == 0) {
         if (!fi->api_read_element && fifoReadAccess(fi)) {  //the element was entirely consumed by graphs. This means we need to free it up from XLink
             streamPacketDesc_t *packet;
@@ -2826,8 +3121,6 @@ ncStatus_t ncGraphQueueInference(struct ncGraphHandle_t * graphHandle,
     pthread_mutex_unlock(&fi->fifo_mutex);
 
     pthread_mutex_lock(&fo->fifo_mutex);
-    cmd.cmd.graphCmd.releaseElemBuff2 = fo->api_read_adjust;
-    fo->api_read_adjust = 0;
     rc = pushUserParam(fo, user_param, 0);
     if (rc != NC_OK) {
         pthread_mutex_unlock(&fo->fifo_mutex);

@@ -34,8 +34,10 @@ struct tensorDescriptor_t {
     uint32_t w;
     uint32_t h;
     uint32_t totalSize;
-};                              //If this structure is equivalent with the API structure, it is just a coincidence. Don't make any assumptions based on this in the code.
-
+    uint32_t widthStride;
+    uint32_t heightStride;
+    uint32_t channelsStride;
+};
 typedef enum {
     NC_GRAPH_OK,
     NC_GRAPH_WRONG_INPUT_FORMAT,
@@ -85,7 +87,6 @@ typedef enum {
 typedef enum {
     BUFFER_ALLOCATE_CMD = 0,
     BUFFER_DEALLOCATE_CMD = 1,
-
 } bufferCommandType_t;
 
 typedef struct {
@@ -94,10 +95,8 @@ typedef struct {
     char streamName[16];
     uint32_t buffId1;
     uint32_t buffId2;
-    uint32_t releaseElemBuff1;
-    uint32_t releaseElemBuff2;
     uint32_t executors_number;
-    uint8_t laterUse[16];
+    uint8_t laterUse[24];
 } graphCommand_t;
 
 typedef struct {

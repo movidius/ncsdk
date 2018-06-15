@@ -27,7 +27,11 @@
 #ifdef _USBLINK_ENABLE_PRIVATE_INCLUDE_
 
 #include <stdint.h>
+#if (defined(_WIN32) || defined(_WIN64))
+#include "win_semaphore.h"
+#else
 #include <semaphore.h>
+#endif
 #include <XLinkPublicDefines.h>
 #include "UsbLinkPlatform.h"
 
