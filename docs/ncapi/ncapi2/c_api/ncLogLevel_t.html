@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" ">
+<title> | Intel® Movidius™ Neural Compute SDK Documentation</title>
+<link rel="stylesheet" href="../../../css/syntax.css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="../../../css/modern-business.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="../../../css/customstyles.css">
+<link rel="stylesheet" href="../../../css/boxshadowproperties.css">
+<!-- most color styles are extracted out to here -->
+<link rel="stylesheet" href="../../../css/theme-blue.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="../../../js/jquery.navgoco.min.js"></script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Anchor.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/2.0.0/anchor.min.js"></script>
+<script src="../../../js/toc.js"></script>
+<script src="../../../js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="../../../images/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<meta name="generator" content="Jekyll v3.8.1" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API." />
+<meta property="og:description" content="Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API." />
+<link rel="canonical" href="https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncLogLevel_t.html" />
+<meta property="og:url" content="https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncLogLevel_t.html" />
+<script type="application/ld+json">
+{"description":"Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API.","@type":"WebPage","url":"https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/ncLogLevel_t.html","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#tg-sb-link").click(function() {
+                $("#tg-sb-sidebar").toggle();
+                $("#tg-sb-content").toggleClass('col-md-9');
+                $("#tg-sb-content").toggleClass('col-md-12');
+                $("#tg-sb-icon").toggleClass('fa-toggle-on');
+                $("#tg-sb-icon").toggleClass('fa-toggle-off');
+            });
+        });
+    </script>
+    
+
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="fa fa-home fa-lg navbar-brand" href="../../../index.html">&nbsp;<span class="projectTitle"> Intel® Movidius™ Neural Compute SDK</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- toggle sidebar button 
+                <li><a id="tg-sb-link" href="#"><i id="tg-sb-icon" class="fa fa-toggle-on"></i> Nav</a></li>
+		-->
+                <!-- entries without drop-downs appear here -->
+
+
+
+
+                
+                
+                
+                <li><a href="https://developer.movidius.com/repo" target="_blank">GitHub</a></li>
+                
+                
+                
+                <li><a href="https://developer.movidius.com/blog" target="_blank">Blog</a></li>
+                
+                
+                
+                <li><a href="https://developer.movidius.com/forums" target="_blank">User Forum</a></li>
+                
+                
+                
+                <li><a href="https://developer.movidius.com/examples" target="_blank">NC App Zoo</a></li>
+                
+                
+                
+                <!-- entries with drop-downs appear here -->
+                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
+                
+                
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="../../../js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: '../../../search.json',
+                                searchResultTemplate: '<li><a href="https://movidius.github.io/ncsdk{url}" title="">{display}</a></li>',
+                    noResultsText: '',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <div id="main">
+    <!-- Content Row -->
+    <div class="row">
+        
+        
+            <!-- Sidebar Column -->
+            <div class="col-md-3" id="tg-sb-sidebar">
+                
+
+<ul id="mysidebar" class="nav">
+    <li class="sidebarTitle">NCSDK C API 2.x</li>
+    
+    
+    
+    
+    
+    <li class="singlenav">
+    
+    <a href="../../../ncapi/ncapi2/c_api/readme.html">Overview</a>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">Enumerations</a>
+        <ul>
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncDeviceHwVersion_t.html">ncDeviceHwVersion_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncDeviceOption_t.html">ncDeviceOption_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncDeviceState_t.html">ncDeviceState_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncFifoDataType_t.html">ncFifoDataType_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncFifoOption_t.html">ncFifoOption_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncFifoState_t.html">ncFifoState_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncFifoType_t.html">ncFifoType_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGlobalOption_t.html">ncGlobalOption_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGraphOption_t.html">ncGraphOption_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGraphState_t.html">ncGraphState_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li class="active"><a href="../../../ncapi/ncapi2/c_api/ncLogLevel_t.html">ncLogLevel_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncStatus_t.html">ncStatus_t</a></li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">Structures</a>
+        <ul>
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncDeviceHandle_t.html">ncDeviceHandle_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncFifoHandle_t.html">ncFifoHandle_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGraphHandle_t.html">ncGraphHandle_t</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncTensorDescriptor_t.html">ncTensorDescriptor_t</a></li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">Global Functions</a>
+        <ul>
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGlobalGetOption.html">ncGlobalGetOption()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGlobalSetOption.html">ncGlobalSetOption()</a></li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">Device Functions</a>
+        <ul>
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncDeviceClose.html">ncDeviceClose()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncDeviceCreate.html">ncDeviceCreate()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncDeviceDestroy.html">ncDeviceDestroy()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncDeviceGetOption.html">ncDeviceGetOption()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncDeviceOpen.html">ncDeviceOpen()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncDeviceSetOption.html">ncDeviceSetOption()</a></li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">Fifo Functions</a>
+        <ul>
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">Graph Functions</a>
+        <ul>
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGraphAllocate.html">ncGraphAllocate()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGraphAllocateWithFifos.html">ncGraphAllocateWithFifos()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGraphAllocateWithFifosEx.html">ncGraphAllocateWithFifosEx()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGraphCreate.html">ncGraphCreate()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGraphDestroy.html">ncGraphDestroy()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGraphGetOption.html">ncGraphGetOption()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGraphQueueInference.html">ncGraphQueueInference()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGraphQueueInferenceWithFifoElem.html">ncGraphQueueInferenceWithFifoElem()</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="../../../ncapi/ncapi2/c_api/ncGraphSetOption.html">ncGraphSetOption()</a></li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    <!-- if you aren't using the accordion, uncomment this block:
+       <p class="external">
+           <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+       </p>
+       -->
+</ul>
+
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>
+
+            </div>
+            
+        
+
+        <!-- Content Column -->
+        <div class="col-md-9" id="tg-sb-content">
+            <h1 id="enum-ncloglevel_t">enum ncLogLevel_t</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Info</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>mvnc.h</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <td>See also</td>
+      <td><a href="ncGlobalOption_t.html">ncGlobalOption_t</a>, <a href="ncGlobalGetOption.html">ncGlobalGetOption()</a>, <a href="ncGlobalSetOption.html">ncGlobalSetOption()</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+
+<p>The ncLogLevel_t enumeration defines application logging levels, which can be read with <a href="ncGlobalGetOption.html">ncGlobalGetOption()</a> or set with <a href="ncGlobalSetOption.html">ncGlobalSetOption()</a>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Constant</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NC_LOG_DEBUG</td>
+      <td>Debug and above (full verbosity).</td>
+    </tr>
+    <tr>
+      <td>NC_LOG_INFO</td>
+      <td>Info and above.</td>
+    </tr>
+    <tr>
+      <td>NC_LOG_WARN</td>
+      <td>Warning and above (default).</td>
+    </tr>
+    <tr>
+      <td>NC_LOG_ERROR</td>
+      <td>Errors and above.</td>
+    </tr>
+    <tr>
+      <td>NC_LOG_FATAL</td>
+      <td>Fatal only.</td>
+    </tr>
+  </tbody>
+</table>
+
+        </div>
+    <!-- /.row -->
+</div>
+<!-- /.container -->
+</div>
+<!-- /#main -->
+    </div>
+
+</body>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2018 Intel Corporation <br />
+                    * Other names and brands may be claimed as the property of others.
+                </div>
+            </div>
+</footer>
+
+</html>
