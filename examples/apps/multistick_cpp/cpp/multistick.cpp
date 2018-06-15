@@ -258,7 +258,7 @@ bool DoInferenceOnImageFile(struct ncGraphHandle_t *graphHandle, struct ncDevice
 
     // Read descriptor for input tensor
     length = sizeof(struct ncTensorDescriptor_t);
-    retCode = ncFifoGetOption(bufferIn, NC_RO_FIFO_TENSOR_DESCRIPTOR, &td, &length);
+    retCode = ncFifoGetOption(bufferIn, NC_RO_FIFO_GRAPH_TENSOR_DESCRIPTOR, &td, &length);
     if (retCode || length != sizeof(td)){
         printf("ncFifoGetOption failed, retCode=%d\n", retCode);
         return false;

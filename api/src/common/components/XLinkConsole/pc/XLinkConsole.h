@@ -20,7 +20,6 @@
  * XLinkConsole.h
  *
  *  Created on: Nov 20, 2017
- *      Author: zbiro
  */
 #ifndef _XLINKCONSOLE_H_
 #define _XLINKCONSOLE_H_

@@ -28,10 +28,13 @@
 
 #include <assert.h>
 #include <stdlib.h>
-
+#if (defined(_WIN32) || defined(_WIN64))
+#include "win_pthread.h"
+#include "win_semaphore.h"
+#else
 #include <pthread.h>
 #include <semaphore.h>
-
+#endif
 #include "XLinkDispatcher.h"
 #include "XLinkPrivateDefines.h"
 
@@ -138,11 +141,7 @@ sem_t addSchedulerSem;
 //below workaround for "C2088 '==': illegal for struct" error
 int pthread_t_compare(pthread_t a, pthread_t b)
 {
-#if (defined(_WIN32) || defined(_WIN64) )
-    return ((a.p == b.p) && (a.x == b.x));
-#else
     return  (a == b);
-#endif
 }
 
 static int unrefSem(sem_t* sem,  xLinkSchedulerState_t* curr) {
