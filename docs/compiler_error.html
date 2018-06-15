@@ -1,83 +1,669 @@
-<!doctype html>
-<html lang="en-US">
-  <head>
+<!DOCTYPE html>
+<html>
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" ">
+<title>mvNCCompile Error Codes | Intel® Movidius™ Neural Compute SDK Documentation</title>
+<link rel="stylesheet" href="css/syntax.css">
 
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <script src="assets/js/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="css/modern-business.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="css/customstyles.css">
+<link rel="stylesheet" href="css/boxshadowproperties.css">
+<!-- most color styles are extracted out to here -->
+<link rel="stylesheet" href="css/theme-blue.css">
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header  class="without-description" >
-        <h1 style="color:#FFFFFF;text-shadow:none"><a href=index.html>Intel® Movidius™ Neural Compute SDK</a></h1>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="js/jquery.navgoco.min.js"></script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Anchor.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/2.0.0/anchor.min.js"></script>
+<script src="js/toc.js"></script>
+<script src="js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="images/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+    <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>mvNCCompile Error Codes</title>
+<meta name="generator" content="Jekyll v3.8.1" />
+<meta property="og:title" content="mvNCCompile Error Codes" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API." />
+<meta property="og:description" content="Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API." />
+<link rel="canonical" href="https://movidius.github.io/ncsdk/compiler_error.html" />
+<meta property="og:url" content="https://movidius.github.io/ncsdk/compiler_error.html" />
+<script type="application/ld+json">
+{"description":"Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API.","@type":"WebPage","url":"https://movidius.github.io/ncsdk/compiler_error.html","headline":"mvNCCompile Error Codes","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#tg-sb-link").click(function() {
+                $("#tg-sb-sidebar").toggle();
+                $("#tg-sb-content").toggleClass('col-md-9');
+                $("#tg-sb-content").toggleClass('col-md-12');
+                $("#tg-sb-icon").toggleClass('fa-toggle-on');
+                $("#tg-sb-icon").toggleClass('fa-toggle-off');
+            });
+        });
+    </script>
+    
+
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="fa fa-home fa-lg navbar-brand" href="index.html">&nbsp;<span class="projectTitle"> Intel® Movidius™ Neural Compute SDK</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- toggle sidebar button 
+                <li><a id="tg-sb-link" href="#"><i id="tg-sb-icon" class="fa fa-toggle-on"></i> Nav</a></li>
+		-->
+                <!-- entries without drop-downs appear here -->
+
+
+
+
+                
+                
+                
+                <li><a href="https://developer.movidius.com/repo" target="_blank">GitHub</a></li>
+                
+                
+                
+                <li><a href="https://developer.movidius.com/blog" target="_blank">Blog</a></li>
+                
+                
+                
+                <li><a href="https://developer.movidius.com/forums" target="_blank">User Forum</a></li>
+                
+                
+                
+                <li><a href="https://developer.movidius.com/examples" target="_blank">NC App Zoo</a></li>
+                
+                
+                
+                <!-- entries with drop-downs appear here -->
+                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
+                
+                
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: 'search.json',
+                                searchResultTemplate: '<li><a href="https://movidius.github.io/ncsdk{url}" title="">{display}</a></li>',
+                    noResultsText: '',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <div id="main">
+    <!-- Content Row -->
+    <div class="row">
         
-        <p class="view"><a href="">View the Project on GitHub <small></small></a></p>
+        
+            <!-- Sidebar Column -->
+            <div class="col-md-3" id="tg-sb-sidebar">
+                
+
+<ul id="mysidebar" class="nav">
+    <li class="sidebarTitle">NCSDK Documentation </li>
+    
+    
+    
+    
+    <li>
+        <a href="#">Overview</a>
         <ul>
-        
-          <li>  <a href=TOC.html><small>Table of Contents</small></a> </li>
-          <li>  <a href=index.html#NcSdkTools><small>NCSDK<br>Tools</small></a> </li>
-          <li> <a href=ncapi/readme.html><small>NCAPI Documentation</small></a></li>
-          <li>  <a href="">View On <strong>GitHub</strong></a></li>
-          <li> <a href="https://ncsforum.movidius.com/">User Forum</a></li>
+            
+            
+            
+            <li><a href="index.html">Introduction</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="ncs.html">Intel® Movidius™ Neural Compute Stick</a></li>
+            
+            
+            
+            
         </ul>
-      </header>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">Installation</a>
+        <ul>
+            
+            
+            
+            <li><a href="install.html">Basic Installation</a></li>
+            
+            
+            
+            <li class="subfolders">
+                <a href="#">Other Installation Options</a>
+                <ul>
+                    
+                    
+                    
+                    <li><a href="docker.html">Docker</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="virtualenv.html">virtualenv</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="vm_config.html">Virtual Machine</a></li>
+                    
+                    
+                    
+                </ul>
+            </li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">Frameworks</a>
+        <ul>
+            
+            
+            
+            <li><a href="configure_network.html">Network Configuration</a></li>
+            
+            
+            
+            <li class="subfolders">
+                <a href="#">Caffe</a>
+                <ul>
+                    
+                    
+                    
+                    <li><a href="caffe.html">Overview</a></li>
+                    
+                    
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li class="subfolders">
+                <a href="#">TensorFlow™</a>
+                <ul>
+                    
+                    
+                    
+                    <li><a href="tensorflow.html">Overview</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="tf_compile_guidance.html">Compilation Guidance</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="tf_slim.html">Compiling TensorFlow-Slim Networks</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="tf_modelzoo.html">Compiling Model Zoo Networks</a></li>
+                    
+                    
+                    
+                </ul>
+            </li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">Toolkit</a>
+        <ul>
+            
+            
+            
+            <li><a href="tools/tools_overview.html">Toolkit Overview</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tools/compile.html">mvNCCompile</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tools/check.html">mvNCCheck</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="tools/profile.html">mvNCProfile</a></li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    <li>
+        <a href="#">API</a>
+        <ul>
+            
+            
+            
+            <li><a href="ncapi/readme.html">Overview</a></li>
+            
+            
+            
+            <li class="subfolders">
+                <a href="#">NCAPI v2</a>
+                <ul>
+                    
+                    
+                    
+                    <li><a href="ncapi/ncapi2/py_api/readme.html">Python</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="ncapi/ncapi2/c_api/readme.html">C/C++</a></li>
+                    
+                    
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li class="subfolders">
+                <a href="#">NCAPI v1</a>
+                <ul>
+                    
+                    
+                    
+                    <li><a href="ncapi/ncapi1/py_api/readme.html">Python</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="ncapi/ncapi1/c_api/readme.html">C/C++</a></li>
+                    
+                    
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li class="subfolders">
+                <a href="#">NCAPI v1 to NCAPI v2 Conversion</a>
+                <ul>
+                    
+                    
+                    
+                    <li><a href="ncapi/python_api_migration.html">Python</a></li>
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="ncapi/c_api_migration.html">C/C++</a></li>
+                    
+                    
+                    
+                </ul>
+            </li>
+            
+            
+            
+            
+        </ul>
+    </li>
+    
+    
+    
+    
+    
+    
+    <li class="singlenav">
+    
+    <a href="examples.html">Examples</a>
+    </li>
+    
+    
+    
+    
+    
+    
+    <li class="singlenav">
+    
+    <a href="release_notes.html">Release Notes</a>
+    </li>
+    
+    
+    
+    
+    
+    
+    <li class="singlenav">
+    
+    <a href="support.html">Support</a>
+    </li>
+    
+    
+    
+    
+    <!-- if you aren't using the accordion, uncomment this block:
+       <p class="external">
+           <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+       </p>
+       -->
+</ul>
 
-      <section>
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>
 
-      <h1 id="mvnccompile-error-codes">mvNCCompile Error Codes</h1>
+            </div>
+            
+        
 
-<h3 id="error--1-setup-error-caffe-import-error">Error  1: “Setup Error: Caffe Import Error.”</h3>
-<h3 id="error--2-setup-error-using-a-version-of-python-that-is-unsupported">Error  2: “Setup Error: Using a version of Python that is unsupported.”</h3>
-<h3 id="error--3-setup-error-caffe-syntax-error-">Error  3: “Setup Error: Caffe Syntax Error: …”</h3>
-<h3 id="error--4-toolkit-error-stage-type-not-supported-">Error  4: “Toolkit Error: Stage Type Not Supported: …”</h3>
-<h3 id="error--5-toolkit-error-stage-details-not-supported-">Error  5: “Toolkit Error: Stage Details Not Supported: …”</h3>
-<h3 id="error--6-setup-error-no-myriad-executable-detected">Error  6: “Setup Error: no Myriad Executable detected.”</h3>
-<h3 id="error--7-toolkit-error-usb-failure-code-">Error  7: “Toolkit Error: USB Failure. Code: …”</h3>
-<h3 id="error--8-argument-error-network-description-cannot-be-found">Error  8: “Argument Error: Network description cannot be found.”</h3>
-<h3 id="error--9-argument-error-network-weight-cannot-be-found">Error  9: “Argument Error: Network weight cannot be found.”</h3>
-<h3 id="error-10-toolkit-error-no-such-mode-">Error 10: “Toolkit Error: No such Mode …”</h3>
-<h3 id="error-11-argument-error-expected-id-not-provided">Error 11: “Argument Error: Expected ID not provided.”</h3>
-<h3 id="error-12-argument-error-image-cannot-be-found">Error 12: “Argument Error: Image cannot be found.”</h3>
-<h3 id="error-13-toolkit-error-provided-outputnodeinputnode-name-does-not-exist-or-does-not-match-with-one-contained-in-caffemodel-file-provided-">Error 13: “Toolkit Error: Provided OutputNode/InputNode name does not exist or does not match with one contained in caffemodel file Provided: …”</h3>
-<h3 id="error-14-toolkit-error-data-type-not-supported-">Error 14: “Toolkit Error: Data Type Not Supported: …”</h3>
-<h3 id="error-15-toolkit-error-parser-not-supported-">Error 15: “Toolkit Error: Parser Not Supported: …”</h3>
-<h3 id="error-16-toolkit-error-internal-error-input-stage-is-not-first-layer">Error 16: “Toolkit Error: Internal Error: Input Stage is not first layer.”</h3>
-<h3 id="error-17-toolkit-error-internal-error-could-not-build-graph-missing-link-">Error 17: “Toolkit Error: Internal Error: Could not build graph. Missing link: …”</h3>
-<h3 id="error-18-toolkit-error-internal-error-invalid-conversion-optimization-from-">Error 18: “Toolkit Error: Internal Error: Invalid Conversion Optimization. From: …”</h3>
-<h3 id="error-19-toolkit-error-setup-error-not-all-required-arguments-were-passed--erroneous-arguments">Error 19: “Toolkit Error: Setup Error: Not all required arguments were passed / Erroneous arguments.”</h3>
-<h3 id="error-20-toolkit-error-input-layer-must-be-in-an-input_shape-construct">Error 20: “Toolkit Error: Input Layer must be in an input_shape construct.”</h3>
-<h3 id="error-21-argument-error-validation-metric-not-supported-">Error 21: “Argument Error: Validation metric not supported “</h3>
-<h3 id="error-22-toolkit-error-unable-to-tell-what-parser-is-required-consider-overriding-with-parser-argument">Error 22: “Toolkit Error: Unable to tell what parser is required. Consider overriding with –parser argument.”</h3>
-<h3 id="error-23-toolkit-error-mismatch-between-input-layer-of-network-and-given-input-file">Error 23: “Toolkit Error: Mismatch between input layer of network and given input file.”</h3>
-<h3 id="error-24-toolkit-error-1-image-inference-not-supported">Error 24: “Toolkit Error: &gt;1 image inference not supported.”</h3>
-<h3 id="error-26-toolkit-error-no-moviusbboot-executable-detected">Error 26: “Toolkit Error: No moviUsbBoot Executable detected.”</h3>
-<h3 id="error-25-myriad-error-">Error 25: “Myriad Error: …”</h3>
-<h3 id="error-27-setup-error-too-many--too-few-shave-processors-selected">Error 27: “Setup Error: Too Many / Too Few Shave Processors Selected.”</h3>
-<h3 id="error-28-caffe-error-memoryerror-potential-cause-available-ram-not-sufficient-for-network-to-be-loaded-into-caffe">Error 28: “Caffe Error: MemoryError. Potential Cause: Available RAM not sufficient for Network to be loaded into Caffe”</h3>
-<h3 id="error-29-setup-error-tuple-syntax-incorrect-should-be-in-form-xyz-">Error 29: “Setup Error: Tuple Syntax Incorrect, should be in form x,y,z “</h3>
-<h3 id="error-30-toolkit-error-filetype-not-supported-as-a-input">Error 30: “Toolkit Error: Filetype not supported as a input.”</h3>
-<h3 id="error-31-usb-error-problem-transferring-data">Error 31: “USB Error: Problem Transferring data.”</h3>
-<h3 id="error-32-setup-error-problem-parsing-configuration-file">Error 32: “Setup Error: Problem parsing configuration File.”</h3>
-<h3 id="error-33-toolkit-error-no-temperature-read-from-device">Error 33: “Toolkit Error: No Temperature Read from device.”</h3>
-<h3 id="error-34-setup-error-values-for-input-contain-placeholder-pass-an-absolute-value">Error 34: “Setup Error: Values for input contain placeholder. Pass an absolute value.”</h3>
-<h3 id="error-35-setup-error-not-enough-resources-on-myriad-to-process-this-network">Error 35: “Setup Error: Not enough resources on Myriad to process this network.”</h3>
+        <!-- Content Column -->
+        <div class="col-md-9" id="tg-sb-content">
+            <h1 id="mvnccompile-error-codes">mvNCCompile Error Codes</h1>
 
+<table>
+  <thead>
+    <tr>
+      <th>Error Code</th>
+      <th>Message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Setup Error: Caffe Import Error.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Setup Error: Using a version of Python that is unsupported.</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Setup Error: Caffe Syntax Error: …</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Toolkit Error: Stage Type Not Supported: …</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Toolkit Error: Stage Details Not Supported: …</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Setup Error: no Myriad Executable detected.</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Toolkit Error: USB Failure. Code: …</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Argument Error: Network description cannot be found.</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>Argument Error: Network weight cannot be found.</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>Toolkit Error: No such Mode …</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>Argument Error: Expected ID not provided.</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td>Argument Error: Image cannot be found.</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td>Toolkit Error: Provided OutputNode/InputNode name does not exist or does not match with one contained in caffemodel file Provided: …</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>Toolkit Error: Data Type Not Supported: …</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>Toolkit Error: Parser Not Supported: …</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>Toolkit Error: Internal Error: Input Stage is not first layer.</td>
+    </tr>
+    <tr>
+      <td>17</td>
+      <td>Toolkit Error: Internal Error: Could not build graph. Missing link: …</td>
+    </tr>
+    <tr>
+      <td>18</td>
+      <td>Toolkit Error: Internal Error: Invalid Conversion Optimization. From: …</td>
+    </tr>
+    <tr>
+      <td>19</td>
+      <td>Toolkit Error: Setup Error: Not all required arguments were passed / Erroneous arguments.</td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>Toolkit Error: Input Layer must be in an input_shape construct.</td>
+    </tr>
+    <tr>
+      <td>21</td>
+      <td>Argument Error: Validation metric not supported</td>
+    </tr>
+    <tr>
+      <td>22</td>
+      <td>Toolkit Error: Unable to tell what parser is required. Consider overriding with –parser argument.</td>
+    </tr>
+    <tr>
+      <td>23</td>
+      <td>Toolkit Error: Mismatch between input layer of network and given input file.</td>
+    </tr>
+    <tr>
+      <td>24</td>
+      <td>Toolkit Error: &gt;1 image inference not supported.</td>
+    </tr>
+    <tr>
+      <td>26</td>
+      <td>Toolkit Error: No moviUsbBoot Executable detected.</td>
+    </tr>
+    <tr>
+      <td>25</td>
+      <td>Myriad Error: …</td>
+    </tr>
+    <tr>
+      <td>27</td>
+      <td>Setup Error: Too Many / Too Few Shave Processors Selected.</td>
+    </tr>
+    <tr>
+      <td>28</td>
+      <td>Caffe Error: MemoryError. Potential Cause: Available RAM not sufficient for Network to be loaded into Caffe</td>
+    </tr>
+    <tr>
+      <td>29</td>
+      <td>Setup Error: Tuple Syntax Incorrect, should be in form x,y,z</td>
+    </tr>
+    <tr>
+      <td>30</td>
+      <td>Toolkit Error: Filetype not supported as a input.</td>
+    </tr>
+    <tr>
+      <td>31</td>
+      <td>USB Error: Problem Transferring data.</td>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td>Setup Error: Problem parsing configuration File.</td>
+    </tr>
+    <tr>
+      <td>33</td>
+      <td>Toolkit Error: No Temperature Read from device.</td>
+    </tr>
+    <tr>
+      <td>34</td>
+      <td>Setup Error: Values for input contain placeholder. Pass an absolute value.</td>
+    </tr>
+    <tr>
+      <td>35</td>
+      <td>Setup Error: Not enough resources on Myriad to process this network.</td>
+    </tr>
+  </tbody>
+</table>
 
-      </section>
+        </div>
+    <!-- /.row -->
+</div>
+<!-- /.container -->
+</div>
+<!-- /#main -->
     </div>
-    <footer>
-    
-      
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
 
-    
-  </body>
+</body>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2018 Intel Corporation <br />
+                    * Other names and brands may be claimed as the property of others.
+                </div>
+            </div>
+</footer>
+
 </html>
