@@ -46,7 +46,7 @@ then
 		      -D INSTALL_PYTHON_EXAMPLES=OFF \
 		      -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib-3.3.0/modules \
 		      -D BUILD_EXAMPLES=OFF ..
-		make
+		make -j $(($(nproc) + 1))
 		sudo make install
 		sudo ldconfig
 	else
