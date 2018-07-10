@@ -2,7 +2,7 @@
 This Intel® Movidius™ Neural Compute software developer kit (NCSDK) is provided for users of the [Intel® Movidius™ Neural Compute Stick](https://developer.movidius.com/) (Intel® Movidius™ NCS). It includes software tools, an API, and examples, so developers can create software that takes advantage of the accelerated neural network capability provided by the Intel Movidius NCS hardware.
 
 # Neural Compute SDK2
-## The [NCSDK v2.04](https://github.com/movidius/ncsdk/releases/tag/v2.04.00.06) release is now available. 
+## [NCSDK v2](https://github.com/movidius/ncsdk/releases) releases are now available. 
 
 -------
 All documentation in the docs directory is now in HTML format which is **best viewed from the documentation site: https://movidius.github.io/ncsdk/** 
