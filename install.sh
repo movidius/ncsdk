@@ -1,5 +1,25 @@
 #! /bin/bash
 
+if [ -e /opt/movidius/NCSDK ]; then
+	while [ 1 ]; do
+		echo "/opt/movidius/NCSDK already exists."
+		echo -n "Remove prior install [y], try install again[t], quit[q]? "
+		read ans
+		if [ "$ans" = "q" ]; then
+			echo "Aborting install"
+			exit 1
+		fi
+		if [ "$ans" = "y" ]; then
+			break
+		fi
+		if [ "$ans" = "t" ]; then
+			cd /opt/movidius/NCSDK
+			./install-ncsdk.sh
+			exit $?
+		fi
+	done
+fi
+
 # download the file
 cp ncsdk.conf /tmp
 
