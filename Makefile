@@ -37,10 +37,6 @@ prereqs:
 	@sed -i 's/\r//' install.sh
 	@sed -i 's/\r//' uninstall.sh
 	@sed -i 's/\r//' README.md
-	@chmod +x install.sh
-	@chmod +x uninstall.sh
-	@chmod +x install-opencv.sh
-	@chmod +x uninstall-opencv.sh
 
 .PHONY: install
 install: prereqs uninstallopencv
