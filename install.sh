@@ -15,15 +15,22 @@
 # read in functions shared by installer and uninstaller
 source $(dirname "$0")/install-utilities.sh
 
-
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 # check_supported_os - require install to be running on a supported OS
 function check_supported_os()
 {
     ### Checking OS and version...
     # install package lsb-release if application lsb_release isn't installed 
+
     RC=0
+    CHECKDNF=0
+    command -v dnf > /dev/null || CHECKDNF=$?
     command -v lsb_release > /dev/null || RC=$?
-    [ $RC -ne 0 ] && exec_and_search_errors "$SUDO_PREFIX apt-get $APT_QUIET install -y lsb-release"
+    if [ "${CHECKDNF}" -eq 0 ]; then
+        [ $RC -ne 0 ] && exec_and_search_errors "$SUDO_PREFIX dnf $DNF_QUIET install -y redhat-lsb-core"
+    else
+        [ $RC -ne 0 ] && exec_and_search_errors "$SUDO_PREFIX apt-get $APT_QUIET install -y lsb-release"
+    fi
     
     DISTRO="$(lsb_release -i 2>/dev/null | cut -f 2)"
     VERSION="$(lsb_release -r 2>/dev/null | awk '{ print $2 }' | sed 's/[.]//')"
@@ -31,6 +38,8 @@ function check_supported_os()
     OS_VERSION="${VERSION:-255}"
     if [ "${OS_DISTRO,,}" = "ubuntu" ] && [ ${OS_VERSION} = 1604 ]; then
         [ "${VERBOSE}" = "yes" ] && echo "Installing on Ubuntu 16.04"
+    elif [ "${OS_DISTRO,,}" = "fedora" ] || [ "${OS_DISTRO,,}" = "Fedora" ]; then #CHANGED
+        [ "${VERBOSE}" = "yes" ] && echo "Installing on Fedora" #CHANGED
     elif [ "${OS_DISTRO,,}" = "raspbian" ] && [ ${OS_VERSION} -ge 91 ]; then
         [ "${VERBOSE}" = "yes" ] && echo "Installing on Raspbian Stretch"
     elif [ "${OS_DISTRO,,}" = "raspbian" ] && [ ${OS_VERSION} -ge 80 ] && [ ${OS_VERSION} -lt 90 ]; then
@@ -137,6 +146,7 @@ function init_installer()
 
     ### Set installer verbosity level
     APT_QUIET=-qq
+    DNF_QUIET=-q #CHANGED
     PIP_QUIET=--quiet
     GIT_QUIET=-q
     STDOUT_QUIET='>/dev/null'
@@ -144,6 +154,7 @@ function init_installer()
         APT_QUIET=
         PIP_QUIET=
         GIT_QUIET=
+        DNF_QUIET= #CHANGED
         STDOUT_QUIET=
     fi
 
@@ -219,6 +230,7 @@ function download_and_copy_files()
     ${SUDO_PREFIX} cp ${FROM_DIR}/uninstall.sh ${INSTALL_DIR}/NCSDK 
     ${SUDO_PREFIX} cp ${FROM_DIR}/requirements.txt ${INSTALL_DIR}/NCSDK 
     ${SUDO_PREFIX} cp ${FROM_DIR}/requirements_apt.txt ${INSTALL_DIR}/NCSDK 
+    ${SUDO_PREFIX} cp ${FROM_DIR}/requirements_dnf.txt ${INSTALL_DIR}/NCSDK #CHANGED
     ${SUDO_PREFIX} cp ${FROM_DIR}/requirements_apt_raspbian.txt ${INSTALL_DIR}/NCSDK 
 }
 
@@ -282,6 +294,29 @@ function install_apt_dependencies()
     $SUDO_PREFIX ldconfig
 }
 
+# install_dnf_dependencies - installs dependencies using dnf    
+function install_dnf_dependencies()
+{
+    exec_and_search_errors "$SUDO_PREFIX dnf $DNF_QUIET -y update"
+    exec_and_search_errors "$SUDO_PREFIX dnf $DNF_QUIET install -y $(cat "$DIR/requirements_dnf.txt")"
+    exec_and_search_errors "$SUDO_PREFIX dnf $DNF_QUIET install -y boost-devel"
+
+    # Make sure pip2 and pip3 installed correctly
+    RC=0
+    command -v pip2 > /dev/null || RC=$?
+    if [ $RC -ne 0 ] ; then
+        echo -e "${RED} pip2 command not found.  Will exit${NC}"
+        exit 1
+    fi    
+    RC=0
+    command -v pip3 > /dev/null || RC=$?
+    if [ $RC -ne 0 ] ; then
+        echo -e "${RED} pip3 command not found.  Will exit${NC}"
+        exit 1
+    fi
+
+    $SUDO_PREFIX ldconfig
+}
 
 # setup_virtualenv - Use python virtualenv 
 function setup_virtualenv()
@@ -444,7 +479,6 @@ function install_tensorflow()
             INSTALL_TF="yes"
         fi
         [ $tf -eq 2 ] && INSTALL_TF="yes"
-
         # install TensorFlow if needed
         if [ "${INSTALL_TF}" = "yes" ] ; then
             echo "Couldn't find a supported tensorflow version, downloading TensorFlow $SUPPORTED_TENSORFLOW_VERSION"
@@ -460,7 +494,7 @@ function install_tensorflow()
             echo "Finished installing TensorFlow"
         fi              
         
-    elif [ "${OS_DISTRO,,}" = "ubuntu" ] ; then
+    elif [ "${OS_DISTRO,,}" = "ubuntu" ] || [ "${OS_DISTRO,,}" = "fedora" ] || [ "${OS_DISTRO,,}" = "Fedora" ]; then
         echo "Checking whether tensorflow CPU version is installed..."
         # find_tensorflow sets FIND_TENSORFLOW__FOUND_SUPPORTED_VERSION to 0, 1 or 2 depending if correct version installed, incorrect version installed or not installed, respectively
         find_tensorflow "tensorflow" 
@@ -738,6 +772,11 @@ function install_api()
         $SUDO_PREFIX ln -s $SYS_INSTALL_DIR/lib/mvnc/libmvnc_highclass.so.0 $SYS_INSTALL_DIR/lib/libmvnc_highclass.so
     fi
 
+    if [ "${OS_DISTRO,,}" = "fedora" ] || [ "${OS_DISTRO,,}" = "Fedora" ]; then
+        $SUDO_PREFIX touch /etc/ld.so.conf.d/ncsdk-x86_64.conf
+        $SUDO_PREFIX echo "/usr/local/lib" | sudo tee -a /etc/ld.so.conf.d/ncsdk-x86_64.conf
+    fi
+
     $SUDO_PREFIX ldconfig
 
     # Copy other collaterals to destination
@@ -801,7 +840,7 @@ function finalize_installer()
             exit 1
         fi
     fi
-    
+
     echo ""
     echo -e "${GREEN}Installation is complete.${NC}"
     echo "Please provide feedback in our support forum if you encountered difficulties."
@@ -857,13 +896,20 @@ function main()
     ### installation phase
     make_installer_dirs
     download_and_copy_files
-    install_apt_dependencies
+
+    if [ "${OS_DISTRO,,}" = "fedora" ] || [ "${OS_DISTRO,,}" = "Fedora" ]; then
+        install_dnf_dependencies
+    else
+        install_apt_dependencies
+    fi
+
     create_install_logfile
     # Optionally use python virtualenv, USE_VIRTUALENV set in ncsdk.conf
     [ "${USE_VIRTUALENV}" == 'yes' ] && setup_virtualenv
     install_python_dependencies
 
     ### Install tensorflow and caffe based on settings in ncsdk.conf
+    echo ${INSTALL_TENSORFLOW}
     [ "${INSTALL_TENSORFLOW}" = "yes" ] && install_tensorflow
     [ "${INSTALL_CAFFE}" = "yes" ] && install_caffe
 
