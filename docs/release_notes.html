@@ -496,31 +496,28 @@
         <div class="col-md-9" id="tg-sb-content">
             <p>============================================================</p>
 <h1 id="movidius-neural-compute-sdk-release-notes">Movidius Neural Compute SDK Release Notes</h1>
-<h1 id="v20500-2018-06-07">V2.05.00 2018-06-07</h1>
+<h1 id="v11201-2018-10-05">V1.12.01 2018-10-05</h1>
 <p>============================================================</p>
-
-<p>As of V2.05.00, SDK has been refactored and contains many new features and structural changes. It is recommended you read the documentation to familiarize with the new features and contents.</p>
 
 <h2 id="sdk-notes">SDK Notes:</h2>
 
 <h3 id="new-features">New features:</h3>
 <ol>
-  <li>Tensorflow 1.7 supported.  Tensorflow 1.7 is automatically installed on Ubuntu.</li>
+  <li>This release (1.12.01) is functionally identical to 1.12.00, however it has been re-factored so that everything in the public repository is now licensed via the Apache 2.0 open source license terms per the LICENSE file in the root directory.  Non open source components may be downloaded during the installation.</li>
+  <li>Improved compiler support for custom networks that use variable batch size via Tensorflow.</li>
+  <li>Improved description on how to use Tensorflow networks that were built for training.  Please see “Guidance for Compiling TensorFlow Networks” in the SDK documentation</li>
 </ol>
 
 <h4 id="networks">Networks:</h4>
 <ol>
-  <li>No change</li>
+  <li>Facenet based on inception-resnet-v1 (see erratum #12)</li>
 </ol>
 
 <h4 id="layers">Layers:</h4>
-<ol>
-  <li>No change.</li>
-</ol>
 
 <h2 id="api-notes">API Notes:</h2>
 <ol>
-  <li>Apps written with NCAPI v1 are not compatible with this release and need to be migrated to NCAPI v2, refer to <a href="ncapi/readme.html">Migrating Applications from NCAPI v1 to NCAPI v2</a> for information about migrating apps to the new API.</li>
+  <li>No change</li>
 </ol>
 
 <h2 id="network-notes">Network Notes:</h2>
@@ -535,20 +532,20 @@
   <li>VGG (Sousmith VGG_A)</li>
   <li>Alexnet</li>
   <li>TinyYolo v1</li>
-  <li>VGG 16 (Configuration D)</li>
-  <li>Resnet 18</li>
+  <li>VGG 16</li>
   <li>Resnet 50</li>
+  <li>Resnet-18</li>
   <li>SSD Mobilenet v1</li>
 </ol>
 
-<h3 id="tensorflow-r16">Tensorflow r1.6</h3>
+<h3 id="tensorflow-r13">Tensorflow r1.3</h3>
 <ol>
   <li>inception-v1</li>
   <li>inception-v2</li>
   <li>inception-v3</li>
   <li>inception-v4</li>
   <li>Inception ResNet v2</li>
-  <li>VGG 16 (Configuration D)</li>
+  <li>VGG 16</li>
   <li>Mobilenet_V1_1.0 variants:
     <ul>
       <li>MobileNet_v1_1.0_224</li>
@@ -570,6 +567,7 @@
     </ul>
   </li>
   <li>TinyYolo v2 via Darkflow tranformation</li>
+  <li>Facenet based on inception-resnet-v1 (See erratum #12)</li>
 </ol>
 
 <h2 id="firmware-features">Firmware Features:</h2>
@@ -607,26 +605,27 @@
 
 <h2 id="bug-fixes">Bug Fixes:</h2>
 <ol>
-  <li>Fixed: Facenet and other network regression due to TensorFlow 1.7 changes.</li>
+  <li>Fixed: Tensorflow FusedBatchNorm doesn’t support fully connected layer inputs</li>
+  <li>Fixed: Mobilenets on Tensforflow 1.4 provide incorrect classification</li>
+  <li>Fixed: Resnet-18 on Caffe providing NaN results</li>
 </ol>
 
 <h2 id="errata">Errata:</h2>
 <ol>
   <li>Python 2.7 is fully supported for making user applications, but only the helloworld_py example runs as-is in both python 2.7 and 3.5 due to dependencies on modules.</li>
+  <li>SDK tools for tensorflow on Rasbpian Stretch are not supported for this release, due to lack of an integrated tensorflow installer for Rasbpian in the SDK. TF examples are provided with pre-compiled graph files to allow them to run on Rasperry Pi, however the compile, profile, and check functions will not be available on Raspberry Pi, and ‘make examples’ will generate failures for the tensorflow examples on Raspberry Pi.</li>
   <li>Depth-wise convolution may not be supported if channel multiplier &gt; 1.</li>
   <li>If working behind proxy, proper proxy settings must be applied for the installer to succeed.</li>
   <li>Although improved, the installer is known to take a long time on Raspberry Pi. Date/time must be correct for SDK installation to succeed on Raspberry Pi.</li>
-  <li>Default system virtual memory swap file size is too small to compile AlexNet, and VGG networks on Raspberry Pi.</li>
+  <li>Default system virtual memory swap file size is too small to compile AlexNet on Raspberry Pi.  VGG 16 not verified to compile on Pi.</li>
   <li>Raspberry Pi users will need to upgrade to Raspbian Stretch for releases after 1.09.</li>
   <li>Convolution may fail to find a solution for very large inputs.</li>
-  <li>Depth-wise convolution is tested for 3x3 kernels.</li>
+  <li>Depth convolution is tested for 3x3 kernels.</li>
   <li>A TanH layer’s “top” &amp; “bottom” blobs must have different names.  This is different from a ReLU layer, whose “top” &amp; “bottom” should be named the same as its previous layer.</li>
-  <li>On upgrade from previous versions of SDK, the installer will detect if openCV 3.3.0 was installed, for example from http://github.com/movidius/ncappzoo/apps/stream_ty_gn/install-opencv-from_source.sh.  For this release, the installer will prompt to uninstall this specific version of openCV. This is required for ssd-caffe to run correctly.  After 2.05 installation is complete, openCV 3.3.0 can be re-installed and the ssd-caffe will continue to function.</li>
-  <li>On upgrade from previous versions of SDK, the installer will detect if openCV 3.3.0 was installed, for example from http://github.com/movidius/ncappzoo/apps/stream_ty_gn/install-opencv-from_source.sh.  For this release, the installer will prompt to uninstall this specific version of openCV. This is required for ssd-caffe to run correctly.  After 2.05 installation is complete, openCV 3.3.0 can be re-installed and the ssd-caffe will continue to function.</li>
-  <li>The MTCNN network in the app zoo is showing unexpected behavior for this release, and is being investigated.  To use MTCNN, please use version 1.12.00 of SDK.</li>
+  <li>On upgrade from previous versions of SDK, the installer will detect if openCV 3.3.0 was installed, for example from http://github.com/movidius/ncappzoo/apps/stream_ty_gn/install-opencv-from_source.sh.  For this release, the installer will prompt to uninstall this specific version of openCV. This is required for ssd-caffe to run correctly.  After 1.11 installation is complete, openCV 3.3.0 can be re-installed and the ssd-caffe will continue to function.</li>
+  <li>Facenet requires L2 Normalization be inserted to be used, please see the support forum for a saver script example.</li>
   <li>Although mvNCCheck shows per-pixel error for some metrics for mobilenet_v1_224, classification results are not impacted.</li>
-  <li>Only Ubuntu 16.04 LTS is supported as a host OS for this release.  Ubuntu 18.04 is being evaluated.</li>
-  <li>The visualization graph created by mvNCProfile may have an erroneous connection through the data layer.</li>
+  <li>Initial validation has been done on SSD Mobilenet v1 and TinyYolo v2 but more thorough evaluation is underway.</li>
 </ol>
 
         </div>

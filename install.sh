@@ -3,10 +3,10 @@
 # download the file
 cp ncsdk.conf /tmp
 
-download_filename=NCSDK-1.12.tar.gz
+download_filename=NCSDK-1.12.01.01.tar.gz
 
-# ncsdk_link is the url
-ncsdk_link=https://software.intel.com/sites/default/files/managed/33/1b/NCSDK-1.12.00.01.tar.gz
+# ncsdk_link is the url (set in both install.sh & get_mvcmd.sh)
+ncsdk_link=https://downloadmirror.intel.com/28192/eng/NCSDK-1.12.01.01.tar.gz
 
 # download the payload from the redirector link
 # and save it the download_filename no matter what the original filename was
@@ -26,6 +26,8 @@ ncsdk_pkg=${ncsdk_archive%%.tar.gz}
 #	/opt/movidius/uninstall-ncsdk.sh
 #fi
 
+DIR=$(pwd)
+
 # Create Required installation dirs
 sudo mkdir -p /opt/movidius
 sudo cp $ncsdk_archive /opt/movidius/ncsdk.tar.gz
@@ -36,7 +38,12 @@ sudo tar zxvf ./ncsdk.tar.gz
 sudo rm -rf NCSDK
 sudo mv $ncsdk_pkg* NCSDK
 cd /opt/movidius/NCSDK
-cp /tmp/ncsdk.conf .
+sudo cp /tmp/ncsdk.conf .
+
+sudo cp ${DIR}/api/include/mvnc.h .
+sudo cp ${DIR}/api/include/mvnc_deprecated.h .
+sudo cp ${DIR}/api/python/mvnc/mvncapi.py .
+sudo cp ${DIR}/api/python/mvnc/__init__.py .
 ./install-ncsdk.sh
 
 # leave the uninstall script on the target

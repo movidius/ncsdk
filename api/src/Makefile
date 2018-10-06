@@ -24,7 +24,7 @@ LDFLAGS += -shared
 OBJS := $(SRCS:%.c=$(OBJDIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 
-all: obj-$(ARCH)/libmvnc.so.0
+all: $(OBJDIR)/$(OUT) get_mvcmd
 
 $(OBJDIR)/$(OUT): $(OBJS)
 	$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LIBS)
@@ -38,6 +38,10 @@ $(OBJDIR):
 	@mkdir $@
 
 -include $(DEPS)
+
+.PHONY: get_mvcmd
+get_mvcmd:
+	@./get_mvcmd.sh
 
 basicinstall: $(OBJDIR)/$(OUT)
 	mkdir -p $(INSTALLDIR)/include/
@@ -61,7 +65,7 @@ postinstall:
 	udevadm trigger
 	ldconfig
 
-install: basicinstall pythoninstall postinstall
+install: get_mvcmd basicinstall pythoninstall postinstall
 
 uninstall:
 	rm -f $(INSTALLDIR)/lib/libmvnc.so.0
@@ -79,3 +83,4 @@ clean:
 	rm -f $(OBJS)
 	rm -rf $(OBJDIR)
 	rm -f libmvnc.so
+	find mvnc/ -type f -delete

@@ -26,6 +26,11 @@ LDFLAGS += -shared
 OBJS := $(SRCS:%.c=$(OBJDIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 
+all: $(OBJDIR)/$(OUT) get_mvcmd
+
+get_mvcmd:
+	@./get_mvcmd.sh
+
 $(OBJDIR)/$(OUT): $(OBJS)
 	$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LIBS)
 
@@ -41,3 +46,4 @@ clean:
 	rm -f $(OUT)
 	rm -f $(OBJS)
 	rm -rf $(OBJDIR)
+	find mvnc/ -type f -delete
