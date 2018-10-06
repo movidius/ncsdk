@@ -1,19 +1,18 @@
 /*
-* Copyright 2018 Intel Corporation.
-* The source code, information and material ("Material") contained herein is
-* owned by Intel Corporation or its suppliers or licensors, and title to such
-* Material remains with Intel Corporation or its suppliers or licensors.
-* The Material contains proprietary information of Intel or its suppliers and
-* licensors. The Material is protected by worldwide copyright laws and treaty
-* provisions.
-* No part of the Material may be used, copied, reproduced, modified, published,
-* uploaded, posted, transmitted, distributed or disclosed in any way without
-* Intel's prior express written permission. No license under any patent,
-* copyright or other intellectual property rights in the Material is granted to
-* or conferred upon you, either expressly, by implication, inducement, estoppel
-* or otherwise.
-* Any license under such intellectual property rights must be express and
-* approved by Intel in writing.
+*
+* Copyright (c) 2017-2018 Intel Corporation. All Rights Reserved
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
 */
 
 ///
@@ -27,21 +26,23 @@
 #include "stdio.h"
 #include "stdint.h"
 #include "string.h"
-
 #include <assert.h>
 #include <stdlib.h>
+
+
 #if (defined(_WIN32) || defined(_WIN64))
+#include "gettime.h"
 #include "win_pthread.h"
 #include "win_semaphore.h"
-#include "gettime.h"
 #else
 #include <pthread.h>
 #include <semaphore.h>
 #endif
+
 #include "mvMacros.h"
-#include "UsbLinkPlatform.h"
+#include "XLinkPlatform.h"
 #include "XLinkDispatcher.h"
-#define _USBLINK_ENABLE_PRIVATE_INCLUDE_
+#define _XLINK_ENABLE_PRIVATE_INCLUDE_
 #include "XLinkPrivateDefines.h"
 
 #ifdef MVLOG_UNIT_NAME
@@ -91,14 +92,15 @@ linkId_t nextUniqueLinkId = 0; //incremental number, doesn't get decremented.
 typedef struct xLinkDesc_t {
     int nextUniqueStreamId; //incremental number, doesn't get decremented.
                                 //Needs to be per link to match remote
-    streamDesc_t availableStreams[USB_LINK_MAX_STREAMS];
+    streamDesc_t availableStreams[XLINK_MAX_STREAMS];
     xLinkState_t peerState;
     void* fd;
     linkId_t id;
+    int hostClosedFD;
 } xLinkDesc_t;
 
 xLinkDesc_t availableXLinks[MAX_LINKS];
-
+xLinkDesc_t* getLink(void* fd);
 sem_t  pingSem; //to b used by myriad
 
 
@@ -124,12 +126,13 @@ int handleIncomingEvent(xLinkEvent_t* event){
     //specific actions to this peer
     void* buffer ;
     streamDesc_t* stream ;
+    int sc = 0 ;
     switch (event->header.type){
     case USB_WRITE_REQ:
         /*If we got here, we will read the data no matter what happens.
           If we encounter any problems we will still read the data to keep
           the communication working but send a NACK.*/
-        stream = getStreamById(event->xLinkFD, event->header.streamId);
+        stream = getStreamById(event->xLinkFD, event->header.streamId);\
         ASSERT_X_LINK(stream);
 
         stream->localFillLevel += event->header.size;
@@ -141,7 +144,7 @@ int handleIncomingEvent(xLinkEvent_t* event){
             mvLog(MVLOG_FATAL,"out of memory\n");
             ASSERT_X_LINK(0);
         }
-        int sc = USBLinkRead(event->xLinkFD, buffer, event->header.size, USB_DATA_TIMEOUT);
+        sc = XLinkRead(event->xLinkFD, buffer, event->header.size, USB_DATA_TIMEOUT);
         if(sc < 0){
             mvLog(MVLOG_ERROR,"%s() Read failed %d\n", __func__, (int)sc);
         }
@@ -182,6 +185,32 @@ int handleIncomingEvent(xLinkEvent_t* event){
         break;
     case USB_RESET_RESP:
         break;
+    case PCIE_CREATE_STREAM_REQ:
+        break;
+    case PCIE_WRITE_REQ:
+        printf("PCIE_WRITE_REQ\n");
+        stream = getStreamById(event->xLinkFD, event->header.streamId);
+        printf("XLinkWrite sending size %d and bufer %p\n", (int)event->header.size, &event->data);
+        int rc = XLinkWrite(NULL, event->data, event->header.size, 0);
+        if(rc < 0) {
+            mvLog(MVLOG_ERROR,"Write failed %d\n", rc);
+        }
+        event->header.flags.bitField.ack = 0;
+        event->header.flags.bitField.nack = 1;
+        releaseStream(stream);
+        break;
+    case PCIE_READ_REQ:
+        break;
+    case PCIE_CLOSE_STREAM_REQ:
+        break;
+    case PCIE_WRITE_RESP:
+        break;
+    case PCIE_READ_RESP:
+        break;
+    case PCIE_CREATE_STREAM_RESP:
+        break;
+    case PCIE_CLOSE_STREAM_RESP:
+        break;
     default:
         ASSERT_X_LINK(0);
     }
@@ -191,12 +220,18 @@ int handleIncomingEvent(xLinkEvent_t* event){
 }
  int dispatcherEventReceive(xLinkEvent_t* event){
     static xLinkEvent_t prevEvent;
-    int sc = USBLinkRead(event->xLinkFD, &event->header, sizeof(event->header), 0);
+    int sc = XLinkRead(event->xLinkFD, &event->header, sizeof(event->header), 0);
 
     if(sc < 0 && event->header.type == USB_RESET_RESP) {
-		return sc;
+        return sc;
     }
-    if(sc < 0){
+    if(sc < 0) {
+        xLinkDesc_t* link = getLink(event->xLinkFD);
+        if (link->hostClosedFD) {
+            //host intentionally closed usb, finish normally
+            event->header.type = USB_RESET_RESP;
+            return 0;
+        }
         mvLog(MVLOG_ERROR,"%s() Read failed %d\n", __func__, (int)sc);
         return sc;
     }
@@ -268,7 +303,7 @@ int getNextAvailableStreamIndex(xLinkDesc_t* link)
         return -1;
 
     int idx;
-    for (idx = 0; idx < USB_LINK_MAX_STREAMS; idx++) {
+    for (idx = 0; idx < XLINK_MAX_STREAMS; idx++) {
         if (link->availableStreams[idx].id == INVALID_STREAM_ID)
             return idx;
     }
@@ -282,7 +317,7 @@ streamDesc_t* getStreamById(void* fd, streamId_t id)
     xLinkDesc_t* link = getLink(fd);
     ASSERT_X_LINK(link != NULL);
     int stream;
-    for (stream = 0; stream < USB_LINK_MAX_STREAMS; stream++) {
+    for (stream = 0; stream < XLINK_MAX_STREAMS; stream++) {
         if (link->availableStreams[stream].id == id) {
             sem_wait(&link->availableStreams[stream].sem);
             return &link->availableStreams[stream];
@@ -295,7 +330,7 @@ streamDesc_t* getStreamByName(xLinkDesc_t* link, const char* name)
 {
     ASSERT_X_LINK(link != NULL);
     int stream;
-    for (stream = 0; stream < USB_LINK_MAX_STREAMS; stream++) {
+    for (stream = 0; stream < XLINK_MAX_STREAMS; stream++) {
         if (link->availableStreams[stream].id != INVALID_STREAM_ID &&
             strcmp(link->availableStreams[stream].name, name) == 0) {
                 sem_wait(&link->availableStreams[stream].sem);
@@ -354,7 +389,6 @@ void deallocateStream(streamDesc_t* stream)
     }
 }
 
-
 int releasePacketFromStream(streamDesc_t* stream, uint32_t* releasedSize)
 {
     streamPacketDesc_t* currPack = &stream->packets[stream->firstPacket];
@@ -362,11 +396,14 @@ int releasePacketFromStream(streamDesc_t* stream, uint32_t* releasedSize)
         mvLog(MVLOG_ERROR,"There is no packet to release\n");
         return 0; // ignore this, although this is a big problem on application side
     }
+
     stream->localFillLevel -= currPack->length;
     mvLog(MVLOG_DEBUG,"Got release of %ld , current local fill level is %ld out of %ld %ld\n",
         currPack->length, stream->localFillLevel, stream->readSize, stream->writeSize);
 
-    deallocateData(currPack->data, ALIGN_UP_INT32((int32_t)currPack->length, __CACHE_LINE_SIZE), __CACHE_LINE_SIZE);
+    deallocateData(currPack->data,
+        ALIGN_UP_INT32((int32_t)currPack->length, __CACHE_LINE_SIZE), __CACHE_LINE_SIZE);
+
     CIRCULAR_INCREMENT(stream->firstPacket, USB_LINK_MAX_PACKETS_PER_STREAM);
     stream->blockedPackets--;
     *releasedSize = currPack->length;
@@ -396,10 +433,10 @@ int addNewPacketToStream(streamDesc_t* stream, void* buffer, uint32_t size){
 }
 
 streamId_t allocateNewStream(void* fd,
-                             const char* name,
-                             uint32_t writeSize,
-                             uint32_t readSize,
-                             streamId_t forcedId)
+                            const char* name,
+                            uint32_t writeSize,
+                            uint32_t readSize,
+                            streamId_t forcedId)
 {
     streamId_t streamId;
     streamDesc_t* stream;
@@ -487,7 +524,6 @@ int dispatcherLocalEventGetResponse(xLinkEvent_t* event, xLinkEvent_t* response)
             event->header.flags.bitField.block = 0;
             stream->remoteFillLevel += event->header.size;
             stream->remoteFillPacketLevel++;
-
             mvLog(MVLOG_DEBUG,"Got local write of %ld , remote fill level %ld out of %ld %ld\n",
                 event->header.size, stream->remoteFillLevel, stream->writeSize, stream->readSize);
         }
@@ -548,6 +584,35 @@ int dispatcherLocalEventGetResponse(xLinkEvent_t* event, xLinkEvent_t* response)
     case USB_RESET_RESP:
         //should not happen
         event->header.flags.bitField.localServe = 1;
+        break;
+    case PCIE_CREATE_STREAM_REQ:
+        break;
+    case PCIE_WRITE_REQ:
+        break;
+    case PCIE_READ_REQ:
+        printf("PCIE_READ_REQ id:%d\n", (int)event->header.streamId);
+        stream = getStreamById(event->xLinkFD, event->header.streamId);
+        event->header.flags.bitField.ack = 1;
+        event->header.flags.bitField.nack = 0;
+        event->header.flags.bitField.block = 0;
+
+        printf("Xlink Read with data size %d and data %p \n",
+                (int)((streamPacketDesc_t*)event->data)->length, (streamPacketDesc_t*)event->data);
+        //int sc = XLinkRead(NULL, event->data->data, event->data->length, 0);
+        //if(sc < 0){
+        //    mvLog(MVLOG_ERROR,"%s() PCIE XLinkRead failed %d\n", __func__, (int)sc);
+        //}
+        releaseStream(stream);
+        break;
+    case PCIE_CLOSE_STREAM_REQ:
+        break;
+    case PCIE_WRITE_RESP:
+        break;
+    case PCIE_READ_RESP:
+        break;
+    case PCIE_CREATE_STREAM_RESP:
+        break;
+    case PCIE_CLOSE_STREAM_RESP:
         break;
     default:
         ASSERT_X_LINK(0);
@@ -710,10 +775,25 @@ int dispatcherRemoteEventGetResponse(xLinkEvent_t* event, xLinkEvent_t* response
             releaseStream(stream);
             break;
         }
-
         case USB_PING_RESP:
             break;
         case USB_RESET_RESP:
+            break;
+        case PCIE_CREATE_STREAM_REQ:
+            break;
+        case PCIE_WRITE_REQ:
+            break;
+        case PCIE_READ_REQ:
+            break;
+        case PCIE_CLOSE_STREAM_REQ:
+            break;
+        case PCIE_WRITE_RESP:
+            break;
+        case PCIE_READ_RESP:
+            break;
+        case PCIE_CREATE_STREAM_RESP:
+            break;
+        case PCIE_CLOSE_STREAM_RESP:
             break;
         default:
             ASSERT_X_LINK(0);
@@ -724,18 +804,20 @@ int dispatcherRemoteEventGetResponse(xLinkEvent_t* event, xLinkEvent_t* response
 int dispatcherEventSend(xLinkEvent_t *event)
 {
     mvLog(MVLOG_DEBUG,"sending %d %d\n", (int)event->header.type,  (int)event->header.id);
-    int rc = USBLinkWrite(event->xLinkFD, &event->header, sizeof(event->header), 0);
+    int rc = XLinkWrite(event->xLinkFD, &event->header, sizeof(event->header), 0);
     if(rc < 0)
     {
         mvLog(MVLOG_ERROR,"Write failed %d\n", rc);
+        return rc;
     }
     if (event->header.type == USB_WRITE_REQ)
     {
         //write requested data
-        rc = USBLinkWrite(event->xLinkFD, event->data,
+        rc = XLinkWrite(event->xLinkFD, event->data,
                           event->header.size, USB_DATA_TIMEOUT);
         if(rc < 0) {
             mvLog(MVLOG_ERROR,"Write failed %d\n", rc);
+            return rc;
         }
     }
     // this function will send events to the remote node
@@ -749,105 +831,31 @@ static xLinkState_t getXLinkState(xLinkDesc_t* link)
     return link->peerState;
 }
 
-void dispatcherCloseUsbLink(void*fd)
+void dispatcherCloseLink(void*fd, int fullClose)
 {
     xLinkDesc_t* link = getLink(fd);
     ASSERT_X_LINK(link != NULL);
-    link->peerState = X_LINK_COMMUNICATION_NOT_OPEN;
-    link->id = INVALID_LINK_ID;
-    link->fd = NULL;
-    link->nextUniqueStreamId = 0;
+    if (fullClose)
+    {
+        link->peerState = X_LINK_COMMUNICATION_NOT_OPEN;
+        link->id = INVALID_LINK_ID;
+        link->fd = NULL;
+        link->nextUniqueStreamId = 0;
 
-    int stream;
-    for (stream = 0; stream < USB_LINK_MAX_STREAMS; stream++)
-        link->availableStreams[stream].id = INVALID_STREAM_ID;
+        int stream;
+        for (stream = 0; stream < XLINK_MAX_STREAMS; stream++)
+            link->availableStreams[stream].id = INVALID_STREAM_ID;
+    }
+    else
+    {
+        link->peerState = XLINK_DOWN;
+    }
 }
 
 void dispatcherResetDevice(void* fd)
 {
-    USBLinkPlatformResetRemote(fd);
+    XLinkPlatformResetRemote(fd);
 }
-
-
-/*#################################################################################
-###################################### EXTERNAL ###################################
-##################################################################################*/
-//Called only from app - per device
-XLinkError_t XLinkConnect(XLinkHandler_t* handler)
-{
-    int index = getNextAvailableLinkIndex();
-    ASSERT_X_LINK(index != -1);
-
-    xLinkDesc_t* link = &availableXLinks[index];
-    mvLog(MVLOG_DEBUG,"%s() device name %s \n", __func__, handler->devicePath);
-
-    if (UsbLinkPlatformConnect(handler->devicePath2, handler->devicePath, &link->fd) == -1)
-    {
-        return X_LINK_ERROR;
-    }
-
-    dispatcherStart(link->fd);
-
-    xLinkEvent_t event = {0};
-    event.header.type = USB_PING_REQ;
-    event.xLinkFD = link->fd;
-    dispatcherAddEvent(EVENT_LOCAL, &event);
-    dispatcherWaitEventComplete(link->fd);
-
-    link->id = nextUniqueLinkId++;
-    link->peerState = USB_LINK_UP;
-    handler->linkId = link->id;
-
-    return 0;
-}
-
-XLinkError_t XLinkInitialize(XLinkGlobalHandler_t* handler)
-{
-    ASSERT_X_LINK(USB_LINK_MAX_STREAMS <= MAX_POOLS_ALLOC);
-    glHandler = handler;
-    sem_init(&pingSem,0,0);
-    int i;
-    int sc = UsbLinkPlatformInit(handler->loglevel);
-    if (sc)
-    {
-       return X_LINK_COMMUNICATION_NOT_OPEN;
-    }
-
-    //initialize availableStreams
-    xLinkDesc_t* link;
-    for (i = 0; i < MAX_LINKS; i++) {
-        link = &availableXLinks[i];
-        link->id = INVALID_LINK_ID;
-        link->fd = NULL;
-        link->peerState = USB_LINK_NOT_INIT;
-        int stream;
-        for (stream = 0; stream < USB_LINK_MAX_STREAMS; stream++)
-            link->availableStreams[stream].id = INVALID_STREAM_ID;
-    }
-
-    controlFunctionTbl.eventReceive = &dispatcherEventReceive;
-    controlFunctionTbl.eventSend = &dispatcherEventSend;
-    controlFunctionTbl.localGetResponse = &dispatcherLocalEventGetResponse;
-    controlFunctionTbl.remoteGetResponse = &dispatcherRemoteEventGetResponse;
-    controlFunctionTbl.closeLink = &dispatcherCloseUsbLink;
-    controlFunctionTbl.resetDevice = &dispatcherResetDevice;
-    dispatcherInitialize(&controlFunctionTbl);
-
-#ifndef __PC__
-    int index = getNextAvailableLinkIndex();
-    if (index == -1)
-        return X_LINK_COMMUNICATION_NOT_OPEN;
-
-    link = &availableXLinks[index];
-    link->fd = NULL;
-    link->id = nextUniqueLinkId++;
-    link->peerState = USB_LINK_UP;
-
-    sem_wait(&pingSem);
-#endif
-    return X_LINK_SUCCESS;
-}
-
 
 XLinkError_t XLinkGetFillLevel(streamId_t streamId, int isRemote, int* fillLevel)
 {
@@ -857,7 +865,7 @@ XLinkError_t XLinkGetFillLevel(streamId_t streamId, int isRemote, int* fillLevel
     streamDesc_t* stream;
 
     ASSERT_X_LINK(link != NULL);
-    if (getXLinkState(link) != USB_LINK_UP)
+    if (getXLinkState(link) != XLINK_UP)
     {
         return X_LINK_COMMUNICATION_NOT_OPEN;
     }
@@ -872,21 +880,139 @@ XLinkError_t XLinkGetFillLevel(streamId_t streamId, int isRemote, int* fillLevel
     return X_LINK_SUCCESS;
 }
 
+/*#################################################################################
+###################################### EXTERNAL ###################################
+##################################################################################*/
+/*
+PCIE inserts are a temporary solution for XLinkPcie,
+their purpose is to bypass using the dispatcher,
+calling the xlink Platform functions directly.
+Pcie calls should be moved to dispatcher as a next task/target.
+*/
+
+//Called only from app - per device
+XLinkError_t XLinkConnect(XLinkHandler_t* handler)
+{
+    /************* PCIE **************/
+    if (glHandler->protocol == PCIE) {
+        if(XLinkPlatformConnect(handler->devicePath2,   \
+                                handler->devicePath,    \
+                                NULL) < 0) {
+            return X_LINK_ERROR;
+        }
+        else {
+            handler->linkId = 0;
+            return X_LINK_SUCCESS;
+        }
+    }/*******************************/
+
+    int index = getNextAvailableLinkIndex();
+    ASSERT_X_LINK(index != -1);
+
+    xLinkDesc_t* link = &availableXLinks[index];
+    mvLog(MVLOG_DEBUG,"%s() device name %s \n", __func__, handler->devicePath);
+
+    if (XLinkPlatformConnect(handler->devicePath2,  \
+                            handler->devicePath,    \
+                            &link->fd) < 0) {
+        return X_LINK_ERROR;
+    }
+
+    dispatcherStart(link->fd);
+    xLinkEvent_t event = {0};
+    event.header.type = USB_PING_REQ;
+    event.xLinkFD = link->fd;
+    dispatcherAddEvent(EVENT_LOCAL, &event);
+    dispatcherWaitEventComplete(link->fd);
+
+    link->id = nextUniqueLinkId++;
+    link->peerState = XLINK_UP;
+    handler->linkId = link->id;
+    link->hostClosedFD = 0;
+    return X_LINK_SUCCESS;
+}
+
+XLinkError_t XLinkInitialize(XLinkGlobalHandler_t* handler)
+{
+    ASSERT_X_LINK(XLINK_MAX_STREAMS <= MAX_POOLS_ALLOC);
+    glHandler = handler;
+    sem_init(&pingSem,0,0);
+    int i;
+
+#if (defined(_WIN32) || defined(_WIN64))
+    if (glHandler->protocol != USB_VSC) {
+        printf("Windows only support USB_VSC! \n");
+        return X_LINK_COMMUNICATION_NOT_OPEN;
+    }
+#endif
+
+    int sc = XLinkPlatformInit(glHandler->protocol, glHandler->loglevel);
+    if (sc != X_LINK_SUCCESS) {
+       return X_LINK_COMMUNICATION_NOT_OPEN;
+    }
+    /************* PCIE **************/
+    if (glHandler->protocol == PCIE) {
+        /*Bypass Dispatcher on PCIE for now*/
+        printf("PCIe initialized through Xlink! \n");
+        return X_LINK_SUCCESS;
+    }/*******************************/
+
+    //initialize availableStreams
+    xLinkDesc_t* link;
+    for (i = 0; i < MAX_LINKS; i++) {
+        link = &availableXLinks[i];
+        link->id = INVALID_LINK_ID;
+        link->fd = NULL;
+        link->peerState = XLINK_NOT_INIT;
+        int stream;
+        for (stream = 0; stream < XLINK_MAX_STREAMS; stream++)
+            link->availableStreams[stream].id = INVALID_STREAM_ID;
+    }
+    controlFunctionTbl.eventReceive = &dispatcherEventReceive;
+    controlFunctionTbl.eventSend = &dispatcherEventSend;
+    controlFunctionTbl.localGetResponse = &dispatcherLocalEventGetResponse;
+    controlFunctionTbl.remoteGetResponse = &dispatcherRemoteEventGetResponse;
+    controlFunctionTbl.closeLink = &dispatcherCloseLink;
+    controlFunctionTbl.resetDevice = &dispatcherResetDevice;
+    dispatcherInitialize(&controlFunctionTbl);
+
+#ifndef __PC__
+    int index = getNextAvailableLinkIndex();
+    if (index == -1)
+        return X_LINK_COMMUNICATION_NOT_OPEN;
+
+    link = &availableXLinks[index];
+    link->fd = NULL;
+    link->id = nextUniqueLinkId++;
+    link->peerState = XLINK_UP;
+
+    sem_wait(&pingSem);
+#endif
+    return X_LINK_SUCCESS;
+}
+
 streamId_t XLinkOpenStream(linkId_t id, const char* name, int stream_write_size)
 {
+    /************* PCIE **************/
+    if (glHandler->protocol == PCIE) {
+        /*Exit on PCIe for now*/
+        return (streamId_t)id;
+    }/*******************************/
+    int operationTypes[NMB_OF_PROTOCOLS] = \
+        {USB_CREATE_STREAM_REQ, USB_CREATE_STREAM_REQ, \
+        PCIE_CREATE_STREAM_REQ, IPC_CREATE_STREAM_REQ};
+
     xLinkEvent_t event = {0};
     xLinkDesc_t* link = getLinkById(id);
     mvLog(MVLOG_DEBUG,"%s() id %d link %p\n", __func__, id, link);
     ASSERT_X_LINK(link != NULL);
-    if (getXLinkState(link) != USB_LINK_UP)
-    {
+    if (getXLinkState(link) != XLINK_UP) {
         /*no link*/
         mvLog(MVLOG_DEBUG,"%s() no link up\n", __func__);
         return INVALID_STREAM_ID;
     }
 
-    if(strlen(name) > MAX_NAME_LENGTH)
-    {
+    if(strlen(name) > MAX_NAME_LENGTH) {
         mvLog(MVLOG_WARN,"name too long\n");
         return INVALID_STREAM_ID;
     }
@@ -894,7 +1020,7 @@ streamId_t XLinkOpenStream(linkId_t id, const char* name, int stream_write_size)
     if(stream_write_size > 0)
     {
         stream_write_size = ALIGN_UP(stream_write_size, __CACHE_LINE_SIZE);
-        event.header.type = USB_CREATE_STREAM_REQ;
+        event.header.type = operationTypes[glHandler->protocol];
         strncpy(event.header.streamName, name, MAX_NAME_LENGTH);
         event.header.size = stream_write_size;
         event.header.streamId = INVALID_STREAM_ID;
@@ -902,7 +1028,6 @@ streamId_t XLinkOpenStream(linkId_t id, const char* name, int stream_write_size)
 
         dispatcherAddEvent(EVENT_LOCAL, &event);
         dispatcherWaitEventComplete(link->fd);
-
     }
     streamId_t streamId = getStreamIdByName(link, name);
     if (streamId > 0xFFFFFFF) {
@@ -925,7 +1050,7 @@ XLinkError_t XLinkCloseStream(streamId_t streamId)
     ASSERT_X_LINK(link != NULL);
 
     mvLog(MVLOG_DEBUG,"%s(): streamId %d\n", __func__, (int)streamId);
-    if (getXLinkState(link) != USB_LINK_UP)
+    if (getXLinkState(link) != XLINK_UP)
         return X_LINK_COMMUNICATION_NOT_OPEN;
 
     xLinkEvent_t event = {0};
@@ -948,7 +1073,7 @@ XLinkError_t XLinkGetAvailableStreams(linkId_t id)
 {
     xLinkDesc_t* link = getLinkById(id);
     ASSERT_X_LINK(link != NULL);
-    if (getXLinkState(link) != USB_LINK_UP)
+    if (getXLinkState(link) != XLINK_UP)
     {
         return X_LINK_COMMUNICATION_NOT_OPEN;
     }
@@ -956,38 +1081,62 @@ XLinkError_t XLinkGetAvailableStreams(linkId_t id)
     return X_LINK_SUCCESS;
 }
 
+XLinkError_t GetDeviceName(int index, char* name, int nameSize, int pid)
+{
+    int rc = -1;
+    if (!pid)
+        rc = XLinkPlatformGetDeviceName(index, name, nameSize);
+    else
+        rc = XLinkPlatformGetDeviceNameExtended(index, name, nameSize, pid);
+
+    switch (rc) {
+    case X_LINK_PLATFORM_SUCCESS:
+        return X_LINK_SUCCESS;
+    case X_LINK_PLATFORM_DEVICE_NOT_FOUND:
+        return X_LINK_DEVICE_NOT_FOUND;
+    case X_LINK_PLATFORM_TIMEOUT:
+        return X_LINK_TIMEOUT;
+    default:
+        return X_LINK_ERROR;
+    }
+}
+
 XLinkError_t XLinkGetDeviceName(int index, char* name, int nameSize)
 {
-    int rc = UsbLinkPlatformGetDeviceName(index, name, nameSize);
-    switch(rc) {
-        case USB_LINK_PLATFORM_SUCCESS:
-            return X_LINK_SUCCESS;
-        case USB_LINK_PLATFORM_DEVICE_NOT_FOUND:
-            return X_LINK_DEVICE_NOT_FOUND;
-        case USB_LINK_PLATFORM_TIMEOUT:
-            return X_LINK_TIMEOUT;
-        default:
-            return X_LINK_ERROR;
+    return GetDeviceName(index, name, nameSize, 0);
+}
 
-    }
+XLinkError_t XLinkGetDeviceNameExtended(int index, char* name, int nameSize, int pid)
+{
+    return GetDeviceName(index, name, nameSize, pid);
 }
 
 XLinkError_t XLinkWriteData(streamId_t streamId, const uint8_t* buffer,
                             int size)
 {
+    /************* PCIE **************/
+    if (glHandler->protocol == PCIE) {
+        /*Bypass Dispatcher on PCIE for now*/
+        int rc = XLinkWrite(NULL, (void*)buffer, size, 0);
+        if(rc < 0) {
+            mvLog(MVLOG_ERROR,"Write failed %d\n", rc);
+        }
+        return X_LINK_SUCCESS;
+    }/*******************************/
+    int operationTypes[NMB_OF_PROTOCOLS] = \
+        {USB_WRITE_REQ, USB_WRITE_REQ, PCIE_WRITE_REQ, IPC_WRITE_REQ};
     linkId_t id;
     EXTRACT_IDS(streamId,id);
     xLinkDesc_t* link = getLinkById(id);
     ASSERT_X_LINK(link != NULL);
-    if (getXLinkState(link) != USB_LINK_UP)
+    if (getXLinkState(link) != XLINK_UP)
     {
         return X_LINK_COMMUNICATION_NOT_OPEN;
     }
     struct timespec start, end;
     clock_gettime(CLOCK_REALTIME, &start);
-
     xLinkEvent_t event = {0};
-    event.header.type = USB_WRITE_REQ;
+    event.header.type = operationTypes[glHandler->protocol];
     event.header.size = size;
     event.header.streamId = streamId;
     event.xLinkFD = link->fd;
@@ -995,9 +1144,8 @@ XLinkError_t XLinkWriteData(streamId_t streamId, const uint8_t* buffer,
 
     xLinkEvent_t* ev = dispatcherAddEvent(EVENT_LOCAL, &event);
     dispatcherWaitEventComplete(link->fd);
+
     clock_gettime(CLOCK_REALTIME, &end);
-
-
     if (ev->header.flags.bitField.ack == 1)
     {
          //profile only on success
@@ -1014,7 +1162,7 @@ XLinkError_t XLinkWriteData(streamId_t streamId, const uint8_t* buffer,
 
 XLinkError_t XLinkAsyncWriteData()
 {
-    if (getXLinkState(NULL) != USB_LINK_UP)
+    if (getXLinkState(NULL) != XLINK_UP)
     {
         return X_LINK_COMMUNICATION_NOT_OPEN;
     }
@@ -1023,19 +1171,37 @@ XLinkError_t XLinkAsyncWriteData()
 
 XLinkError_t XLinkReadData(streamId_t streamId, streamPacketDesc_t** packet)
 {
+    /************* PCIE **************/
+    if (glHandler->protocol == PCIE) {
+        /*Bypass Dispatcher on PCIE for now*/
+        int toRead = (int)(*packet)->length;
+        int byteCount = 0;
+
+        while (toRead) {
+            int sc = XLinkRead(NULL, ((*packet)->data) + byteCount, (*packet)->length, 0);
+            if(sc < 0){
+                mvLog(MVLOG_ERROR,"%s() PCIE XLinkRead failed %d\n", __func__, (int)sc);
+            }
+
+            toRead -= sc;
+            byteCount += sc;
+        }
+        return X_LINK_SUCCESS;
+    }/********************************/
+    int operationTypes[NMB_OF_PROTOCOLS] = \
+        {USB_READ_REQ, USB_READ_REQ, PCIE_READ_REQ, IPC_READ_REQ};
+    struct timespec start, end;
     linkId_t id;
     EXTRACT_IDS(streamId,id);
     xLinkDesc_t* link = getLinkById(id);
     ASSERT_X_LINK(link != NULL);
-    if (getXLinkState(link) != USB_LINK_UP)
+    if (getXLinkState(link) != XLINK_UP)
     {
         return X_LINK_COMMUNICATION_NOT_OPEN;
     }
 
     xLinkEvent_t event = {0};
-    struct timespec start, end;
-
-    event.header.type = USB_READ_REQ;
+    event.header.type = operationTypes[glHandler->protocol];
     event.header.size = 0;
     event.header.streamId = streamId;
     event.xLinkFD = link->fd;
@@ -1060,11 +1226,17 @@ XLinkError_t XLinkReadData(streamId_t streamId, streamPacketDesc_t** packet)
 
 XLinkError_t XLinkReleaseData(streamId_t streamId)
 {
+    /************* PCIE **************/
+    if (glHandler->protocol == PCIE) {
+        XLinkPlatformResetRemote(NULL);
+        return X_LINK_SUCCESS;
+    }/********************************/
+
     linkId_t id;
     EXTRACT_IDS(streamId,id);
     xLinkDesc_t* link = getLinkById(id);
     ASSERT_X_LINK(link != NULL);
-    if (getXLinkState(link) != USB_LINK_UP)
+    if (getXLinkState(link) != XLINK_UP)
     {
         return X_LINK_COMMUNICATION_NOT_OPEN;
     }
@@ -1085,19 +1257,28 @@ XLinkError_t XLinkReleaseData(streamId_t streamId)
 
 XLinkError_t XLinkBootRemote(const char* deviceName, const char* binaryPath)
 {
-    if (UsbLinkPlatformBootRemote(deviceName, binaryPath) == 0)
+    if (XLinkPlatformBootRemote(deviceName, binaryPath) == 0)
         return X_LINK_SUCCESS;
     else
         return X_LINK_COMMUNICATION_FAIL;
+}
+
+XLinkError_t XLinkDisconnect(linkId_t id)
+{
+    xLinkDesc_t* link = getLinkById(id);
+    ASSERT_X_LINK(link != NULL);
+    link->hostClosedFD = 1;
+    XLinkPlatformResetRemote(link->fd);
+    return X_LINK_SUCCESS;
 }
 
 XLinkError_t XLinkResetRemote(linkId_t id)
 {
     xLinkDesc_t* link = getLinkById(id);
     ASSERT_X_LINK(link != NULL);
-    if (getXLinkState(link) != USB_LINK_UP)
+    if (getXLinkState(link) != XLINK_UP)
     {
-        USBLinkPlatformResetRemote(link->fd);
+        XLinkPlatformResetRemote(link->fd);
         return X_LINK_COMMUNICATION_NOT_OPEN;
     }
     xLinkEvent_t event = {0};
@@ -1117,7 +1298,7 @@ XLinkError_t XLinkResetAll()
         if (availableXLinks[i].id != INVALID_LINK_ID) {
             xLinkDesc_t* link = &availableXLinks[i];
             int stream;
-            for (stream = 0; stream < USB_LINK_MAX_STREAMS; stream++) {
+            for (stream = 0; stream < XLINK_MAX_STREAMS; stream++) {
                 if (link->availableStreams[stream].id != INVALID_STREAM_ID) {
                     streamId_t streamId = link->availableStreams[stream].id;
                     mvLog(MVLOG_DEBUG,"%s() Closing stream (stream = %d) %d on link %d\n",

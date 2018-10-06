@@ -3,7 +3,7 @@
 
 .PHONY: all
 all:
-	@echo "nothing to make, use 'make run' to run."
+	@echo "nothing to make or download for this example, use 'make run' to run the examples."
 
 .PHONY: run
 run:

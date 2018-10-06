@@ -1,19 +1,18 @@
 /*
-* Copyright 2018 Intel Corporation.
-* The source code, information and material ("Material") contained herein is
-* owned by Intel Corporation or its suppliers or licensors, and title to such
-* Material remains with Intel Corporation or its suppliers or licensors.
-* The Material contains proprietary information of Intel or its suppliers and
-* licensors. The Material is protected by worldwide copyright laws and treaty
-* provisions.
-* No part of the Material may be used, copied, reproduced, modified, published,
-* uploaded, posted, transmitted, distributed or disclosed in any way without
-* Intel's prior express written permission. No license under any patent,
-* copyright or other intellectual property rights in the Material is granted to
-* or conferred upon you, either expressly, by implication, inducement, estoppel
-* or otherwise.
-* Any license under such intellectual property rights must be express and
-* approved by Intel in writing.
+*
+* Copyright (c) 2017-2018 Intel Corporation. All Rights Reserved
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
 */
 
 // USB utility for use with Myriad2v2 ROM
@@ -202,13 +201,18 @@ usbBootError_t usb_find_device(unsigned idx, char *addr, unsigned addrsize, void
     // 2 => pid
     // '255-' x 7 (also gives us nul-terminator for last entry)
     // 7 => to add "-maXXXX"
-    uint8_t devs[15][2 + 2 + 4 * 7 + 7] = { 0 };//to store ven_id,dev_id;
+    //uint8_t devs[15][2 + 2 + 4 * 7 + 7] = { 0 };//to store ven_id,dev_id;
+    static uint8_t devs[15][2 + 2 + 4 * 7 + 7] = { 0 };//to store ven_id,dev_id;
+    static int devs_cnt = 0;
 #else
     static libusb_device **devs;
     libusb_device *dev;
     struct libusb_device_descriptor desc;
 #endif
     int count = 0;
+#if (defined(_WIN32) || defined(_WIN64))
+    int create_count = 0;
+#endif
     size_t i;
 
     if(!initialized)
@@ -226,7 +230,10 @@ usbBootError_t usb_find_device(unsigned idx, char *addr, unsigned addrsize, void
                 fprintf(stderr, "Unable to get USB device list: %s\n", libusb_strerror(res));
             return USB_BOOT_ERROR;
         }
+        devs_cnt = res;
     }
+    else
+        res = devs_cnt;
 #else
     if(!devs || idx == 0)
     {
@@ -248,7 +255,7 @@ usbBootError_t usb_find_device(unsigned idx, char *addr, unsigned addrsize, void
     while (res-- > 0)
     {
         if (((int)(devs[res][0] << 8 | devs[res][1]) == vid && (devs[res][2] << 8 | devs[res][3]) == pid) ||
-            (pid == 0 && vid == 0 &&
+            ((pid == 0 || pid == -1) && vid == 0 &&
             (((int)(devs[res][0] << 8 | devs[res][1]) == DEFAULT_VID && is_pid_supported((int)(devs[res][2] << 8 | devs[res][3])) == 1) ||
             ((int)(devs[res][0] << 8 | devs[res][1]) == DEFAULT_OPENVID && (int)(devs[res][2] << 8 | devs[res][3]) == DEFAULT_OPENPID))))
         {
@@ -263,7 +270,20 @@ usbBootError_t usb_find_device(unsigned idx, char *addr, unsigned addrsize, void
                     return USB_BOOT_SUCCESS;
                 }
             }
-            else if (idx == count)
+            else if ((pid == -1) && (int)(devs[res][2] << 8 | devs[res][3]) != DEFAULT_OPENPID)//pid==-1 is an indicator to try to find Myriad devices, exclude VSC devices
+            {
+                if (idx == create_count)
+                {
+                    const char *caddr = &devs[res][4];
+                    if (usb_loglevel > 1)
+                        fprintf(stderr, "Device %d Address: %s - VID/PID %04x:%04x\n", idx, caddr, (int)(devs[res][0] << 8 | devs[res][1]), (int)(devs[res][2] << 8 | devs[res][3]));
+                    strncpy(addr, caddr, addrsize);
+                    return USB_BOOT_SUCCESS;
+                }
+                else
+                    create_count++;
+            }
+            else if ((idx == count) && (pid != -1))
             {
                 const char *caddr = &devs[res][4];
                 if (usb_loglevel > 1)
@@ -421,7 +441,6 @@ static int wait_findopen(const char *device_address, int timeout, libusb_device 
         i++;
         usleep(100000);
     }
-    return 0;
 }
 
 static int send_file(libusb_device_handle *h, uint8_t endpoint, const uint8_t *tx_buf, unsigned filesize)

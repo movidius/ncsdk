@@ -1,7 +1,10 @@
 ARCH := $(shell uname -m)
 
+NO_RESET ?= no
+NO_BOOT ?= no
 
-OUT := libmvnc.so.0
+LIB_NAME:= libmvnc
+OUT := $(LIB_NAME).so.0
 OBJDIR := obj-$(ARCH)
 INSTALLDIR := ${DESTDIR}/usr/local
 PYTHON3DIST := $(shell python3 -c "import site; print(site.getsitepackages()[0])")
@@ -21,7 +24,7 @@ XLINK_SRCS=$(XLINK_BASE)/pc/usb_boot.c
 XLINK_SRCS+=$(XLINK_BASE)/shared/XLink.c
 XLINK_SRCS+=$(XLINK_BASE)/shared/XLinkDispatcher.c
 XLINK_SRCS+=$(XLINKCONSOLE_BASE)/pc/XLinkConsole.c
-XLINK_SRCS+=$(XLINK_BASE)/pc/UsbLinkPlatform.c
+XLINK_SRCS+=$(XLINK_BASE)/pc/XLinkPlatform.c
 
 XLINK_CFLAGS= -I$(XLINK_BASE)/shared \
 			-I$(XLINK_BASE)/pc \
@@ -30,7 +33,12 @@ XLINK_CFLAGS= -I$(XLINK_BASE)/shared \
 			-I $(MV_COMMON_BASE)/shared/include/
 
 CFLAGS+=$(XLINK_CFLAGS) -D__PC__ -DUSE_USB_VSC -DVERSION_NAME="\"$(VERSION_NUMBER)\""
-#CFLAGS+=-DXLINK_NO_BOOT
+ifeq ($(NO_BOOT), yes)
+    CFLAGS+=-DXLINK_NO_BOOT
+endif
+ifeq ($(NO_RESET), yes)
+    CFLAGS+=-DXLINK_NO_RESET
+endif
 CFLAGS+=-DDEVICE_SHELL_ENABLED
 
 LIBS += -lpthread -lusb-1.0 -ldl
@@ -52,12 +60,15 @@ LDFLAGS += -shared
 OBJS := $(SRCS:%.c=$(OBJDIR)/%.o)
 OBJS += $(XLINK_SRCS:%.c=$(OBJDIR)/%.o)
 DEPS := $(OBJS:.o=.d)
-all: obj-$(ARCH)/libmvnc.so.0
+
+.PHONY: get_mvcmd
+
+all: $(OBJDIR)/$(OUT) get_mvcmd
 
 $(OBJDIR)/$(OUT): $(OBJS)
 	if [ ! -e ./version.txt ] ; then echo "missing version.txt file"; exit 1; fi;
 	$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LIBS)
-	ln -fs $(OBJDIR)/$(OUT) libmvnc.so
+	ln -fs $(OBJDIR)/$(OUT) $(LIB_NAME).so
 	ln -fs $(OBJDIR)/$(OUT) $(OUT)
 
 $(OBJDIR)/%.o: %.c
@@ -66,12 +77,15 @@ $(OBJDIR)/%.o: %.c
 
 -include $(DEPS)
 
+get_mvcmd:
+	@./get_mvcmd.sh
+
 basicinstall: $(OBJDIR)/$(OUT)
 	mkdir -p $(INSTALLDIR)/include/
 	mkdir -p $(INSTALLDIR)/include/mvnc2
 	mkdir -p $(INSTALLDIR)/lib/
 	cp $(OBJDIR)/$(OUT) $(INSTALLDIR)/lib/
-	ln -fs libmvnc.so.0 $(INSTALLDIR)/lib/libmvnc.so
+	ln -fs $(OUT) $(INSTALLDIR)/lib/$(LIB_NAME).so
 	cp ../include/mvnc.h $(INSTALLDIR)/include/mvnc2
 	ln -fs $(INSTALLDIR)/include/mvnc2/mvnc.h $(INSTALLDIR)/include/mvnc.h 
 	mkdir -p $(INSTALLDIR)/lib/mvnc
@@ -90,11 +104,11 @@ postinstall:
 	udevadm trigger
 	ldconfig
 
-install: basicinstall pythoninstall postinstall
+install: get_mvcmd basicinstall pythoninstall postinstall
 
 uninstall:
-	rm -f $(INSTALLDIR)/lib/libmvnc.so.0
-	rm -f $(INSTALLDIR)/lib/libmvnc.so
+	rm -f $(INSTALLDIR)/lib/$(OUT)
+	rm -f $(INSTALLDIR)/lib/$(LIB_NAME).so
 	rm -f $(INSTALLDIR)/include/mvnc.h
 	rm -f $(INSTALLDIR)/include/mvnc2/mvnc.h
 	rm -f $(INSTALLDIR)/lib/mvnc/MvNCAPI-*.mvcmd
@@ -107,4 +121,5 @@ clean:
 	rm -f $(OUT)
 	rm -f $(OBJS)
 	rm -rf $(OBJDIR)
-	rm -f libmvnc.so
+	rm -f $(LIB_NAME).so
+	find mvnc/ -type f -delete

@@ -528,52 +528,72 @@
 
 <p>These instructions can be done in an Ubuntu <a href="vm_config.html">virtual machine</a>.</p>
 
-<h2 id="create-a-docker-container-for-the-ncsdk">Create a Docker container for the NCSDK</h2>
+<h2 id="non-privileged-docker-containers">Non-privileged Docker Containers</h2>
+<p>Versions of the NCSDK prior to 2.08 required that the <em>docker run</em> command was issued with the –privileged flag.  This is due to the way the NCS device boots and loads its firmware.
+If you are OK with running your docker container with the –privileged flag you can skip this section and follow the instructions in the <em>Privileged Docker Containers</em> section below.
+If you want to run as docker in a non-privileged container then follow the instructions in this section.</p>
 
-<p>We have provided a Dockerfile to build an Ubuntu-based Docker image that has the NCSDK installed.</p>
+<p>There are a few concepts to be aware of when using NCS devices in a non-privileged docker container.  In this mode the NCAPI libraries within the docker container must be rebuilt with NO_BOOT=yes NO_RESET=yes flags to prevent the API from rebooting/resetting the NCS devices.  The provide docker_cmd.sh script takes care of this for you.   Also, since the API isn’t booting the devices and loading the firmware this must be done prior to running an application that uses the devices and prior to starting the docker container.  There is a seperate program provided that does this called ncs_boot_devices.
+When starting the docker container the USB device name must be passed to the container with the –device flag.  The device name is not static, it changes over time so the docker_cmd.sh script also handles this.</p>
 
-<h4 id="1-build-the-docker-image">1. Build the Docker image</h4>
+<p>To make it easier to navigate the concepts above the following instructions can be followed.</p>
 
-<p>This command will create an image named ‘ncsdk’.</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker build <span class="nt">-t</span> ncsdk <span class="nt">-f</span> ./extras/docker/Dockerfile https://github.com/movidius/ncsdk.git#ncsdk2
+<h3 id="1-create-a-docker-image-for-the-ncsdk-to-run-in-non-privileged-mode">1. Create a Docker Image for the NCSDK to run in Non-privileged Mode</h3>
+<p>The provided docker file Dockerfile_NoPreviligeAccess will be used create a docker image named ‘ncsdk’ when you follow the commands below.
+You must have already cloned the ncsdk repository and should be in the top level directory named ncsdk.  Note if you want to use a specific branch of the repository be sure to do git checkout for the desired branch.
+After these commands are successfully executed, the docker image will contain the ncsdk and the NCAPI will have been compiled with the appropriate flags (NO_BOOT=yes and NO_RESET=yes.) within the image.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> &lt;NCSDK installation directory&gt;
+<span class="nv">$ </span>docker build <span class="nt">-t</span> ncsdk <span class="nt">-f</span> ./extras/docker/Dockerfile_NoPreviligeAccess <span class="nb">.</span>
 </code></pre></div></div>
 
-<p>This may take some time as the NCSDK is installed and dependencies are built.</p>
+<h3 id="2-prepare-ncs-devices-for-use-within-the-non-privileged-container">2. Prepare NCS Devices for Use Within the Non-privileged Container</h3>
+<p>Run the following commands to build and run the ncs_boot_devices program which loads the device firmware.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$cd</span> &lt;NCSDK installation path&gt;/extras/docker/ncs_boot_devices
 
-<p>If you have already cloned the ncsdk repo, you can instead execute this build command from within the ncsdk directory in the ncsdk2 branch:</p>
+<span class="nv">$ </span><span class="c">#The path to api src directory is typically "../../../api/src"</span>
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">MVNC_API_PATH</span><span class="o">=</span>&lt;path to api src <span class="o">&gt;</span>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker build <span class="nt">-t</span> ncsdk <span class="nt">-f</span> ./extras/docker/Dockerfile <span class="nb">.</span>
+<span class="nv">$ </span>make ncs_boot_devices
+
+<span class="nv">$ </span><span class="c">#Make sure all NCS devices are plugged into the host system at this point</span>
+<span class="nv">$ </span><span class="c">#Run the program to boot the devices and load the firmware</span>
+<span class="nv">$ </span>make run
 </code></pre></div></div>
 
-<h4 id="2-create-and-run-a-docker-container-from-the-built-image">2. Create and run a Docker container from the built image</h4>
+<h3 id="3-run-the-non-privileged-docker-container">3. Run the Non-privileged Docker Container.</h3>
+<p>The provided docker_cmd.sh script will run the docker container for you with appropriate –device parameters.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="c">#Now the devices in the system have been booted with correct firmware.</span>
+<span class="nv">$ </span><span class="c">#Start the docker container with correct --device parameters</span>
+<span class="nv">$ </span><span class="nb">cd</span> &lt;NCSDK installation path&gt;/extras/docker
+<span class="nv">$ </span>./docker_cmd.sh
+</code></pre></div></div>
+
+<h2 id="privileged-docker-containers">Privileged Docker Containers</h2>
+<p>The simplest way to use the NCS within a docker container is to do it from a container thats running with the –privileged flag.  This is not always desirable however, so if you would rather run in a non-privileged container see the <em>Non-privileged Docker Containers</em> section above.</p>
+
+<h3 id="1-create-a-docker-image-for-the-ncsdk-to-run-in-privileged-mode">1. Create a Docker Image for the NCSDK to Run in Privileged Mode</h3>
+
+<p>We have provided a Dockerfile to build an Ubuntu-based Docker image that has the NCSDK installed.  This command will create an image named ‘ncsdk’.
+You must have already cloned the ncsdk repository and should be in the top level directory named ncsdk.  Note if you want to use a specific branch of the repository be sure to do git checkout for the desired branch.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> &lt;NCSDK installation directory&gt;
+<span class="nv">$ </span>docker build <span class="nt">-t</span> ncsdk <span class="nt">-f</span> ./extras/docker/Dockerfile <span class="nb">.</span>
+</code></pre></div></div>
+
+<h3 id="2-create-and-run-a-privileged-docker-container-from-the-built-image">2. Create and Run a Privileged Docker container from the Built Image</h3>
 
 <p>This command will create a container named ‘ncsdk’.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run <span class="nt">--net</span><span class="o">=</span>host <span class="nt">--privileged</span> <span class="nt">-v</span> /dev:/dev <span class="nt">--name</span> ncsdk <span class="nt">-i</span> <span class="nt">-t</span> ncsdk /bin/bash
 </code></pre></div></div>
 
-<p>The elevated permissions are necessary for the USB access required by the neural compute device. Additional <code class="highlighter-rouge">run</code> options can be seen <a href="https://docs.docker.com/engine/reference/run/">here</a>. See the instructions above if you need to configure your Docker container to run behind a proxy.</p>
-
-<h4 id="3-build-examples-optional">3. Build examples (optional)</h4>
-
-<p>You must have a neural compute device connected to a USB port in your host system when running this command. This command is executed inside of your Docker container.</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>make examples
-</code></pre></div></div>
-
-<h4 id="4-exit-the-container">4. Exit the container</h4>
-
-<p>This command is executed inside of your Docker container.</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">exit</span>
-</code></pre></div></div>
+<p>The elevated permissions required via –privileged are necessary for the USB access required by the neural compute device unless following the non-privileged instructions above.</p>
 
 <h2 id="use-your-ncsdk-container">Use your NCSDK container</h2>
 
-<h2 id="starting-the-container">Starting the container</h2>
+<h3 id="starting-the-container">Starting the container</h3>
 <p>The Docker <code class="highlighter-rouge">run</code> command creates a new container instance each time that is used. If you want to use your existing container, use the <code class="highlighter-rouge">start</code> command.
-<em>(Note: We named the container ‘ncsdk’ in the run command above.)</em></p>
+<em>(Note: The container is named ‘ncsdk’ when following both the privileged and non-privileged instructions above.)</em></p>
 
 <ul>
   <li>
@@ -582,7 +602,21 @@
   </li>
 </ul>
 
-<h2 id="other-useful-docker-commands">Other useful Docker commands</h2>
+<h3 id="build-ncsdk-examples-optional">Build NCSDK examples (optional)</h3>
+
+<p>You must have a neural compute device connected to a USB port in your host system when running this command. This command is executed inside of your Docker container.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>make examples
+</code></pre></div></div>
+
+<h3 id="exit-the-container">Exit the container</h3>
+
+<p>This command is executed inside of your Docker container.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">exit</span>
+</code></pre></div></div>
+
+<h3 id="other-useful-docker-commands">Other useful Docker commands</h3>
 
 <p>These commands are executed from your host terminal, not from inside the Docker container.</p>
 
@@ -636,6 +670,8 @@
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker commit CONTAINER_ID <span class="o">[</span>REPOSITORY_NAME[:TAG]]
 </code></pre></div></div>
+
+<p>Additional <code class="highlighter-rouge">run</code> options can be seen <a href="https://docs.docker.com/engine/reference/run/">here</a>. See the instructions above if you need to configure your Docker container to run behind a proxy.</p>
 
         </div>
     <!-- /.row -->

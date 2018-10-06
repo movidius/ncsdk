@@ -119,6 +119,9 @@ function init_installer()
     ### get constants (function is in install-utilities.sh) 
     initialize_constants
     
+    ### make sure system has required prerequisites
+    check_prerequisites
+
     ### check if file exist 
     VERSION_FILE=version.txt
     if [ ! -f ${VERSION_FILE} ] ; then
@@ -156,9 +159,6 @@ function init_installer()
         SYS_INSTALL_DIR=/usr
     fi
 
-    ### make sure system has required prerequisites
-    check_prerequisites
-
     if [ "${VERBOSE}" = "yes" ] ; then
         print_ncsdk_config
     fi
@@ -184,11 +184,11 @@ function make_installer_dirs()
 # download_and_copy_files - download tarball and copy to install dir
 function download_and_copy_files()
 {
-    download_filename="NCSDK-${NCSDK_VERSION}.tar.gz"
+download_filename=NCSDK-2.08.01.02.tar.gz
     if [ ! -f ${download_filename} ] ; then
         echo "Downloading ${download_filename}"
-        ncsdk_link="https://downloadmirror.intel.com/27839/eng/NCSDK-2.05.00.02.tar.gz"
-        exec_and_search_errors "wget --no-cache -O ${download_filename} $ncsdk_link"
+        # ncsdk_download_link set in install-utilities.sh function initialize_constants()
+        exec_and_search_errors "wget --no-cache -O ${download_filename} $ncsdk_download_link"
     fi
     # ncsdk_pkg is the filename without the .tar.gz extension
     ncsdk_pkg=${download_filename%%.tar.gz}
@@ -198,7 +198,7 @@ function download_and_copy_files()
     ${SUDO_PREFIX} cp ./uninstall.sh ${INSTALL_DIR}/
     ${SUDO_PREFIX} cp ./install-utilities.sh ${INSTALL_DIR}/
     ${SUDO_PREFIX} cp ./ncsdk.conf ${INSTALL_DIR}/
-
+    
     # save current dir
     FROM_DIR=$PWD
 
@@ -385,7 +385,9 @@ function install_python_dependencies()
     elif [ "${OS_DISTRO,,}" = "raspbian" ] ; then
         # for Raspian, use apt with python3-* if available
         exec_and_search_errors "$SUDO_PREFIX apt-get $APT_QUIET install -y $(cat "$DIR/requirements_apt_raspbian.txt")"
-        exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org Cython graphviz scikit-image"
+        exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org Cython"
+        exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org graphviz"
+        exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org scikit-image"
         exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org --upgrade numpy==1.13.1"
         exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org pygraphviz Enum34>=1.1.6 networkx>=2.1,<=2.1"
         # Install packages for python 2.x, required for NCSDK python API
@@ -402,7 +404,7 @@ function install_python_dependencies()
 #                   sets FIND_TENSORFLOW__FOUND_SUPPORTED_VERSION=2 when TensorFlow isn't installed
 function find_tensorflow()
 {
-    SUPPORTED_TENSORFLOW_VERSION=1.7.0
+    SUPPORTED_TENSORFLOW_VERSION=1.9.0
     RC=0
     $PIP_PREFIX pip3 show $1 1> /dev/null || RC=$?
     if [ $RC -eq 0 ]; then
@@ -428,54 +430,21 @@ function find_tensorflow()
 # install_tensorflow - install supported version of tensorflow on system
 function install_tensorflow()
 {
-    if [ "${OS_DISTRO,,}" = "raspbian" ] && [ "${INSTALL_TENSORFLOW}" = "yes" ]; then
-        echo -e "${YELLOW}NOTE: TensorFlow is not officially supported on Raspbian Stretch."
-        echo -e "      We are installing a specific nightly TensorFlow build from http://ci.tensorflow.org/view/Nightly/job/nightly-pi-python3/"
-        echo -e "      for code development and testing. ${NC}"
 
-        echo "Checking if tensorflow is installed..."
-        # find_tensorflow sets FIND_TENSORFLOW__FOUND_SUPPORTED_VERSION to 0, 1 or 2 depending if correct version installed, incorrect version installed or not installed, respectively
-        find_tensorflow "tensorflow" 
-        tf=${FIND_TENSORFLOW__FOUND_SUPPORTED_VERSION}
-        INSTALL_TF="no"
-        [ $tf -eq 0 ] && echo "Installed TensorFlow is the correct version, not re-installing"
-        if [ $tf -eq 1 ] ; then
-            exec_and_search_errors "$PIP_PREFIX pip3 uninstall --quiet -y tensorflow"
-            INSTALL_TF="yes"
-        fi
-        [ $tf -eq 2 ] && INSTALL_TF="yes"
-
-        # install TensorFlow if needed
-        if [ "${INSTALL_TF}" = "yes" ] ; then
-            echo "Couldn't find a supported tensorflow version, downloading TensorFlow $SUPPORTED_TENSORFLOW_VERSION"
-            # rename wheel for python 3.5
-            WHEEL_DOWNLOAD=tensorflow-1.7.0-cp34-none-any.whl
-            WHEEL=tensorflow-1.7.0-cp35-none-any.whl
-            [ -f "${WHEEL_DOWNLOAD}" ] && sudo mv -f ${WHEEL_DOWNLOAD} ${WHEEL_DOWNLOAD}.save
-            $SUDO_PREFIX wget https://storage.googleapis.com/download.tensorflow.org/deps/pi/2018_05_21/${WHEEL_DOWNLOAD}
-            [ -f "${WHEEL}" ] && $SUDO_PREFIX mv -f ${WHEEL} ${WHEEL}.save
-            $SUDO_PREFIX mv ${WHEEL_DOWNLOAD} ${WHEEL}
-            echo "Installing TensorFlow"
-            exec_and_search_errors "$PIP_PREFIX pip3 install --quiet ${WHEEL}"
-            echo "Finished installing TensorFlow"
-        fi              
-        
-    elif [ "${OS_DISTRO,,}" = "ubuntu" ] ; then
-        echo "Checking whether tensorflow CPU version is installed..."
-        # find_tensorflow sets FIND_TENSORFLOW__FOUND_SUPPORTED_VERSION to 0, 1 or 2 depending if correct version installed, incorrect version installed or not installed, respectively
-        find_tensorflow "tensorflow" 
-        tf=${FIND_TENSORFLOW__FOUND_SUPPORTED_VERSION}
-        if [ $tf -ne 0 ]; then
-            echo "Checking whether tensorflow GPU version is installed..."
-            find_tensorflow tensorflow-gpu 
-            tf_gpu=${FIND_TENSORFLOW__FOUND_SUPPORTED_VERSION}
-        fi      
-        if [[ $tf -ne 0 && $tf_gpu -ne 0 ]]; then
-            echo "Couldn't find a supported tensorflow version, installing tensorflow $SUPPORTED_TENSORFLOW_VERSION"
-            exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org tensorflow==$SUPPORTED_TENSORFLOW_VERSION"
-        else
-            echo "tensorflow already at latest supported version...skipping."
-        fi
+    echo "Checking whether tensorflow CPU version is installed..."
+    # find_tensorflow sets FIND_TENSORFLOW__FOUND_SUPPORTED_VERSION to 0, 1 or 2 depending if correct version installed, incorrect version installed or not installed, respectively
+    find_tensorflow "tensorflow" 
+    tf=${FIND_TENSORFLOW__FOUND_SUPPORTED_VERSION}
+    if [ $tf -ne 0 ]; then
+        echo "Checking whether tensorflow GPU version is installed..."
+        find_tensorflow tensorflow-gpu 
+        tf_gpu=${FIND_TENSORFLOW__FOUND_SUPPORTED_VERSION}
+    fi      
+    if [[ $tf -ne 0 && $tf_gpu -ne 0 ]]; then
+        echo "Couldn't find a supported tensorflow version, installing tensorflow $SUPPORTED_TENSORFLOW_VERSION"
+        exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org --trusted-host www.piwheels.org tensorflow==$SUPPORTED_TENSORFLOW_VERSION"
+    else
+        echo "tensorflow already at latest supported version...skipping."
     fi
 }
 
@@ -715,14 +684,13 @@ function install_api()
     $SUDO_PREFIX cp $SDK_DIR/fw/MvNCAPI-*.mvcmd $SYS_INSTALL_DIR/lib/mvnc/
 
     # Copy C API to destination
-    $SUDO_PREFIX cp $SDK_DIR/api/c/mvnc.h $SYS_INSTALL_DIR/include/mvnc2
+    $SUDO_PREFIX cp $FROM_DIR/api/include/mvnc.h $SYS_INSTALL_DIR/include/mvnc2    
     $SUDO_PREFIX cp $SDK_DIR/api/c/libmvnc.so.0 $SYS_INSTALL_DIR/lib/mvnc/
 
     if [ -f $SDK_DIR/api/c/libmvnc_highclass.so.0 ] ; then
         $SUDO_PREFIX cp $SDK_DIR/api/c/ncHighClass.h $SYS_INSTALL_DIR/include/mvnc2
         $SUDO_PREFIX cp $SDK_DIR/api/c/libmvnc_highclass.so.0 $SYS_INSTALL_DIR/lib/mvnc/
     fi
-    echo "NCS Include files have been installed in $SYS_INSTALL_DIR/include"
 
     check_and_remove_file $SYS_INSTALL_DIR/include/mvnc.h
     check_and_remove_file $SYS_INSTALL_DIR/include/ncHighClass.h
@@ -737,14 +705,16 @@ function install_api()
         $SUDO_PREFIX ln -s $SYS_INSTALL_DIR/include/mvnc2/ncHighClass.h $SYS_INSTALL_DIR/include/ncHighClass.h
         $SUDO_PREFIX ln -s $SYS_INSTALL_DIR/lib/mvnc/libmvnc_highclass.so.0 $SYS_INSTALL_DIR/lib/libmvnc_highclass.so
     fi
-
+    echo "NCS Include files have been installed in $SYS_INSTALL_DIR/include"
+    
     $SUDO_PREFIX ldconfig
 
-    # Copy other collaterals to destination
     $SUDO_PREFIX cp -r $DIR/version.txt $INSTALL_DIR/
     $SUDO_PREFIX cp -r $SDK_DIR/LICENSE $INSTALL_DIR/
 
     # Install python API
+    $SUDO_PREFIX cp ${FROM_DIR}/api/python/mvnc/mvncapi.py $SDK_DIR/api/python/mvnc
+    $SUDO_PREFIX cp ${FROM_DIR}/api/python/mvnc/__init__.py $SDK_DIR/api/python/mvnc
     exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --upgrade --force-reinstall $SDK_DIR/api"
     exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --upgrade --force-reinstall $SDK_DIR/api"
     echo "NCS Python API has been installed in $INSTALL_DIR, and PYTHONPATH environment variable updated"

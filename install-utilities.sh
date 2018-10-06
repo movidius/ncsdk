@@ -45,6 +45,12 @@ function set_error_handling()
 # initialize_constants - initialize constants
 function initialize_constants()
 {
+    # file
+    ncsdk_download_link="https://downloadmirror.intel.com/28191/eng/NCSDK-2.08.01.02.tar.gz"
+
+    # VERBOSE value can be changed by editing ncsdk.config which will be read in function read_ncsdk_config()
+    VERBOSE=no
+
     # avoid conflicts with PYTHONPATH during install
     export PYTHONPATH=""
     
@@ -102,13 +108,16 @@ function read_ncsdk_config()
     INSTALL_TOOLKIT=yes
     PIP_SYSTEM_INSTALL=yes
     USE_VIRTUALENV=no
-    VERBOSE=no
     # check if nproc is available on the system via 'command'
     RC=0
     command -v nproc > /dev/null || RC=$?
     if [ $RC -eq 0 ] ; then
         #  default to using all processors to invoke make with (make -j $MAKE_NJOBS)
         MAKE_NJOBS=$(nproc)
+        # RPi runs make faster with N-1 cores
+        DISTRO="$(lsb_release -i 2>/dev/null | cut -f 2)"
+        OS_DISTRO="${DISTRO:-INVALID}"
+        [ "${OS_DISTRO,,}" = "raspbian" ] && MAKE_NJOBS=$((MAKE_NJOBS-1))
     else
         # Can't find nproc, default to 1 make process. Can change in ncsdk.conf
         MAKE_NJOBS=1

@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     tar \
     udev \
     wget \
+    libusb-1.0-0-dev \
     && apt-get clean
 
 # Copy over the NCSDK
@@ -19,3 +20,6 @@ WORKDIR "/ncsdk"
 
 # Run the installer
 RUN make install
+WORKDIR "api/src"
+RUN sudo make clean && sudo make get_mvcmd && sudo make basicinstall NO_BOOT=yes NO_RESET=yes && sudo make pythoninstall
+WORKDIR "../../"

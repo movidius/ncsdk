@@ -18,9 +18,8 @@ This creates an image named "ncsdk".
 
 ## Run the container
 
-After the image is built, execute the following command to run the container that we named "ncsdk":
-
-$ docker run --net=host --privileged -v /dev:/dev --name ncsdk -i -t ncsdk /bin/bash
+1. To boot devices with runtime FW compile and run the app ./ncs_boot_devices/
+2. run the command ./docker_cmd.sh 
 
 ## Additional Information
 
