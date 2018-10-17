@@ -122,4 +122,4 @@ clean:
 	rm -f $(OBJS)
 	rm -rf $(OBJDIR)
 	rm -f $(LIB_NAME).so
-	find mvnc/ -type f -delete
+	rm -rf mvnc
