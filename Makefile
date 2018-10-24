@@ -13,13 +13,13 @@ help:
 	@echo "  make examples - makes the ncsdk examples."
 	@echo "  make api - installs only the api. Ideal for RPi setup."
 	@echo "  make uninstall - uninstalls the ncsdk."
-	@echo "  make clean - removes targets and intermediate files." 
+	@echo "  make clean - removes targets and intermediate files."
 
 .PHONY: all
 all: install examples
 
 .PHONY: opencv
-opencv: 
+opencv:
 	./install-opencv.sh
 
 .PHONY: uninstallopencv
@@ -63,7 +63,8 @@ runexamples: prereqs opencv
 	(cd examples; make run)
 
 .PHONY: api
-api: @echo "\nmake api starting."
+api:
+	@echo "\nmake api starting."
 	(cd api/src; make; make install)
 
 .PHONY: clean
