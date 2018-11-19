@@ -1344,6 +1344,7 @@ static ncStatus_t getGraphOptionClass0(struct _graphPrivate_t *g,
          option == NC_RO_GRAPH_INPUT_COUNT ||
          option == NC_RO_GRAPH_OUTPUT_COUNT ||
          option == NC_RO_GRAPH_OPTION_CLASS_LIMIT ||
+         option == NC_RO_GRAPH_TIME_TAKEN_ARRAY_SIZE ||
          option == NC_RW_GRAPH_EXECUTORS_NUM) && *dataLength < sizeof(int)) {
         mvLog(MVLOG_ERROR,
               "data length of data (%d) is smaller that required (%d)!\n",
