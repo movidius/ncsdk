@@ -129,12 +129,12 @@ int main(int argc, char** argv)
     // Try to open the NCS device via the device name
     retCode = ncDeviceOpen(deviceHandle);
     if (retCode != NC_OK)
-    {   // failed to open the device.  
+    {   // failed to open the device.
         printf("Could not open NCS device\n");
         exit(-1);
     }
-    
-    // deviceHandle is ready to use now.  
+
+    // deviceHandle is ready to use now.
     // Pass it to other NC API calls as needed and close it when finished.
     printf("Successfully opened NCS device!\n");
 
@@ -155,11 +155,11 @@ int main(int argc, char** argv)
     retCode = ncGraphAllocate(deviceHandle, graphHandle, graphFileBuf, graphFileLen);
     if (retCode != NC_OK)
     {   // error allocating graph
-        printf("Could not allocate graph for file: %s\n", GRAPH_FILE_NAME); 
+        printf("Could not allocate graph for file: %s\n", GRAPH_FILE_NAME);
         printf("Error from ncGraphAllocate is: %d\n", retCode);
     }
     else
-    {   // successfully allocated graph.  Now graphHandle is ready to go.  
+    {   // successfully allocated graph.  Now graphHandle is ready to go.
         // use graphHandle for other API calls and call mvncDeallocateGraph
         // when done with it.
         printf("Successfully allocated graph for %s\n", GRAPH_FILE_NAME);

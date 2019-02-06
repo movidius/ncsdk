@@ -37,6 +37,7 @@
 #else
 #include <pthread.h>
 #include <semaphore.h>
+#include <unistd.h>
 #endif
 
 #include "mvMacros.h"
@@ -132,7 +133,7 @@ int handleIncomingEvent(xLinkEvent_t* event){
         /*If we got here, we will read the data no matter what happens.
           If we encounter any problems we will still read the data to keep
           the communication working but send a NACK.*/
-        stream = getStreamById(event->xLinkFD, event->header.streamId);\
+        stream = getStreamById(event->xLinkFD, event->header.streamId);
         ASSERT_X_LINK(stream);
 
         stream->localFillLevel += event->header.size;
@@ -220,22 +221,31 @@ int handleIncomingEvent(xLinkEvent_t* event){
 }
  int dispatcherEventReceive(xLinkEvent_t* event){
     static xLinkEvent_t prevEvent;
-    int sc = XLinkRead(event->xLinkFD, &event->header, sizeof(event->header), 0);
+    int sc = X_LINK_PLATFORM_TIMEOUT;
+    while (sc == X_LINK_PLATFORM_TIMEOUT) {
+        sc = XLinkRead(event->xLinkFD, &event->header, sizeof(event->header), USB_DATA_TIMEOUT);
 
-    if(sc < 0 && event->header.type == USB_RESET_RESP) {
-        return sc;
-    }
-    if(sc < 0) {
-        xLinkDesc_t* link = getLink(event->xLinkFD);
-        if (link->hostClosedFD) {
-            //host intentionally closed usb, finish normally
-            event->header.type = USB_RESET_RESP;
-            return 0;
+        if(sc < 0) {
+            if (event->header.type == USB_RESET_RESP) {
+                return sc;
+            } else {
+                xLinkDesc_t* link = getLink(event->xLinkFD);
+                if (link->hostClosedFD) {
+                    //host intentionally closed usb, finish normally
+                    event->header.type = USB_RESET_RESP;
+                    return 0;
+                }
+            }
         }
+    }
+
+    //If we got here then either: 1) read was successful
+    //          2) failed on other issue that is not timeout.
+    // if it was timeout or device was reset/hostClosedFd it will be caught above.
+    if(sc < 0) {
         mvLog(MVLOG_ERROR,"%s() Read failed %d\n", __func__, (int)sc);
         return sc;
     }
-
     mvLog(MVLOG_DEBUG,"Incoming event %d %d %d %d\n",
                                 (int)event->header.type,
                                 (int)event->header.id,
@@ -334,7 +344,7 @@ streamDesc_t* getStreamByName(xLinkDesc_t* link, const char* name)
         if (link->availableStreams[stream].id != INVALID_STREAM_ID &&
             strcmp(link->availableStreams[stream].name, name) == 0) {
                 sem_wait(&link->availableStreams[stream].sem);
-                    return &link->availableStreams[stream];
+                return &link->availableStreams[stream];
         }
     }
     return NULL;
@@ -453,7 +463,7 @@ streamId_t allocateNewStream(void* fd,
         {
             return INVALID_STREAM_ID;
         }
-        mvLog(MVLOG_DEBUG,"%s(): streamName Exists %d\n", __func__, (int)stream->id);
+        mvLog(MVLOG_DEBUG,"%s(): streamName Exists id = %d\n", __func__, (int)stream->id);
     }
     else
     {
@@ -545,13 +555,13 @@ int dispatcherLocalEventGetResponse(xLinkEvent_t* event, xLinkEvent_t* response)
             event->header.flags.bitField.block = 1;
             // TODO: easy to implement non-blocking read here, just return nack
         }
-        releaseStream(stream);
         event->header.flags.bitField.localServe = 1;
+        releaseStream(stream);
         break;
     case USB_READ_REL_REQ:
         stream = getStreamById(event->xLinkFD, event->header.streamId);
         ASSERT_X_LINK(stream);
-        uint32_t releasedSize;
+        uint32_t releasedSize = 0;
         releasePacketFromStream(stream, &releasedSize);
         event->header.size = releasedSize;
         releaseStream(stream);
@@ -712,6 +722,7 @@ int dispatcherRemoteEventGetResponse(xLinkEvent_t* event, xLinkEvent_t* response
                         deallocateStream(stream);
                         if (!stream->writeSize) {
                             stream->id = INVALID_STREAM_ID;
+                            stream->name[0] = '\0';
                         }
                     }
                     else
@@ -1081,7 +1092,7 @@ XLinkError_t XLinkGetAvailableStreams(linkId_t id)
     return X_LINK_SUCCESS;
 }
 
-XLinkError_t GetDeviceName(int index, char* name, int nameSize, int pid)
+static XLinkError_t GetDeviceName(int index, char* name, int nameSize, int pid)
 {
     int rc = -1;
     if (!pid)
@@ -1268,6 +1279,7 @@ XLinkError_t XLinkDisconnect(linkId_t id)
     xLinkDesc_t* link = getLinkById(id);
     ASSERT_X_LINK(link != NULL);
     link->hostClosedFD = 1;
+    usleep((USB_DATA_TIMEOUT + 500)*1000);
     XLinkPlatformResetRemote(link->fd);
     return X_LINK_SUCCESS;
 }

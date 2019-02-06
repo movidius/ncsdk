@@ -23,13 +23,26 @@ function check_supported_os()
     # install package lsb-release if application lsb_release isn't installed 
     RC=0
     command -v lsb_release > /dev/null || RC=$?
-    [ $RC -ne 0 ] && exec_and_search_errors "$SUDO_PREFIX apt-get $APT_QUIET install -y lsb-release"
+    [ $RC -ne 0 ] && exec_and_search_errors "$SUDO_PREFIX apt-get install -y lsb-release"
     
     DISTRO="$(lsb_release -i 2>/dev/null | cut -f 2)"
     VERSION="$(lsb_release -r 2>/dev/null | awk '{ print $2 }' | sed 's/[.]//')"
     OS_DISTRO="${DISTRO:-INVALID}"
     OS_VERSION="${VERSION:-255}"
     if [ "${OS_DISTRO,,}" = "ubuntu" ] && [ ${OS_VERSION} = 1604 ]; then
+       # Require 64-bit Ubuntu OS
+        HARDWARE_PLATFORM=$(uname -i)
+        if [ "${HARDWARE_PLATFORM}" != "x86_64" ] ; then
+            echo -e "${RED} You are not running on a 64-bit OS version which is required.  Will exit${NC}"
+            exit 1
+        fi
+        # require AVX support under Ubuntu OS
+        RC=0
+        grep -q avx /proc/cpuinfo || RC=$?
+        if [ ${RC} -ne 0 ] ; then
+            echo -e "${RED}Intel(R) Advanced Vector Extensions, Intel(R) AVX, support required but not detected.  Will exit${NC}"
+            exit 1
+        fi
         [ "${VERBOSE}" = "yes" ] && echo "Installing on Ubuntu 16.04"
     elif [ "${OS_DISTRO,,}" = "raspbian" ] && [ ${OS_VERSION} -ge 91 ]; then
         [ "${VERBOSE}" = "yes" ] && echo "Installing on Raspbian Stretch"
@@ -119,6 +132,9 @@ function init_installer()
     ### get constants (function is in install-utilities.sh) 
     initialize_constants
     
+    ### Ask for sudo priviledges (function is in install-utilities.sh)
+    ask_sudo_permissions
+
     ### make sure system has required prerequisites
     check_prerequisites
 
@@ -134,9 +150,6 @@ function init_installer()
     
     ### read config file (function is in install-utilities.sh) 
     read_ncsdk_config
-
-    ### Ask for sudo priviledges (function is in install-utilities.sh)
-    ask_sudo_permissions
 
     ### Set installer verbosity level
     APT_QUIET=-qq
@@ -184,12 +197,21 @@ function make_installer_dirs()
 # download_and_copy_files - download tarball and copy to install dir
 function download_and_copy_files()
 {
-download_filename=NCSDK-2.08.01.02.tar.gz
+download_filename=NCSDK-2.10.01.01.tar.gz
     if [ ! -f ${download_filename} ] ; then
-        echo "Downloading ${download_filename}"
-        # ncsdk_download_link set in install-utilities.sh function initialize_constants()
-        exec_and_search_errors "wget --no-cache -O ${download_filename} $ncsdk_download_link"
+        ncsdk_link_filename=$(echo $ncsdk_download_link | awk -F / '{print $NF}')
+        # make sure ncsdk_link_filename matches download_filename
+        if [ "${ncsdk_link_filename}" = "${download_filename}" ] ; then
+            echo "Downloading ${download_filename}"
+            exec_and_search_errors "wget -q --no-cache -O ${download_filename} $ncsdk_download_link"
+        else
+            echo -e "${RED}Error file download ($ncsdk_link_filename) doesn't match name based on version.txt ($download_filename)."
+            exit 1
+        fi        
+    else
+        echo "File ${download_filename} exists, will not download again"
     fi
+    
     # ncsdk_pkg is the filename without the .tar.gz extension
     ncsdk_pkg=${download_filename%%.tar.gz}
 
@@ -346,9 +368,11 @@ function install_python_dependencies()
 
     if [ "${OS_DISTRO,,}" = "ubuntu" ] ; then
         exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org -r $DIR/requirements.txt"
+        #NPS exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org --upgrade numpy"
         # Install packages for python 2.x, required for NCSDK python API
         exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --trusted-host files.pythonhosted.org Enum34>=1.1.6"
-        exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --trusted-host files.pythonhosted.org --upgrade numpy>=1.13.0,<=1.13.3"
+	exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --trusted-host files.pythonhosted.org numpy==1.15"
+        #NPS exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --trusted-host files.pythonhosted.org --upgrade numpy"
 
         # verify python3 import scipy._lib.decorator working, a potential problem on Ubuntu only.  First check python3 import scipy.  
         RC=0
@@ -387,12 +411,13 @@ function install_python_dependencies()
         exec_and_search_errors "$SUDO_PREFIX apt-get $APT_QUIET install -y $(cat "$DIR/requirements_apt_raspbian.txt")"
         exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org Cython"
         exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org graphviz"
-        exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org scikit-image"
-        exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org --upgrade numpy==1.13.1"
-        exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org pygraphviz Enum34>=1.1.6 networkx>=2.1,<=2.1"
+        exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org scikit-image>=0.13.0,<=0.14.0"
+        #NPS exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org --upgrade numpy"
+        exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --trusted-host files.pythonhosted.org pygraphviz Enum34>=1.1.6 numpy==1.15 networkx>=2.1,<=2.1"
         # Install packages for python 2.x, required for NCSDK python API
         exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --trusted-host files.pythonhosted.org Enum34>=1.1.6"
-        exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --trusted-host files.pythonhosted.org --upgrade numpy==1.13.1"
+        #NPS exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --trusted-host files.pythonhosted.org --upgrade numpy"
+	exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --trusted-host files.pythonhosted.org numpy==1.15"
     fi
 }
 
@@ -404,7 +429,7 @@ function install_python_dependencies()
 #                   sets FIND_TENSORFLOW__FOUND_SUPPORTED_VERSION=2 when TensorFlow isn't installed
 function find_tensorflow()
 {
-    SUPPORTED_TENSORFLOW_VERSION=1.9.0
+    SUPPORTED_TENSORFLOW_VERSION=1.11.0
     RC=0
     $PIP_PREFIX pip3 show $1 1> /dev/null || RC=$?
     if [ $RC -eq 0 ]; then

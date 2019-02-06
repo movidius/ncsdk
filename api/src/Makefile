@@ -21,6 +21,7 @@ XLINK_BASE=$(MV_COMMON_BASE)/components/XLink
 XLINKCONSOLE_BASE=$(MV_COMMON_BASE)/components/XLinkConsole
 
 XLINK_SRCS=$(XLINK_BASE)/pc/usb_boot.c
+XLINK_SRCS+=$(XLINK_BASE)/pc/pcie_host.c
 XLINK_SRCS+=$(XLINK_BASE)/shared/XLink.c
 XLINK_SRCS+=$(XLINK_BASE)/shared/XLinkDispatcher.c
 XLINK_SRCS+=$(XLINKCONSOLE_BASE)/pc/XLinkConsole.c
@@ -80,7 +81,7 @@ $(OBJDIR)/%.o: %.c
 get_mvcmd:
 	@./get_mvcmd.sh
 
-basicinstall: $(OBJDIR)/$(OUT)
+basicinstall: $(OBJDIR)/$(OUT) get_mvcmd
 	mkdir -p $(INSTALLDIR)/include/
 	mkdir -p $(INSTALLDIR)/include/mvnc2
 	mkdir -p $(INSTALLDIR)/lib/
@@ -104,7 +105,7 @@ postinstall:
 	udevadm trigger
 	ldconfig
 
-install: get_mvcmd basicinstall pythoninstall postinstall
+install: basicinstall pythoninstall postinstall
 
 uninstall:
 	rm -f $(INSTALLDIR)/lib/$(OUT)
@@ -122,4 +123,4 @@ clean:
 	rm -f $(OBJS)
 	rm -rf $(OBJDIR)
 	rm -f $(LIB_NAME).so
-	find mvnc/ -type f -delete
+	if [ -d "mvnc" ]; then find mvnc/ -type f -delete ; fi

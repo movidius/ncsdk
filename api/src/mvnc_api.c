@@ -250,7 +250,7 @@ static void resetAll()
         mvLog(MVLOG_INFO, "Stalled devices found, Reseting...");
         XLinkResetAll();
 #if (!defined(_WIN32) && !defined(_WIN64) )
-        usleep(500000); //device takes some time to re-enumrate, wait till it's back
+        usleep(1000000); //device takes some time to re-enumrate, wait till it's back
 #endif
         iters = 0;
 
@@ -840,7 +840,7 @@ ncStatus_t ncDeviceClose(struct ncDeviceHandle_t * deviceHandle)
     pthread_mutex_unlock(&globalMutex);
 
 #if (!defined(_WIN32) && !defined(_WIN64) )
-    usleep(500000); //device takes some time to re-enumrate, wait till it's back
+    usleep(1000000); //device takes some time to re-enumrate, wait till it's back
 #endif
     return NC_OK;
 }
@@ -1014,7 +1014,7 @@ ncStatus_t ncGraphAllocate(struct ncDeviceHandle_t * deviceHandle,
 
     if (sendGraphMonitorRequest(d->graph_monitor_stream_id, &cmd)) {
         mvLog(MVLOG_WARN, "can't send graph allocation command");
-        pthread_mutex_lock(&d->graph_streamm);
+        pthread_mutex_unlock(&d->graph_streamm);
         return NC_ERROR;
     }
     if (XLinkWriteData(streamId, graphBuffer, graphBufferLength) != 0) {

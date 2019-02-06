@@ -50,9 +50,9 @@ float *LoadImage(const char *path, int reqsize, float *mean);
 
 // Reads a graph file from the file system and copies it to a buffer
 // that is allocated internally via malloc.
-// Param path is a pointer to a null terminate string that must be set to the path to the 
+// Param path is a pointer to a null terminate string that must be set to the path to the
 //            graph file on disk before calling
-// Param length must must point to an integer that will get set to the number of bytes 
+// Param length must must point to an integer that will get set to the number of bytes
 //              allocated for the buffer
 // Returns pointer to the buffer allcoated.
 // Note: The caller must free the buffer returned.
@@ -82,15 +82,15 @@ void *LoadGraphFile(const char *path, unsigned int *length)
     return buf;
 }
 
-// Reads an image file from disk (8 bit per channel RGB .jpg or .png or other formats 
-// supported by stbi_load.)  Resizes it, subtracts the mean from each channel, and then 
-// converts to an array of half precision floats that is suitable to pass to ncFifoWriteElem.  
-// The returned array will contain 3 floats for each pixel in the image the first float 
-// for a pixel is it's the Blue channel value the next is Green and then Red.  The array 
+// Reads an image file from disk (8 bit per channel RGB .jpg or .png or other formats
+// supported by stbi_load.)  Resizes it, subtracts the mean from each channel, and then
+// converts to an array of half precision floats that is suitable to pass to ncFifoWriteElem.
+// The returned array will contain 3 floats for each pixel in the image the first float
+// for a pixel is it's the Blue channel value the next is Green and then Red.  The array
 // contains the pixel values in row major order.
-// Param path is a pointer to a null terminated string that must be set to the path of the 
+// Param path is a pointer to a null terminated string that must be set to the path of the
 //            to read before calling.
-// Param reqsize must be set to the width and height that the image will be resized to.  
+// Param reqsize must be set to the width and height that the image will be resized to.
 //               Its assumed width and height are the same size.
 // Param mean must be set to point to an array of 3 floating point numbers.  The three
 //            numbers are the mean values for the blue, green, and red channels in that order.
@@ -147,7 +147,7 @@ float *LoadImage(const char *path, int reqSize, float *mean)
 
 // Opens one NCS device.
 // Param deviceIndex is the zero-based index of the device to open
-// Param deviceHandle is the address of a device handle that will be set 
+// Param deviceHandle is the address of a device handle that will be set
 //                    if opening is successful
 // Returns true if works or false if doesn't.
 bool OpenOneNCS(int deviceIndex, struct ncDeviceHandle_t **deviceHandle)
@@ -159,16 +159,16 @@ bool OpenOneNCS(int deviceIndex, struct ncDeviceHandle_t **deviceHandle)
         printf("Error - NCS device at index %d not found\n", deviceIndex);
         return false;
     }
-    
+
     // Try to open the NCS device via the device name
     retCode = ncDeviceOpen(*deviceHandle);
     if (retCode != NC_OK)
-    {   // failed to open the device.  
+    {   // failed to open the device.
         printf("Error - Could not open NCS device at index %d\n", deviceIndex);
         return false;
     }
-    
-    // deviceHandle is ready to use now.  
+
+    // deviceHandle is ready to use now.
     // Pass it to other NC API calls as needed and close it when finished.
     printf("Successfully opened NCS device at index %d %p!\n", deviceIndex, *deviceHandle);
     return true;
@@ -212,12 +212,12 @@ bool LoadGraphToNCS(struct ncDeviceHandle_t* deviceHandle, const char* graphFile
     retCode = ncGraphAllocate(deviceHandle, *graphHandle, graphFileBuf, graphFileLen);
     if (retCode != NC_OK)
     {   // error allocating graph
-        printf("Could not allocate graph for file: %s\n", graphFilename); 
+        printf("Could not allocate graph for file: %s\n", graphFilename);
         printf("Error from ncGraphAllocate is: %d\n", retCode);
         return false;
     }
 
-    // successfully allocated graph.  Now graphHandle is ready to go.  
+    // successfully allocated graph.  Now graphHandle is ready to go.
     // use graphHandle for other API calls and call ncGraphDestroy
     // when done with it.
     printf("Successfully allocated graph for %s\n", graphFilename);
@@ -227,7 +227,7 @@ bool LoadGraphToNCS(struct ncDeviceHandle_t* deviceHandle, const char* graphFile
 
 
 // Runs an inference and outputs result to console
-// Param graphHandle is the graphHandle from mvncAllocateGraph for the network that 
+// Param graphHandle is the graphHandle from mvncAllocateGraph for the network that
 //                   will be used for the inference
 // Param imageFileName is the name of the image file that will be used as input for
 //                     the neural network for the inference
@@ -246,12 +246,12 @@ bool DoInferenceOnImageFile(struct ncGraphHandle_t *graphHandle, struct ncDevice
     unsigned int length;
 
     // LoadImage will read image from disk, convert channels to floats
-    // subtract network mean for each value in each channel.  Then, 
+    // subtract network mean for each value in each channel.  Then,
     // return pointer to the buffer of 32Bit floats
     float* imageBuf = LoadImage(imageFileName, networkDim, networkMean);
 
-    // calculate the length of the buffer that contains the floats. 
-    // 3 channels * width * height * sizeof a 32bit float 
+    // calculate the length of the buffer that contains the floats.
+    // 3 channels * width * height * sizeof a 32bit float
     unsigned int lenBuf = 3*networkDim*networkDim*sizeof(*imageBuf);
 
     // Read descriptor for input tensor
@@ -282,9 +282,9 @@ bool DoInferenceOnImageFile(struct ncGraphHandle_t *graphHandle, struct ncDevice
     free(imageBuf);
 
     // the inference has been started, now call ncFifoReadElem() for the
-    // inference result 
+    // inference result
     printf("Successfully loaded the tensor for image %s\n", imageFileName);
-    
+
     unsigned int outputDataLength;
     length = sizeof(unsigned int);
     retCode = ncFifoGetOption(bufferOut, NC_RO_FIFO_ELEMENT_DATA_SIZE, &outputDataLength, &length);
@@ -409,7 +409,7 @@ int main(int argc, char** argv)
     graphHandleSqueezeNet = NULL;
     retCode = ncGraphDestroy(&graphHandleGoogleNet);
     graphHandleGoogleNet = NULL;
-  
+
     retCode = ncDeviceClose(devHandle1);
     devHandle1 = NULL;
 

@@ -19,10 +19,10 @@ function initialization()
     set_error_handling
     ### get constants (function is in install-utilities.sh)
     initialize_constants
+    ### Ask for sudo priviledges (function is in install-utilities.sh)
+    ask_sudo_permissions
     ### read config file (function is in install-utilities.sh) 
     read_ncsdk_config
-    # Ask for sudo priviledges (function is in install-utilities.sh)
-    ask_sudo_permissions
 }
 
 
