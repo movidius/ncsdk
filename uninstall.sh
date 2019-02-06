@@ -65,11 +65,11 @@ function main()
     ### get constants, function is in install-utilities.sh
     initialize_constants
 
-    ### function is in install-utilities.sh
-    read_ncsdk_config
-
     ### ask for sudo priviledges, function is in install-utilities.sh
     ask_sudo_permissions
+
+    ### function is in install-utilities.sh
+    read_ncsdk_config
 
     # override value in ncsdk.config for uninstall
     VERBOSE=yes

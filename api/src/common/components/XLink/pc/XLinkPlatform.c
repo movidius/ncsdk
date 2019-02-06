@@ -42,6 +42,7 @@ extern void initialize_usb_boot();
 #include <pthread.h>
 #endif
 
+#include "pcie_host.h"
 #include "usb_boot.h"
 
 #define MAX_EVENTS 64
@@ -87,6 +88,17 @@ static double seconds()
 /*#################################################################################
 ################################## USB CDC FUNCTIONS ##############################
 ##################################################################################*/
+static xLinkPlatformErrorCode_t cdc_convert_error_code(int rc) {
+    switch(rc) {
+        case 0:
+            return X_LINK_PLATFORM_SUCCESS;
+        case -1:
+            return X_LINK_PLATFORM_DEVICE_NOT_FOUND;
+        //No timeout case for cdc
+        default:
+            return X_LINK_PLATFORM_ERROR;
+    }
+}
 static int cdc_usb_write(void *f __attribute__((unused)),
                         void* data, size_t size,
                         unsigned int timeout __attribute__((unused)))
@@ -95,14 +107,14 @@ static int cdc_usb_write(void *f __attribute__((unused)),
     size_t byteCount = 0;
     if(usbFdWrite < 0)
     {
-        return -1;
+        return cdc_convert_error_code(-1);
     }
     while(byteCount < size) {
        int toWrite = (gl_packetLength && ((size - byteCount) > gl_packetLength)) \
                         ? gl_packetLength : size - byteCount;
        int wc = write(usbFdWrite, ((char*)data) + byteCount, toWrite);
        if (wc != toWrite) {
-           return -2;
+           return cdc_convert_error_code(-2);
        }
        byteCount += toWrite;
 
@@ -111,14 +123,14 @@ static int cdc_usb_write(void *f __attribute__((unused)),
        int rc = read(usbFdWrite, &acknowledge, sizeof(acknowledge));
 
        if ( rc < 0) {
-           return -2;
+           return cdc_convert_error_code(-2);
        }
        if (acknowledge == 0xEF) {
            //printf("read ack %x\n", acknowledge);
        }
        else {
            printf("read ack err %x %d\n", acknowledge, rc);
-           return -2;
+           return cdc_convert_error_code(-2);
        } //*/
     }
 #endif
@@ -131,7 +143,7 @@ static int cdc_usb_read(void *f __attribute__((unused)),
 {
 #if (!defined(_WIN32) && !defined(_WIN64))
     if(usbFdRead < 0) {
-        return -1;
+        return cdc_convert_error_code(-1);
     }
     size_t byteCount =  0;
     int toRead = 0;
@@ -143,7 +155,7 @@ static int cdc_usb_read(void *f __attribute__((unused)),
         {
             int rc = read(usbFdRead, &((char*)data)[byteCount], toRead);
             if (rc < 0) {
-                return -2;
+                return cdc_convert_error_code(-2);
             }
             toRead -= rc;
             byteCount += rc;
@@ -155,7 +167,7 @@ static int cdc_usb_read(void *f __attribute__((unused)),
           //printf("write %x %d\n", acknowledge, wc);
         }
         else {
-            return -2;
+           return cdc_convert_error_code(-2);
         }   //*/
     }
 #endif
@@ -240,6 +252,18 @@ static int cdc_usb_close(void *f __attribute__((unused)))
 /*#################################################################################
 ################################## USB VSC FUNCTIONS ##############################
 ##################################################################################*/
+static xLinkPlatformErrorCode_t vsc_convert_error_code(int rc) {
+    switch(rc) {
+        case 0:
+            return X_LINK_PLATFORM_SUCCESS;
+        case LIBUSB_ERROR_TIMEOUT:
+            return X_LINK_PLATFORM_TIMEOUT;
+        case LIBUSB_ERROR_NO_DEVICE:
+            return X_LINK_PLATFORM_DEVICE_NOT_FOUND;
+        default:
+            return X_LINK_PLATFORM_ERROR;
+    }
+}
 static int vsc_usb_write(void *f, void *data, size_t size, unsigned int timeout)
 {
     while(size > 0)
@@ -258,7 +282,7 @@ static int vsc_usb_write(void *f, void *data, size_t size, unsigned int timeout)
                                     timeout);
  #endif
         if(rc)
-            return rc;
+            return vsc_convert_error_code(rc);
         data = (char *)data + bt;
         size -= bt;
     }
@@ -283,7 +307,7 @@ static int vsc_usb_read(void *f, void *data, size_t size, unsigned int timeout)
                                     timeout);
 #endif
         if(rc)
-            return rc;
+            return vsc_convert_error_code(rc);
         data = ((char *)data) + bt;
         size -= bt;
     }
@@ -316,7 +340,7 @@ static int vsc_usb_open(const char* devPathRead __attribute__((unused)),
         if (libusb_rc < 0) {
             usb_close_device(h);
             usb_free_device(dev);
-            return 0;
+            return -1;
         }
        //usb_close_device(h);
        //usb_free_device(dev);
@@ -361,42 +385,85 @@ static int vsc_usb_close(void *f)
     return 0;
 }
 
+static int write_pending = 0;
+static int read_pending = 0;
+
 /*#################################################################################
 ################################### PCIe FUNCTIONS ################################
 ##################################################################################*/
-static int pcie_host_write(void *f __attribute__((unused)),
-                            void *data, size_t size,
-                            unsigned int timeout __attribute__((unused)))
-{
-    return write(pcieFd, ((char*)data), size);
-}
+#define UNUSED __attribute__((unused))
 
-static int pcie_host_read(void *f __attribute__((unused)),
-                            void *data, size_t size,
-                            unsigned int timeout __attribute__((unused)))
+static int pcie_host_write(UNUSED void *f, void *data, size_t size,
+                           UNUSED unsigned int timeout)
 {
-    return read(pcieFd, ((char*)data), size);
-}
+    int left = size;
+    while(left > 0)
+    {
+        write_pending = 1;
 
-static int pcie_host_open(const char* devPathRead __attribute__((unused)),
-                        const char* devPathWrite,
-                        void** fd __attribute__((unused)))
-{
-    printf("pcie_host_open. Starting device test code example...\n");
-    pcieFd = open(devPathWrite, O_RDWR);
-    if (pcieFd < 0){
-        perror("Failed to open the device...");
-        return errno;
+        int bt = pcie_write(pcieFd, data, left);
+
+        if (bt == -EAGAIN)
+        {
+            // Let read commands be submitted
+            if (read_pending > 0)
+                usleep(1000);
+            continue;
+        }
+
+        write_pending = 0;
+
+        if(bt < 0)
+            return bt;
+        data = ((char *)data) + bt;
+        left -= bt;
     }
-    //*fd = &pcieFd;      //might not need
+
+    return size;
+}
+
+static int pcie_host_read(UNUSED void *f, void *data, size_t size,
+                          UNUSED unsigned int timeout)
+{
+    int left = size;
+    while(left > 0)
+    {
+        read_pending = 1;
+
+        int bt = pcie_read(pcieFd, data, left);
+
+        if (bt == -EAGAIN) {
+            // Let write commands be submitted
+            if (write_pending > 0)
+                usleep(1000);
+            continue;
+        }
+
+        read_pending = 0;
+
+        if(bt < 0)
+            return bt;
+        data = ((char *)data) + bt;
+        left -= bt;
+    }
+
+    return size;
+}
+
+static int pcie_host_open(UNUSED const char* devPathRead,
+                          const char* devPathWrite,
+                          UNUSED void** fd)
+{
+    return pcie_init(devPathWrite, &pcieFd);
+}
+
+static int pcie_host_close(UNUSED void *f)
+{
+    pcie_close(pcieFd);
     return 0;
 }
 
-static int pcie_host_close(void *f __attribute__((unused)))
-{
-    printf("pcie_host_close \n");
-    return close(pcieFd);
-}
+#undef UNUSED
 /*############################### FUNCTION ARRAYS #################################*/
 /*These arrays hold the write/read/open/close operation functions
 specific for each communication protocol.
@@ -445,15 +512,15 @@ int XLinkPlatformInit(protocol_t protocol, int loglevel)
     return 0;
 }
 
-
-int getDeviceName(int index, char* name, int nameSize , int pid)
+static int getDeviceName(int index, char* name, int nameSize , int pid)
 {
     switch(gl_protocol){
 
         case Pcie:
-            name = "/dev/ma2x8x_0"; //hardcoded for now
-            nameSize = strlen(name);
+        {
+            return pcie_find_device_port(index, name, nameSize);
             break;
+        }
         case Ipc:
             break;
         case UsbCDC:
@@ -495,6 +562,10 @@ int XLinkPlatformBootRemote(const char* deviceName, const char* binaryPath)
     char subaddr[28+2];
     int rc;
 
+    /* Don't try to boot FW if PCIe */
+#ifdef USE_PCIE
+        return 0;
+#endif
     if (usbFdRead != -1){
         close(usbFdRead);
         usbFdRead = -1;

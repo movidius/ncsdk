@@ -46,6 +46,7 @@ typedef enum {
     EVENT_BLOCKED,
     EVENT_READY,
     EVENT_SERVED,
+    EVENT_NEW,
 } xLinkEventState_t;
 
 typedef struct xLinkEventPriv_t {
@@ -107,7 +108,20 @@ static void markEventServed(xLinkEventPriv_t* event);
     else \
         x--; \
 }
+char* StateToStr(int state)
+{
+    switch(state)
+    {
+        case EVENT_PENDING: return "EVENT_PENDING";
+        case EVENT_BLOCKED: return "EVENT_BLOCKED";
+        case EVENT_READY: return "EVENT_READY";
+        case EVENT_SERVED: return "EVENT_SERVED";
+        case EVENT_NEW: return "EVENT_NEW";
 
+        default: break;
+    }
+    return "";
+}
 char* TypeToStr(int type)
 {
     switch(type)
@@ -290,13 +304,16 @@ static void markEventReady(xLinkEventPriv_t* event)
     event->isServed = EVENT_READY;
 }
 
-static void markEventServed(xLinkEventPriv_t* event)
-{
+static void eventPost(xLinkEventPriv_t* event) {
     if(event->sem){
         if (sem_post(event->sem)) {
             mvLog(MVLOG_ERROR,"can't post semaphore\n");
         }
     }
+}
+static void markEventServed(xLinkEventPriv_t* event)
+{
+    eventPost(event);
     event->isServed = EVENT_SERVED;
 }
 
@@ -304,12 +321,14 @@ static int dispatcherRequestServe(xLinkEventPriv_t * event, xLinkSchedulerState_
     ASSERT_X_LINK(curr != NULL);
     ASSERT_X_LINK(isEventTypeRequest(event));
     xLinkEventHeader_t *header = &event->packet.header;
+    int served = 0;
     if (header->flags.bitField.block){ //block is requested
         markEventBlocked(event);
-    }else if(header->flags.bitField.localServe == 1 ||
+    } else if(header->flags.bitField.localServe == 1 ||
              (header->flags.bitField.ack == 0
              && header->flags.bitField.nack == 1)){ //this event is served locally, or it is failed
-        markEventServed(event);
+        eventPost(event);
+        served = 1;
     }else if (header->flags.bitField.ack == 1
               && header->flags.bitField.nack == 0){
         event->isServed = EVENT_PENDING;
@@ -318,7 +337,7 @@ static int dispatcherRequestServe(xLinkEventPriv_t * event, xLinkSchedulerState_
     }else{
         ASSERT_X_LINK(0);
     }
-    return 0;
+    return served;
 }
 
 
@@ -384,7 +403,7 @@ static xLinkEventPriv_t* searchForReadyEvent(xLinkSchedulerState_t* curr)
 static xLinkEventPriv_t* getNextQueueElemToProc(eventQueueHandler_t *q ){
     xLinkEventPriv_t* event = NULL;
     if (q->cur != q->curProc) {
-        event = getNextElementWithState(q->base, q->end, q->curProc, EVENT_SERVED);
+        event = getNextElementWithState(q->base, q->end, q->curProc, EVENT_NEW);
         q->curProc = event;
         CIRCULAR_INCREMENT(q->curProc, q->end, q->base);
     }
@@ -405,6 +424,7 @@ static xLinkEvent_t* addNextQueueElemToProc(xLinkSchedulerState_t* curr,
     eventP->packet = *event;
     eventP->origin = o;
     q->cur = eventP;
+    eventP->isServed = EVENT_NEW;
     CIRCULAR_INCREMENT(q->cur, q->end, q->base);
     return ev;
 }
@@ -509,16 +529,21 @@ static void* eventSchedulerRun(void* ctx)
 
         res = getResp(&event->packet, &response.packet);
         if (isEventTypeRequest(event)){
+            int served = 0;
             if (event->origin == EVENT_LOCAL){ //we need to do this for locals only
-                dispatcherRequestServe(event, curr);
+                served = dispatcherRequestServe(event, curr);
             }
             if (res == 0 && event->packet.header.flags.bitField.localServe == 0){
                 glControlFunc->eventSend(toSend);
             }
-        }else{
+            if (event->origin == EVENT_REMOTE || served) {
+                event->isServed = EVENT_SERVED;
+            }
+        } else {
             if (event->origin == EVENT_REMOTE){ // match remote response with the local request
                 dispatcherResponseServe(event, curr);
             }
+            event->isServed = EVENT_SERVED;
         }
 
         //TODO: dispatcher shouldn't know about this packet. Seems to be easily move-able to protocol

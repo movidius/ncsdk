@@ -50,7 +50,7 @@
 <link rel="canonical" href="https://movidius.github.io/ncsdk/release_notes.html" />
 <meta property="og:url" content="https://movidius.github.io/ncsdk/release_notes.html" />
 <script type="application/ld+json">
-{"description":"Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API.","@type":"WebPage","url":"https://movidius.github.io/ncsdk/release_notes.html","headline":"Release Notes","@context":"http://schema.org"}</script>
+{"url":"https://movidius.github.io/ncsdk/release_notes.html","description":"Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API.","headline":"Release Notes","@type":"WebPage","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script>
@@ -496,29 +496,23 @@
         <div class="col-md-9" id="tg-sb-content">
             <p>============================================================</p>
 <h1 id="movidius-neural-compute-sdk-release-notes">Movidius Neural Compute SDK Release Notes</h1>
-<h1 id="v20801-2018-10-04">V2.08.01 2018-10-04</h1>
+<h1 id="v21001-2019-01-27">V2.10.01 2019-01-27</h1>
 <p>============================================================</p>
 
-<p>This release has been refactored and is now licensed under Apache 2.0 license.</p>
-
-<p>As of V2.05.00, SDK has been refactored and contains many new features and structural changes. It is recommended you read the documentation to familiarize with the new features and contents.</p>
+<p>This is a 2.x release of the Intel NCSDK which is not backwards compatible with the 1.x releases of the Intel NCSDK.  Please look at the documentation for differences in tools and APIs.</p>
 
 <h2 id="sdk-notes">SDK Notes:</h2>
 
 <h3 id="new-features">New features:</h3>
 <ol>
-  <li>Tensorflow 1.09 supported.  Tensorflow 1.09 is automatically installed on Ubuntu.</li>
-  <li>The compiler has been refactored for best performance however some networks may still see slight performance degradation.</li>
+  <li>TensorFlow SSD networks added.</li>
+  <li>Multi threaded execution on device.  The graph option NC_RW_GRAPH_EXECUTORS_NUM which was previously limited to values 1 or 2 for Myriad X based devices, but can now be set to any value in the range 1-4 inclusive.  This value corresponds to the number of executor threads to be used on the device for the graph.  Each executor thread will use the number of shaves specified in the graph file (via the -s option on the compiler command.)  The number of executors times the number of shaves specified in the graph file can not exceed the total number of shaves on the device (12 for Myriad2 or 16 for MyriadX.) Does not apply to Myriad 2 based devices</li>
 </ol>
 
-<h4 id="networks">Networks:</h4>
+<h3 id="notable-bug-fixes">Notable bug fixes:</h3>
 <ol>
-  <li>No significant changes.</li>
-</ol>
-
-<h4 id="layers">Layers:</h4>
-<ol>
-  <li>No change.</li>
+  <li>Force numpy 1.15 to avoid known issue with 1.16 release.</li>
+  <li>Force scikit-image to &gt;= 0.13.0 and &lt;= 0.14.0 to address issue with 0.12 RPi.</li>
 </ol>
 
 <h2 id="api-notes">API Notes:</h2>
@@ -527,32 +521,39 @@
 </ol>
 
 <h2 id="network-notes">Network Notes:</h2>
-<p>Support for the following networks has been tested.</p>
 
 <h3 id="caffe">Caffe</h3>
+<h4 id="tested-networks">Tested networks:</h4>
 <ol>
-  <li>GoogleNet V1</li>
-  <li>SqueezeNet V1.1</li>
+  <li>AlexNet</li>
+  <li>GoogLeNet v1</li>
+  <li>MobileNet v1</li>
+  <li>Resnet 18</li>
+  <li>Resnet 50</li>
+  <li>SqueezeNet v1.1</li>
+  <li>SSD MobileNet v1</li>
+  <li>Tiny Yolo v1</li>
+  <li>VGG 16 (Configuration D)</li>
+  <li>RefineDet (Hardware only, see erratum  #21)</li>
+</ol>
+
+<h4 id="untested-networks-that-likely-work">Untested networks that likely work:</h4>
+<ol>
   <li>LeNet</li>
   <li>CaffeNet</li>
   <li>VGG (Sousmith VGG_A)</li>
-  <li>Alexnet</li>
-  <li>TinyYolo v1</li>
-  <li>VGG 16 (Configuration D)</li>
-  <li>Resnet 18</li>
-  <li>Resnet 50</li>
-  <li>Mobilenet v1</li>
-  <li>SSD Mobilenet v1</li>
+  <li>Tiny Yolo v2</li>
 </ol>
 
-<h3 id="tensorflow-r109">Tensorflow r1.09</h3>
+<h3 id="tensorflow-r109">TensorFlow (r1.09)</h3>
+<h4 id="tested-networks-1">Tested networks:</h4>
 <ol>
+  <li>Facenet based on inception-resnet-v1</li>
   <li>inception-v1</li>
-  <li>inception-v2</li>
+  <li>inception-v2 (GoogLeNet v2)</li>
   <li>inception-v3</li>
   <li>inception-v4</li>
   <li>Inception ResNet v2</li>
-  <li>VGG 16 (Configuration D)</li>
   <li>Mobilenet_V1_1.0 variants:
     <ul>
       <li>MobileNet_v1_1.0_224</li>
@@ -574,44 +575,57 @@
     </ul>
   </li>
   <li>TinyYolo v2 via Darkflow tranformation</li>
-  <li>facenet based on inception-resnet-v1</li>
+  <li>VGG 16 (Configuration D)</li>
+  <li>SSD Inception v2</li>
+  <li>SSD Mobilenet v1</li>
+  <li>SSD Mobilenet v2</li>
 </ol>
 
-<h2 id="firmware-features">Firmware Features:</h2>
+<h2 id="firmware-features-in-shaves">Firmware Features in shaves:</h2>
 <ol>
   <li>Convolutions
     <ul>
-      <li>The following convolution cases have been extensively tested (for stride s): 1x1s1, 3x3s1, 5x5s1, 7x7s1, 7x7s2, 7x7s4, 1x3, 3x1, 1x7, 7x1</li>
+      <li>The following convolution cases have been extensively tested (for stride s): 1x1s1,3x3s1,5x5s1,7x7s1, 7x7s2, 7x7s4</li>
       <li>Group convolution</li>
       <li>Depth Convolution</li>
       <li>Dilated convolution</li>
     </ul>
   </li>
-  <li>Max Pooling Radix NxM with Stride S</li>
-  <li>Average Pooling: Radix NxM with Stride S, Global average pooling</li>
+  <li>Max Pooling Radix NxM with Stride S (See erratum  #15)</li>
+  <li>Average Pooling: Radix NxM with Stride S, Global average pooling (See erratum  #15)</li>
   <li>Local Response Normalization</li>
-  <li>Relu, Relu-X, Prelu (see erratum #09)</li>
+  <li>Relu, Relu-X, Prelu, Leaky-Relu (see erratum #6)</li>
   <li>Softmax</li>
   <li>Sigmoid</li>
-  <li>Tanh (see erratum #09)</li>
+  <li>Tanh (see erratum #6)</li>
   <li>Deconvolution</li>
-  <li>Slice</li>
+  <li>Slice (in SW via crop layer)</li>
   <li>Scale</li>
   <li>ElmWise unit : supported operations - sum, prod, max</li>
-  <li>Fully Connected Layers (limited support – see erratum #8)</li>
+  <li>Fully Connected Layers (limited support – : see erratum #10)</li>
   <li>Reshape</li>
   <li>Flatten</li>
   <li>Power</li>
-  <li>Crop</li>
+  <li>Crop (SW in ChannelMinor format only)</li>
   <li>ELU</li>
-  <li>Batch Normalization</li>
+  <li>Batch Normalization (fused)</li>
   <li>L2 Normalization</li>
   <li>Input Layer</li>
 </ol>
 
+<h2 id="firmware-features-in-nces">Firmware Features in NCEs</h2>
+<ol>
+  <li>Convolution</li>
+  <li>Max Pooling Radix NxM with Stride S (See erratum #15)</li>
+  <li>Average Pooling: Radix NxM with Stride S, Global average pooling</li>
+  <li>Fully Connected Layers</li>
+  <li>Relu, Relu-X, Prelu, Leaky-Relu</li>
+  <li>Fused Non-overlapping pooling</li>
+</ol>
+
 <h2 id="bug-fixes">Bug Fixes:</h2>
 <ol>
-  <li>Fixed: Various profiler issues.</li>
+  <li>Docker now works with multiple devices.</li>
 </ol>
 
 <h2 id="errata">Errata:</h2>
@@ -620,18 +634,26 @@
   <li>Depth-wise convolution may not be supported if channel multiplier &gt; 1.</li>
   <li>If working behind proxy, proper proxy settings must be applied for the installer to succeed.</li>
   <li>Although improved, the installer is known to take a long time on Raspberry Pi. Date/time must be correct for SDK installation to succeed on Raspberry Pi.</li>
-  <li>The Docker Non-privileged mode of operation as described in the documentation has an issue with multiple NCS devices.</li>
-  <li>Inception V1 obtained values are invalid for mvNCCheck.</li>
   <li>Convolution may fail to find a solution for very large inputs.</li>
   <li>Depth-wise convolution is tested for 3x3 kernels.</li>
   <li>A TanH layer’s “top” &amp; “bottom” blobs must have different names.  This is different from a ReLU layer, whose “top” &amp; “bottom” should be named the same as its previous layer.</li>
   <li>On upgrade from previous versions of SDK, the installer will detect if openCV 3.3.0 was installed, for example from http://github.com/movidius/ncappzoo/apps/stream_ty_gn/install-opencv-from_source.sh.  For this release, the installer will prompt to uninstall this specific version of openCV. This is required for ssd-caffe to run correctly.  After installation is complete, openCV 3.3.0 can be re-installed and the ssd-caffe will continue to function.</li>
-  <li>The MTCNN network in the app zoo is showing unexpected behavior for this release, and is being investigated.  To use MTCNN, please use version 1.12.01 of SDK.</li>
-  <li>Although mvNCCheck shows per-pixel error for some metrics for mobilenet_v1_224, classification results are not impacted.</li>
+  <li>The MTCNN network in the app zoo is showing unexpected behaviour for this release, and is being investigated.  To use MTCNN, please use version 1.12.00 of SDK.</li>
+  <li>For Caffe networks, although mvNCCheck shows per-pixel error for some metrics for mobilenet_v1_224 and hardware GoogLeNet, classification results are not impacted.</li>
   <li>Only Ubuntu 16.04 LTS is supported as a host OS for this release.  Ubuntu 18.04 is being evaluated.</li>
-  <li>Group Deconvolution with “group” parameter != 1 is not supported on the new parser.</li>
   <li>For this release, use of Myriad devices connected to some specific hubs can fail.  If you encounter errors, please try direct connect to PC port, or try a different hub.</li>
-  <li>Loading multiple graphs into one Myriad device may show stability issues with this release.</li>
+  <li>Layer optimization for layers that run on HW are seen in the profiler graph. Profiler graph, if using new parser, shows multiple connections to and out of depth wise convolutions and some other implicit layers. Note that the different groups of depthwise convolutions  (optimized for HW) don’t show up explicitly in the profiler graph.</li>
+  <li>For this release, networks with small input channels on Tensorflow may experience a performance penalty.</li>
+  <li>Non-Overlapping Pooling can run as post operation on HW and as a separate operation in SW. Overlapping pooling is supported as a separate operation on both HW and SW</li>
+  <li>FC with input NxNxD where N is higher than 1 are not supported natively on CNN Engines. Therefore, they run as a convolution
+which requires modification of prototxt for this release.</li>
+  <li>A Caffe Scale layer only supports 1 input tensor.</li>
+  <li>The –accuracy_adjust=VALUES flag should be used if accuracy for HW networks is low when the network is compiled with the
+default parser. A setting of –accuracy_adjust=”ALL:256” has been found to improve the accuracy for most networks.</li>
+  <li>For some networks, compiling and running a graph with 5 and 15 shaves is not supported.</li>
+  <li>Average pooling in CNN Engine would compute incorrect values near the edges as the scale factor applied is constant depending
+on the size of the kernel.</li>
+  <li>RefineDet must be compiled to run in hardware (with the –ma2480 flag) for this release</li>
 </ol>
 
 
@@ -648,7 +670,7 @@
 <footer>
             <div class="row">
                 <div class="col-lg-12 footer">
-               &copy;2018 Intel Corporation <br />
+               &copy;2019 Intel Corporation <br />
                     * Other names and brands may be claimed as the property of others.
                 </div>
             </div>

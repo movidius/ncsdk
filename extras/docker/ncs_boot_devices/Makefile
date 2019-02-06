@@ -14,6 +14,7 @@ MV_COMMON_BASE=$(realpath $(MVNC_API_PATH)/common)
 XLINK_BASE=$(MV_COMMON_BASE)/components/XLink
 
 XLINK_SRCS=$(XLINK_BASE)/pc/usb_boot.c
+XLINK_SRCS+=$(XLINK_BASE)/pc/pcie_host.c
 XLINK_SRCS+=$(XLINK_BASE)/shared/XLink.c
 XLINK_SRCS+=$(XLINK_BASE)/shared/XLinkDispatcher.c
 XLINK_SRCS+=$(XLINK_BASE)/pc/XLinkPlatform.c

@@ -43,8 +43,8 @@ int main(int argc, char** argv)
         printf("    ncStatus value: %d\n", retCode);
         exit(-1);
     }
-    
-    // deviceHandle is ready to use now.  
+
+    // deviceHandle is ready to use now.
     // Pass it to other NC API calls as needed and close it when finished.
     printf("Hello NCS! Device opened normally.\n");
 

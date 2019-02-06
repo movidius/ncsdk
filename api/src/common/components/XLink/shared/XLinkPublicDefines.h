@@ -27,7 +27,7 @@ extern "C"
 {
 #endif
 
-#define XLINK_MAX_STREAMS 8
+#define XLINK_MAX_STREAMS 32
 #define USB_LINK_MAX_PACKETS_PER_STREAM 64
 
 typedef enum{

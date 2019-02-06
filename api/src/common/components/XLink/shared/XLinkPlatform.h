@@ -29,7 +29,7 @@ extern "C"
 
 #define MAX_POOLS_ALLOC 32
 #define PACKET_LENGTH (64*1024)
-//PCIe 
+//PCIe
 #define PCIE_MAX_BUFFER_SIZE (255 * 4096)
 #ifdef __PC__
 #define MAX_LINKS 16
@@ -68,12 +68,13 @@ int XLinkPlatformResetRemote(void* fd);
 void* allocateData(uint32_t size, uint32_t alignment);
 void deallocateData(void* ptr,uint32_t size, uint32_t alignment);
 
-typedef enum usbLinkPlatformErrorCode {
+typedef enum xLinkPlatformErrorCode {
     X_LINK_PLATFORM_SUCCESS = 0,
-    X_LINK_PLATFORM_ERROR,
-    X_LINK_PLATFORM_DEVICE_NOT_FOUND,
-    X_LINK_PLATFORM_TIMEOUT
-} usbLinkPlatformErrorCode_t;
+    X_LINK_PLATFORM_DEVICE_NOT_FOUND = -1,
+    X_LINK_PLATFORM_ERROR = -2,
+    X_LINK_PLATFORM_TIMEOUT = -3,
+    X_LINK_PLATFORM_DRIVER_NOT_LOADED = -4
+} xLinkPlatformErrorCode_t;
 
 #ifdef __cplusplus
 }

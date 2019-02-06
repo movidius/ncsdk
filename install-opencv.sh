@@ -62,7 +62,7 @@ function install_opencv()
             cd ${HOME}/opencv-${VERSION}/
             mkdir -p build
             cd build
-            cmake -D CMAKE_BUILD_TYPE=RELEASE \
+            cmake -DBUILD_opencv_xfeatures2d=OFF -D CMAKE_BUILD_TYPE=RELEASE \
                   -D CMAKE_INSTALL_PREFIX=/usr/local \
                   -D INSTALL_PYTHON_EXAMPLES=OFF \
                   -D OPENCV_EXTRA_MODULES_PATH=${HOME}/opencv_contrib-${VERSION}/modules \
@@ -137,10 +137,10 @@ function main()
     set_error_handling
     ### get constants (function is in install-utilities.sh)
     initialize_constants
+    ### Ask for sudo priviledges (function is in install-utilities.sh)
+    ask_sudo_permissions
     ### read config file (function is in install-utilities.sh) 
     read_ncsdk_config
-    # (function is in install-utilities.sh)    
-    ask_sudo_permissions
 
     
     ### install opencv
