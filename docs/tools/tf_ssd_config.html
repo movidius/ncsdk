@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" tool, toolkit">
-<title>TensorFlow* SSD config file | Intel® Movidius™ Neural Compute SDK Documentation</title>
+<title>TensorFlow SSD config file | Intel® Movidius™ Neural Compute SDK Documentation</title>
 <link rel="stylesheet" href="../css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -41,16 +41,16 @@
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
     <!-- Begin Jekyll SEO tag v2.4.0 -->
-<title>TensorFlow* SSD config file</title>
+<title>TensorFlow SSD config file</title>
 <meta name="generator" content="Jekyll v3.8.1" />
-<meta property="og:title" content="TensorFlow* SSD config file" />
+<meta property="og:title" content="TensorFlow SSD config file" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API." />
 <meta property="og:description" content="Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API." />
 <link rel="canonical" href="https://movidius.github.io/ncsdk/tools/tf_ssd_config.html" />
 <meta property="og:url" content="https://movidius.github.io/ncsdk/tools/tf_ssd_config.html" />
 <script type="application/ld+json">
-{"description":"Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API.","@type":"WebPage","url":"https://movidius.github.io/ncsdk/tools/tf_ssd_config.html","headline":"TensorFlow* SSD config file","@context":"http://schema.org"}</script>
+{"description":"Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API.","@type":"WebPage","url":"https://movidius.github.io/ncsdk/tools/tf_ssd_config.html","headline":"TensorFlow SSD config file","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script>
@@ -501,11 +501,11 @@
 
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
-            <h1 id="tensorflow-ssd-config-file">TensorFlow* SSD config file</h1>
+            <h1 id="tensorflow-ssd-config-file">TensorFlow SSD config file</h1>
 
 <h2 id="overview">Overview</h2>
 
-<p>In order to generate a Movidius graph file for the TensorFlow* SSD networks, users will need to create a new config file and use the <code class="highlighter-rouge">--tf-ssd-config</code> option with the <code class="highlighter-rouge">mvNCCompile</code> command.</p>
+<p>In order to use TensorFlow* SSD networks with the NCSDK Toolkit commands (<a href="compile.html">mvNCCompile</a>, <a href="check.html">mvNCCheck</a>, <a href="profile.html">mvNCProfile</a>), users will need to create a new config file and use the <code class="highlighter-rouge">--tf-ssd-config</code> option with the associated command.</p>
 
 <h2 id="ncsdk-ssd-config-file-example">NCSDK SSD Config File Example</h2>
 
@@ -537,20 +537,74 @@ score_converter: SIGMOID
 </code></pre></div></div>
 
 <p>The NCSDK SSD config file contains information relevent to the network:</p>
-<ul>
-  <li>input_height - The input height of the network.</li>
-  <li>input_width - The input width of the network.</li>
-  <li>num_classes - The number of classes the network was trained with. This is also the number of different labels/objects that the model will be able to detect.</li>
-  <li>background_label_id - The id of the background label.</li>
-  <li>max_detections - The total number of detections that can be detected in a frame.</li>
-  <li>score_threshold - Minimum score threshold of a potential object to be considered.</li>
-  <li>iou_threshold - Intersection over union threshold value. Used to eliminate potential duplicate objects that are detected.</li>
-  <li>box_param - variance of the bounding box. This affects the size of the bounding boxes.</li>
-</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>input_height</td>
+      <td>Input height of the network.</td>
+    </tr>
+    <tr>
+      <td>input_width</td>
+      <td>Input width of the network.</td>
+    </tr>
+    <tr>
+      <td>num_classes</td>
+      <td>Number of different labels/objects that the model will be able to detect.</td>
+    </tr>
+    <tr>
+      <td>background_label_id</td>
+      <td>Id of the background label.</td>
+    </tr>
+    <tr>
+      <td>max_detections</td>
+      <td>Total number of objects that can be detected in a single image.</td>
+    </tr>
+    <tr>
+      <td>score_threshold</td>
+      <td>Minimum score for detected objects. The model will ignore all detected objects with a score lower than the specified threshold.</td>
+    </tr>
+    <tr>
+      <td>iou_threshold</td>
+      <td>Intersection over union threshold value. Used to eliminate potential duplicate objects that are detected.</td>
+    </tr>
+    <tr>
+      <td>box_param</td>
+      <td>Variance of the bounding box. This affects the size of the bounding boxes.</td>
+    </tr>
+    <tr>
+      <td>score_converter</td>
+      <td>Function that will convert/normalize the output scores.</td>
+    </tr>
+  </tbody>
+</table>
 
 <h4 id="example-of-a-mvnccheck-command-using-the-tf-ssd-config-option">Example of a mvNCCheck command using the –tf-ssd-config option:</h4>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvNCCheck <span class="nt">-s</span> 12 frozen_inference_graph.pb <span class="nt">--tf-ssd-config</span> ssd_mob.config <span class="nt">-i</span> 300_Cellphone.jpg <span class="nt">-cs</span> 0,1,2 <span class="nt">-M</span> <span class="s2">"123,117,104"</span> <span class="nt">-S</span> 255
+</code></pre></div></div>
+<p><strong>NOTE:</strong>  In order to use mvNCCheck with a TensorFlow SSD network, an image must be specified as input. This image must also be the same input resolution as required by the TensorFlow SSD network. The following Python code snippet may be useful in resizing an image to be used with mvNCCheck.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s">'IMAGE_FILENAME.jpg'</span><span class="p">)</span>
+<span class="n">new_img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">))</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s">'NEW_FILENAME.jpg'</span><span class="p">,</span> <span class="n">new_img</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="example-of-a-mvnccompile-command-using-the-tf-ssd-config-option">Example of a mvNCCompile command using the –tf-ssd-config option:</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvNCCompile <span class="nt">-s</span> 12 frozen_inference_graph.pb <span class="nt">--tf-ssd-config</span> ssd_mob.config
+</code></pre></div></div>
+
+<h4 id="example-of-a-mvncprofile-command-using-the-tf-ssd-config-option">Example of a mvNCProfile command using the –tf-ssd-config option:</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvNCProfile <span class="nt">-s</span> 12 frozen_inference_graph.pb <span class="nt">--tf-ssd-config</span> ssd_mob.config 
 </code></pre></div></div>
 
 
