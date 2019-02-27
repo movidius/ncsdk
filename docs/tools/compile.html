@@ -361,6 +361,13 @@
             
             
             
+            
+            
+            <li><a href="../tools/tf_ssd_config.html">TensorFlow SSD config</a></li>
+            
+            
+            
+            
         </ul>
     </li>
     
@@ -558,41 +565,10 @@
     </tr>
     <tr>
       <td>[–tf-ssd-config tensorflow_ssd_config_file]</td>
-      <td>Specify a TensorFlow SSD config file. This option is required to run TensorFlow SSD Mobilenet networks with the NCSDK. See <em> TensorFlow SSD Config File</em> section below.</td>
+      <td>Specify a TensorFlow SSD config file. This option is required to run TensorFlow SSD Mobilenet networks with the NCSDK. <a href="tf_ssd_config.html">NCSDK TensorFlow SSD config file information</a>.</td>
     </tr>
   </tbody>
 </table>
-
-<h2 id="tensorflow-ssd-config-file">TensorFlow SSD Config File</h2>
-
-<p>In order to generate a Movidius graph file for the TensorFlow SSD Mobilenet V1/V2 Coco networks, users will need to create a new config file and use the <code class="highlighter-rouge">--tf-ssd-config</code> option with the <code class="highlighter-rouge">mvNCCompile</code> command. Here is an example of an NCSDK TensorFlow config file that shows how to set the different parameters:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>input_height: 300
-input_width: 300
-
-postprocessing_params {
-    num_classes: 91
-    background_label_id: 0
-    max_detections: 100
-
-    nms_params {
-        score_threshold: 0.300000011921
-        iou_threshold: 0.600000023842
-        max_detections_per_class: 100
-    }
-
-    box_params {
-        var: 0.1
-        var: 0.1
-        var: 0.2
-        var: 0.2
-  }
-}
-
-score_converter: SIGMOID
-</code></pre></div></div>
-<h4 id="example-of-a-mvnccompile-command-using-the-tf-ssd-config-option">Example of a mvNCCompile command using the –tf-ssd-config option:</h4>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mvNCCompile frozen_inference_model.pb <span class="nt">--tf-ssd-config</span> ssd-mob.config <span class="nt">-s</span> 12
-</code></pre></div></div>
 
 <h2 id="examples">Examples</h2>
 
