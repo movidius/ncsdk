@@ -374,24 +374,24 @@
 
 
 {
-"title": "globaloption enum [  v1]",
-"tags": "",
-"keywords": "",
-"url": "/ncapi/ncapi1/py_api/GlobalOption.html",
-"summary": "",
-"display": "GlobalOption enum [Python NCAPI v1]"
-}
-,
-
-
-
-{
 "title": "globaloption enum [  v2]",
 "tags": "",
 "keywords": "",
 "url": "/ncapi/ncapi2/py_api/GlobalOption.html",
 "summary": "",
 "display": "GlobalOption enum [Python NCAPI v2]"
+}
+,
+
+
+
+{
+"title": "globaloption enum [  v1]",
+"tags": "",
+"keywords": "",
+"url": "/ncapi/ncapi1/py_api/GlobalOption.html",
+"summary": "",
+"display": "GlobalOption enum [Python NCAPI v1]"
 }
 ,
 
@@ -1574,12 +1574,36 @@
 
 
 {
-"title": "intel® movidius™ neural compute sdk  api v1",
+"title": "intel® movidius™ neural compute sdk  api v2",
 "tags": "",
-"keywords": "ncapi, python",
-"url": "/ncapi/ncapi1/py_api/readme.html",
+"keywords": "python, ncapi",
+"url": "/ncapi/ncapi2/py_api/readme.html",
 "summary": "",
-"display": "Intel® Movidius™ Neural Compute SDK Python API v1"
+"display": "Intel® Movidius™ Neural Compute SDK Python API v2"
+}
+,
+
+
+
+{
+"title": "neural compute api overview",
+"tags": "",
+"keywords": "ncapi, python, c++",
+"url": "/ncapi/readme.html",
+"summary": "",
+"display": "Neural Compute API Overview"
+}
+,
+
+
+
+{
+"title": "intel® movidius™ neural compute sdk c api v2",
+"tags": "",
+"keywords": "ncapi, c++",
+"url": "/ncapi/ncapi2/c_api/readme.html",
+"summary": "",
+"display": "Intel® Movidius™ Neural Compute SDK C API v2"
 }
 ,
 
@@ -1610,24 +1634,12 @@
 
 
 {
-"title": "intel® movidius™ neural compute sdk  api v2",
+"title": "intel® movidius™ neural compute sdk  api v1",
 "tags": "",
-"keywords": "python, ncapi",
-"url": "/ncapi/ncapi2/py_api/readme.html",
+"keywords": "ncapi, python",
+"url": "/ncapi/ncapi1/py_api/readme.html",
 "summary": "",
-"display": "Intel® Movidius™ Neural Compute SDK Python API v2"
-}
-,
-
-
-
-{
-"title": "intel® movidius™ neural compute sdk c api v2",
-"tags": "",
-"keywords": "ncapi, c++",
-"url": "/ncapi/ncapi2/c_api/readme.html",
-"summary": "",
-"display": "Intel® Movidius™ Neural Compute SDK C API v2"
+"display": "Intel® Movidius™ Neural Compute SDK Python API v1"
 }
 ,
 
@@ -1640,18 +1652,6 @@
 "url": "/ncapi/ncapi2/readme.html",
 "summary": "",
 "display": ""
-}
-,
-
-
-
-{
-"title": "neural compute api overview",
-"tags": "",
-"keywords": "ncapi, python, c++",
-"url": "/ncapi/readme.html",
-"summary": "",
-"display": "Neural Compute API Overview"
 }
 ,
 
@@ -1728,18 +1728,6 @@
 "url": "/tf_slim.html",
 "summary": "",
 "display": "Guidance for Compiling TensorFlow-Slim Networks"
-}
-,
-
-
-
-{
-"title": "tensorflow* ssd config file",
-"tags": "",
-"keywords": "tool, toolkit",
-"url": "/tools/tf_ssd_config.html",
-"summary": "",
-"display": "TensorFlow* SSD config file"
 }
 ,
 
