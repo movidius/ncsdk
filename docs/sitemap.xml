@@ -192,13 +192,13 @@
   
   
   <url>
-    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/GlobalOption.html</loc>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/GlobalOption.html</loc>
   </url>
   
   
   
   <url>
-    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/GlobalOption.html</loc>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/GlobalOption.html</loc>
   </url>
   
   
@@ -792,19 +792,7 @@
   
   
   <url>
-    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/readme.html</loc>
-  </url>
-  
-  
-  
-  <url>
-    <loc>https://movidius.github.io/ncsdk/ncapi/readme.html</loc>
-  </url>
-  
-  
-  
-  <url>
-    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/readme.html</loc>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/readme.html</loc>
   </url>
   
   
@@ -822,13 +810,25 @@
   
   
   <url>
-    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi1/py_api/readme.html</loc>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/py_api/readme.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/c_api/readme.html</loc>
   </url>
   
   
   
   <url>
     <loc>https://movidius.github.io/ncsdk/ncapi/ncapi2/readme.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/ncapi/readme.html</loc>
   </url>
   
   
@@ -869,6 +869,12 @@
   
   <url>
     <loc>https://movidius.github.io/ncsdk/tf_slim.html</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>https://movidius.github.io/ncsdk/tools/tf_ssd_config.html</loc>
   </url>
   
   
