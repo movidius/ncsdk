@@ -549,7 +549,7 @@ score_converter: SIGMOID
     </tr>
     <tr>
       <td>num_classes</td>
-      <td>Number of different labels/objects that the model will be able to detect.</td>
+      <td>Number of different labels/objects that the model will be able to detect. Includes the background label.</td>
     </tr>
     <tr>
       <td>background_label_id</td>
@@ -561,7 +561,7 @@ score_converter: SIGMOID
     </tr>
     <tr>
       <td>score_threshold</td>
-      <td>Minimum score for detected objects. The model will ignore all detected objects with a score lower than the specified threshold.</td>
+      <td>Minimum score for detected objects. The model will ignore all detected objects with a score lower than the specified threshold. Scores range from 0.0 to 1.0.</td>
     </tr>
     <tr>
       <td>iou_threshold</td>
@@ -569,11 +569,11 @@ score_converter: SIGMOID
     </tr>
     <tr>
       <td>box_param</td>
-      <td>Variance of the bounding box. This affects the size of the bounding boxes.</td>
+      <td>Variance of the bounding box. This affects the size and position of the bounding boxes. <br /><br /> 1. The first value (0.1 in the example) is the variance for the Y position for the center of the boxes. <br /> 2. The second value (0.1 in the example) is the variance for the X position for the center of the boxes. <br /> 3. The third value (0.2 in the example) is the variance for the height of the boxes. <br /> 4. The fourth value (0.2 in the example) is the variance for the width of the boxes. <br /><br /> <strong>Note:</strong> If you use other values than those in the example, you may want to also adjust the iou_threshold value since the box overlaps wil be affected.</td>
     </tr>
     <tr>
       <td>score_converter</td>
-      <td>Function that will convert/normalize the output scores.</td>
+      <td>Function that will convert/normalize the output scores. Available options: SIGMOID, SOFTMAX.</td>
     </tr>
   </tbody>
 </table>
