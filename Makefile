@@ -63,7 +63,8 @@ runexamples: prereqs opencv
 	(cd examples; make run)
 
 .PHONY: api
-api: @echo "\nmake api starting."
+api: 
+	@echo "\nmake api starting."
 	(cd api/src; make; make install)
 
 .PHONY: clean
