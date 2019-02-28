@@ -50,7 +50,7 @@
 <link rel="canonical" href="https://movidius.github.io/ncsdk/tools/profile.html" />
 <meta property="og:url" content="https://movidius.github.io/ncsdk/tools/profile.html" />
 <script type="application/ld+json">
-{"url":"https://movidius.github.io/ncsdk/tools/profile.html","description":"Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API.","headline":"mvNCProfile","@type":"WebPage","@context":"http://schema.org"}</script>
+{"description":"Documentation for the Intel® Movidius™ Neural Compute SDK and Intel® Movidius™ Neural Compute API.","@type":"WebPage","url":"https://movidius.github.io/ncsdk/tools/profile.html","headline":"mvNCProfile","@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <script>
@@ -549,6 +549,10 @@
     <tr>
       <td>[-ec]</td>
       <td>Skip certain compiler optimizations for concatenation; this may correct some issues with invalid results from concat layers or compile failures.</td>
+    </tr>
+    <tr>
+      <td>[–tf-ssd-config tensorflow_ssd_config_file]</td>
+      <td>Specify a TensorFlow SSD config file. This option is required to run TensorFlow SSD Mobilenet networks with the NCSDK. <a href="tf_ssd_config.html">NCSDK TensorFlow SSD config file information</a>.</td>
     </tr>
   </tbody>
 </table>
