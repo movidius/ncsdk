@@ -97,6 +97,16 @@ ncsdk_pkg=${download_filename%%.tar.gz}
 # create mvnc directory 
 mkdir -p ${mvcmd_dir}
 
+# set owner to the person that called sudo
+if [ "${SUDO_USER}" == "" ]
+then
+   echo ""
+else
+   chown ${SUDO_USER} ${mvcmd_dir}
+   chgrp ${SUDO_USER} ${mvcmd_dir}
+fi
+
+
 # search for FW in tarball
 ARCH=$(uname -m)
 tar -tf ${download_filename} | grep -q "ncsdk-${ARCH}/fw/$"
@@ -116,6 +126,16 @@ fi
 ls mvnc/*.mvcmd >& /dev/null
 if [ $? -eq 0 ]; then
     echo "NCSDK FW successfully installed"
+
+    # set owner to the person that called sudo
+    if [ "${SUDO_USER}" == "" ]
+    then
+        echo ""
+    else
+        chown ${SUDO_USER} mvnc/*.mvcmd
+        chgrp ${SUDO_USER} mvnc/*.mvcmd
+    fi
+
     # remove old FW dir if it exists
     [ -d ${mvcmd_old_dir} ] && rm -rf ${mvcmd_old_dir}
 else
