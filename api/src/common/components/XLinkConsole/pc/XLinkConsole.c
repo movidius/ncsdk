@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <arpa/inet.h>
+#include <pthread.h>
 #define MVLOG_UNIT_NAME xLinkConsole
 #include "mvLog.h"
 
@@ -38,8 +39,8 @@ void* shellThreadWriter(void* ctx){
     int connfd = (streamId_t)context[1];
     while(1){
 
-        char str[100];
-        int bytes = read(connfd,str, 100);
+        uint8_t str[100];
+        int bytes = read(connfd, str, 100);
         if (bytes > 0){
             XLinkWriteData(cId, str, bytes);
         }else
