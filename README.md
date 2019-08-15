@@ -2,7 +2,7 @@
 This Intel® Movidius™ Neural Compute software developer kit (NCSDK) is the **legacy** SDK provided for users of the [Intel® Movidius™ Neural Compute Stick](https://developer.movidius.com/) (Intel® Movidius™ NCS). New users of this device as well as **all** users of the newer Intel® Neural Compute Stick 2 should install the OpenVINO™ Toolkit as described in the [Getting Started Guide](https://software.intel.com/en-us/articles/get-started-with-neural-compute-stick)
 
 # Intel® Neural Compute Stick 2 (Intel® NCS 2) 
-## Users of the Intel® NCS 2 cannot use the NCSDK and must use the OpenVINO™ Toolkit as described in the [Getting Started Guide](https://software.intel.com/en-us/articles/get-started-with-neural-compute-stick)
+## Users of the Intel® NCS 2 device cannot use the NCSDK and must use the OpenVINO™ Toolkit as described in the [Getting Started Guide](https://software.intel.com/en-us/articles/get-started-with-neural-compute-stick)
 
 For legacy users of the original Intel® Movidius™ Neural Compute Sticke that want to continue with the NCSDK, read on...
 
