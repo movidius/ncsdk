@@ -1,5 +1,10 @@
 # Intel® Movidius™ Neural Compute SDK
-This Intel® Movidius™ Neural Compute software developer kit (NCSDK) is provided for users of the [Intel® Movidius™ Neural Compute Stick](https://developer.movidius.com/) (Intel® Movidius™ NCS). It includes software tools, an API, and examples, so developers can create software that takes advantage of the accelerated neural network capability provided by the Intel Movidius NCS hardware.
+This Intel® Movidius™ Neural Compute software developer kit (NCSDK) is the **legacy** SDK provided for users of the [Intel® Movidius™ Neural Compute Stick](https://developer.movidius.com/) (Intel® Movidius™ NCS). New users of this device as well as **all** users of the newer Intel® Neural Compute Stick 2 should install the OpenVINO™ Toolkit as described in the [Getting Started Guide](https://software.intel.com/en-us/articles/get-started-with-neural-compute-stick)
+
+# Intel® Neural Compute Stick 2 (Intel® NCS 2) 
+## Users of the Intel® NCS 2 cannot use the NCSDK and must use the OpenVINO™ Toolkit as described in the [Getting Started Guide](https://software.intel.com/en-us/articles/get-started-with-neural-compute-stick)
+
+For legacy users of the original Intel® Movidius™ Neural Compute Sticke that want to continue with the NCSDK, read on...
 
 # Neural Compute SDK2
 ## [NCSDK v2](https://github.com/movidius/ncsdk/releases) releases are now available. 
@@ -8,6 +13,8 @@ This Intel® Movidius™ Neural Compute software developer kit (NCSDK) is provid
 All documentation in the docs directory is now in HTML format which is **best viewed from the documentation site: https://movidius.github.io/ncsdk/** 
 -------
 -------
+
+
 With this release the existing NCAPI v1 has been rearchitected into NCAPI v2 which will pave the way for future enhancements and capabilities, as well add some now!  While users are transitioning to this new NCAPI v2 the legacy NCSDK v1.x release will stay on the master branch and NCSDK2 will be on the [ncsdk2](https://github.com/movidius/ncsdk/tree/ncsdk2) branch.  At some point in the not too distant future, NCSDK2 will move to the master.
 
 To help you get ready for NCSDK2 you can take a look at some of the [changes in NCAPI v2](https://movidius.github.io/ncsdk/ncapi/readme.html) as well as the [NCSDK2 Release Notes](https://movidius.github.io/ncsdk/release_notes.html).
