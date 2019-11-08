@@ -104,6 +104,7 @@ function print_ncsdk_config()
     echo "PIP_SYSTEM_INSTALL - Globally install pip packages via sudo -H"
     echo "VERBOSE - Flag to enable more verbose installation"
     echo "USE_VIRTUALENV - Flag to enable python virtualenv"
+    echo "VIRTUALENV_DIR - Virtual environment directory"
     echo "MAKE_NJOBS - Number of processes to use for parallel build (i.e. make -j MAKE_NJOBS)"
     echo ""
     echo "INSTALL_DIR=${INSTALL_DIR}"
@@ -115,6 +116,7 @@ function print_ncsdk_config()
     echo "PIP_SYSTEM_INSTALL=${PIP_SYSTEM_INSTALL}"
     echo "VERBOSE=${VERBOSE}"
     echo "USE_VIRTUALENV=${USE_VIRTUALENV}"
+    echo "VIRTUALENV_DIR=${VIRTUALENV_DIR}"
     echo "MAKE_NJOBS=${MAKE_NJOBS}"
     echo ""
 }
@@ -314,7 +316,6 @@ function setup_virtualenv()
     ${SUDO_PREFIX} apt-get $APT_QUIET install python-virtualenv -y
     echo ""
     
-    VIRTUALENV_DIR=${INSTALL_DIR}/virtualenv-python
     # if virtualenv dir exists, try to activate it
     if [ -d ${VIRTUALENV_DIR} ] ; then
         RC=0
@@ -329,7 +330,7 @@ function setup_virtualenv()
             exit 1
             echo ""
         else
-            echo "virtualenv ${INSTALL_DIR}/virtualenv-python exists, and successfully activated it"
+            echo "virtualenv ${VIRTUALENV_DIR} exists, and successfully activated it"
         fi
     else
         # Create new virtualenv and activate it

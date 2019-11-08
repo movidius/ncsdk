@@ -105,6 +105,7 @@ function read_ncsdk_config()
     INSTALL_TOOLKIT=yes
     PIP_SYSTEM_INSTALL=yes
     USE_VIRTUALENV=no
+	VIRTUALENV_DIR=${INSTALL_DIR}/virtualenv-python
 
 
     ### set # jobs to make simultaneously, MAKE_NJOBS, defaults to 1. 
