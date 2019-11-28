@@ -57,6 +57,30 @@ function remove_install_dir()
 }
 
 
+function initialize_virtualenv()
+{
+	# if virtualenv dir exists, try to activate it
+    if [ -d ${VIRTUALENV_DIR} ] ; then
+        RC=0
+        # disable trapping for unset variables due to activate script 
+        set +u
+        source ${VIRTUALENV_DIR}/bin/activate || RC=$?
+        set -u
+        if [ ${RC} -ne 0 ] ; then
+            echo "source ${VIRTUALENV_DIR}/bin/activate gave an error=${RC}"
+            echo "You need to investigate: 1) Either figure out why virtualenv is not activating correctly or"
+            echo "                         2) edit ncsdk.conf to set USE_VIRTUALENV=no to disable virtualenv.  Will exit"
+            exit 1
+            echo ""
+        else
+            echo "virtualenv ${VIRTUALENV_DIR} exists, and successfully activated it"
+        fi
+	else
+		echo "Supplied virtualenv dir does not exist."
+	fi
+}
+
+
 # main - this is the main function that runs the uninstall
 function main()
 {
@@ -76,6 +100,9 @@ function main()
     
     ### function is in install-utilities.sh
     find_previous_install
+
+    # Optionally use python virtualenv, USE_VIRTUALENV set in ncsdk.conf
+    [ "${USE_VIRTUALENV}" == 'yes' ] && initialize_virtualenv
     
     ### remove prev installation. Function is in install-utilities.sh
     remove_previous_install

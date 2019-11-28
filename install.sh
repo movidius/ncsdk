@@ -29,7 +29,7 @@ function check_supported_os()
     VERSION="$(lsb_release -r 2>/dev/null | awk '{ print $2 }' | sed 's/[.]//')"
     OS_DISTRO="${DISTRO:-INVALID}"
     OS_VERSION="${VERSION:-255}"
-    if [ "${OS_DISTRO,,}" = "ubuntu" ] && [ ${OS_VERSION} = 1604 ]; then
+    if [ "${OS_DISTRO,,}" = "ubuntu" ] && [[ ${OS_VERSION} = 1604 || ${OS_VERSION} = 1804 ]]; then
        # Require 64-bit Ubuntu OS
         HARDWARE_PLATFORM=$(uname -i)
         if [ "${HARDWARE_PLATFORM}" != "x86_64" ] ; then
@@ -104,6 +104,7 @@ function print_ncsdk_config()
     echo "PIP_SYSTEM_INSTALL - Globally install pip packages via sudo -H"
     echo "VERBOSE - Flag to enable more verbose installation"
     echo "USE_VIRTUALENV - Flag to enable python virtualenv"
+    echo "VIRTUALENV_DIR - Virtual environment directory"
     echo "MAKE_NJOBS - Number of processes to use for parallel build (i.e. make -j MAKE_NJOBS)"
     echo ""
     echo "INSTALL_DIR=${INSTALL_DIR}"
@@ -115,6 +116,7 @@ function print_ncsdk_config()
     echo "PIP_SYSTEM_INSTALL=${PIP_SYSTEM_INSTALL}"
     echo "VERBOSE=${VERBOSE}"
     echo "USE_VIRTUALENV=${USE_VIRTUALENV}"
+    echo "VIRTUALENV_DIR=${VIRTUALENV_DIR}"
     echo "MAKE_NJOBS=${MAKE_NJOBS}"
     echo ""
 }
@@ -314,7 +316,6 @@ function setup_virtualenv()
     ${SUDO_PREFIX} apt-get $APT_QUIET install python-virtualenv -y
     echo ""
     
-    VIRTUALENV_DIR=${INSTALL_DIR}/virtualenv-python
     # if virtualenv dir exists, try to activate it
     if [ -d ${VIRTUALENV_DIR} ] ; then
         RC=0
@@ -329,13 +330,14 @@ function setup_virtualenv()
             exit 1
             echo ""
         else
-            echo "virtualenv ${INSTALL_DIR}/virtualenv-python exists, and successfully activated it"
+            echo "virtualenv ${VIRTUALENV_DIR} exists, and successfully activated it"
         fi
     else
         # Create new virtualenv and activate it
         echo "Creating new virtualenv in ${VIRTUALENV_DIR}"
         ${SUDO_PREFIX} mkdir -p ${VIRTUALENV_DIR}
         ${SUDO_PREFIX} virtualenv --system-site-packages -p python3 ${VIRTUALENV_DIR}
+        ${SUDO_PREFIX} chown -R $USER:$USER ${VIRTUALENV_DIR}
         # disable trapping for unset variables due to activate script
         set +u
         RC=0        
@@ -740,9 +742,13 @@ function install_api()
     # Install python API
     $SUDO_PREFIX cp ${FROM_DIR}/api/python/mvnc/mvncapi.py $SDK_DIR/api/python/mvnc
     $SUDO_PREFIX cp ${FROM_DIR}/api/python/mvnc/__init__.py $SDK_DIR/api/python/mvnc
-    exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --upgrade --force-reinstall $SDK_DIR/api"
-    exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --upgrade --force-reinstall $SDK_DIR/api"
-    echo "NCS Python API has been installed in $INSTALL_DIR, and PYTHONPATH environment variable updated"
+	if [ "${USE_VIRTUALENV}" == 'yes' ]; then
+		exec_and_search_errors "$PIP_PREFIX pip install $PIP_QUIET --upgrade --force-reinstall $SDK_DIR/api"
+	else
+    	exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET --upgrade --force-reinstall $SDK_DIR/api"
+    	exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET --upgrade --force-reinstall $SDK_DIR/api"
+    fi
+	echo "NCS Python API has been installed in $INSTALL_DIR, and PYTHONPATH environment variable updated"
 }
 
 
