@@ -29,7 +29,7 @@ function check_supported_os()
     VERSION="$(lsb_release -r 2>/dev/null | awk '{ print $2 }' | sed 's/[.]//')"
     OS_DISTRO="${DISTRO:-INVALID}"
     OS_VERSION="${VERSION:-255}"
-    if [ "${OS_DISTRO,,}" = "ubuntu" ] && [ ${OS_VERSION} = 1604 ]; then
+    if [ "${OS_DISTRO,,}" = "ubuntu" ] && [[ ${OS_VERSION} = 1604 || ${OS_VERSION} = 1804 ]]; then
        # Require 64-bit Ubuntu OS
         HARDWARE_PLATFORM=$(uname -i)
         if [ "${HARDWARE_PLATFORM}" != "x86_64" ] ; then
