@@ -98,24 +98,18 @@ function install_opencv()
         fi
     else  
         echo "Installing opencv python for non-Raspbian";
-        # check if pip2 & pip3 are available on the system via 'command'
+        # check if pip3 are available on the system via 'command'
         RC=0
         command -v pip3 > /dev/null || RC=$?
         if [ $RC -ne 0 ] ; then
             exec_and_search_errors "$SUDO_PREFIX apt-get $APT_QUIET update -y"
             exec_and_search_errors "$SUDO_PREFIX apt-get $APT_QUIET install -y python3-pip"
         fi
-        command -v pip2 > /dev/null || RC=$?
-        if [ $RC -ne 0 ] ; then
-            exec_and_search_errors "$SUDO_PREFIX apt-get $APT_QUIET install -y python-pip"
-        fi
 
         PIP_QUIET=--quiet
         [ "${VERBOSE}" = "yes" ] && PIP_QUIET=""
         exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET opencv-python>=3.4.0.12"
         exec_and_search_errors "$PIP_PREFIX pip3 install $PIP_QUIET opencv-contrib-python>=3.4.0.12"
-        exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET opencv-python>=3.4.0.12"
-        exec_and_search_errors "$PIP_PREFIX pip2 install $PIP_QUIET opencv-contrib-python>=3.4.0.12"
     fi
 }
 
