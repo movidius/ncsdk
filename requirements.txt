@@ -12,6 +12,10 @@ scikit-image>=0.13.0,<=0.14.0
 scipy>=0.14.1,<=0.19.1
 six>=1.10.0
 networkx>=2.1,<=2.1
-pygraphviz>=1.3.1
+pygraphviz>=1.3.1,<=1.5
+# https://github.com/evilsocket/opensnitch/issues/275
+grpcio==1.24.0
 Enum34>=1.1.6
 numpy==1.15
+dask==2.4.0
+scikit-build==0.11.1
